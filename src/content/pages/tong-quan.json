@@ -1,0 +1,54 @@
+{
+  "slug": "tong-quan",
+  "title": "Tong quan: Thanh nien Viet Nam trong ky nguyen moi",
+  "lead": "Trang nay gioi thieu boi canh, vai tro va huong hanh dong cua thanh nien trong giai doan phat trien moi cua dat nuoc.",
+  "sections": [
+    {
+      "type": "paragraphs",
+      "heading": "Boi canh",
+      "items": [
+        "Dat nuoc buoc vao giai doan chuyen doi so, hoi nhap sau va canh tranh tri thuc. Thanh nien la luc luong nam bat co hoi nhanh nhat.",
+        "Ben canh thoi co la nhieu thach thuc: chenh lech ky nang, ap luc viec lam, va nguy co mat dinh huong gia tri trong moi truong thong tin day dac."
+      ]
+    },
+    {
+      "type": "quote",
+      "quote": "Thanh nien la nguoi chu tuong lai, la nguon luc sang tao va la noi ket noi giua truyen thong va hien dai.",
+      "author": "Trich bai giang chuyen de"
+    },
+    {
+      "type": "roleCards",
+      "heading": "Ba vai tro cot loi",
+      "items": [
+        {
+          "title": "Tien phong tri thuc",
+          "description": "Hoc tap lien tuc, cap nhat ky nang so va kha nang lam viec lien nganh."
+        },
+        {
+          "title": "Chu dong cong dan",
+          "description": "Tham gia van de cong dong bang hanh dong cu the, khong dung o nhan thuc."
+        },
+        {
+          "title": "Giup giu ban sac",
+          "description": "Ket hop tinh than dan toc voi tu duy toan cau trong moi quyet dinh."
+        }
+      ]
+    },
+    {
+      "type": "evidence",
+      "heading": "Minh chung thuc tien",
+      "label": "THUC TIEN",
+      "text": "Nhom sinh vien, cau lac bo khoi nghiep va cac du an tinh nguyen da tao ra gia tri xa hoi ro rang, dong thoi xay dung nang luc lanh dao tu som.",
+      "images": [
+        {
+          "alt": "Sinh vien trinh bay de an",
+          "caption": "Cuoc thi y tuong doi moi sang tao cap truong"
+        },
+        {
+          "alt": "Nhom tinh nguyen tai dia phuong",
+          "caption": "Chuoi hoat dong thanh nien vi cong dong"
+        }
+      ]
+    }
+  ]
+}

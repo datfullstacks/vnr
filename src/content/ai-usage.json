@@ -1,0 +1,51 @@
+{
+  "title": "AI Usage",
+  "description": "Minh bach cach nhom su dung cong cu AI va quy trinh kiem chung truoc khi dua vao san pham.",
+  "tools": [
+    {
+      "name": "ChatGPT",
+      "role": "Len cau truc noi dung, goi y storyboard game",
+      "usage": "Dung de xay dung bo khung thong diep va flow cau hoi theo tung chu de.",
+      "verification": "Doi chieu lai voi van kien, bao cao chinh thong va tai lieu hoc phan."
+    },
+    {
+      "name": "Gemini",
+      "role": "Tim tu khoa, mo rong goc nhin",
+      "usage": "Ho tro tong hop y tuong ve minh chung thuc tien cho moi phan.",
+      "verification": "Kiem tra do tin cay cua nguon va loai bo thong tin khong ro xuat xu."
+    },
+    {
+      "name": "Grok",
+      "role": "Phan bien noi dung va kiem tra logic lap luan",
+      "usage": "Dat cau hoi nguoc de phat hien lo hong trong thong diep va game mechanics.",
+      "verification": "Nhom bien tap lai cau chu, tranh sao chep va giu dung boi canh mon hoc."
+    }
+  ],
+  "timeline": [
+    {
+      "step": "Buoc 1",
+      "title": "Thu thap de bai va rang buoc",
+      "description": "Xac dinh muc tieu hoc tap, pham vi chu de va dau ra can co."
+    },
+    {
+      "step": "Buoc 2",
+      "title": "Phac thao bang AI",
+      "description": "Tao khung noi dung va game flow, sau do chon phuong an kha thi nhat."
+    },
+    {
+      "step": "Buoc 3",
+      "title": "Kiem chung nguon",
+      "description": "Doi chieu tung khang dinh voi tai lieu tham khao va nguon chinh thong."
+    },
+    {
+      "step": "Buoc 4",
+      "title": "Bien tap va chuan hoa",
+      "description": "Viet lai bang van phong nhom, thong nhat thuat ngu va giong dieu."
+    },
+    {
+      "step": "Buoc 5",
+      "title": "Review truoc khi phat hanh",
+      "description": "Chay thu game, soat loi noi dung, xac nhan accessibility va tinh nhat quan."
+    }
+  ]
+}

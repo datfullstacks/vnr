@@ -1,0 +1,54 @@
+{
+  "slug": "xa-hoi",
+  "title": "Tren linh vuc xa hoi: Cong hien tu hanh dong nho",
+  "lead": "Gia tri cua thanh nien duoc do bang kha nang dong gop that cho cong dong va kha nang tao anh huong tich cuc ben vung.",
+  "sections": [
+    {
+      "type": "paragraphs",
+      "heading": "Van de uu tien",
+      "items": [
+        "Chuyen doi xanh, an sinh va nang luc so cho nguoi yeu the la cac bai toan xa hoi can su tham gia cua the he tre.",
+        "Cac hoat dong tinh nguyen can duoc thiet ke theo mo hinh dai han, co do luong ket qua cu the."
+      ]
+    },
+    {
+      "type": "quote",
+      "quote": "Moi hanh dong phuc vu cong dong deu la mot buoc ren luyen nhan cach va nang luc lanh dao.",
+      "author": "Thong diep hoc tap"
+    },
+    {
+      "type": "evidence",
+      "heading": "Minh chung thuc tien",
+      "label": "THUC TIEN",
+      "text": "Tu hien mau tinh nguyen den cac du an day hoc mien phi, nguoi tre da tao ra tac dong xa hoi thiet thuc va de do luong.",
+      "images": [
+        {
+          "alt": "Chien dich hien mau",
+          "caption": "Ngay hoi hien mau do thanh nien phoi hop to chuc"
+        },
+        {
+          "alt": "Lop hoc cong dong",
+          "caption": "Lop bo tro ky nang so cho hoc sinh vung kho"
+        }
+      ]
+    },
+    {
+      "type": "roleCards",
+      "heading": "Cam ket hanh dong",
+      "items": [
+        {
+          "title": "Mot du an moi nam",
+          "description": "Moi nhom hoc tap dat muc tieu toi thieu mot du an cong dong co theo doi ket qua."
+        },
+        {
+          "title": "Lam viec theo du lieu",
+          "description": "Thu thap phan hoi, do luong tac dong va dieu chinh mo hinh theo bang chung."
+        },
+        {
+          "title": "Ket noi lien nganh",
+          "description": "Phoi hop giua nha truong, doanh nghiep va dia phuong de mo rong quy mo."
+        }
+      ]
+    }
+  ]
+}

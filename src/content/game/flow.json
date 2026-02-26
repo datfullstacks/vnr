@@ -1,0 +1,157 @@
+{
+  "title": "Hanh trinh lua chon cua ban",
+  "overview": "Ban la mot sinh vien nam nhat. Moi quyet dinh trong hoc tap, cong viec va dong gop xa hoi se tac dong den huong di tuong lai.",
+  "intro": {
+    "title": "Tong the cot truyen",
+    "summary": [
+      "Game gom 4 phan theo 4 linh vuc: kinh te, chinh tri, tu tuong - van hoa, xa hoi.",
+      "Moi phan co 3 lua chon. Lua chon cua ban se cong diem nhiet huyet va mo ra ket qua cuoi cung.",
+      "Ban co the choi lai de thu cac chien luoc khac nhau."
+    ],
+    "next": "phan-1"
+  },
+  "steps": [
+    {
+      "id": "phan-1",
+      "title": "Phan 1 - Kinh te",
+      "context": "Ban co 6 thang de chuan bi cho nam hoc moi. Ban se uu tien gi?",
+      "quote": "Tri thuc tre phai tao ra gia tri that tu nang luc that.",
+      "choices": [
+        {
+          "id": "nghien-cuu-cong-nghe",
+          "label": "Nghien cuu cong nghe",
+          "description": "Hoc them du lieu, AI va ky nang ky thuat ung dung.",
+          "score": 2,
+          "next": "phan-2"
+        },
+        {
+          "id": "khoi-nghiep",
+          "label": "Khoi nghiep nho",
+          "description": "Thu nghiem mo hinh kinh doanh giai quyet van de dia phuong.",
+          "score": 2,
+          "next": "phan-2"
+        },
+        {
+          "id": "kiem-tien-nhanh",
+          "label": "Lam viec ngan han",
+          "description": "Chi chon viec de co thu nhap nhanh ma khong dau tu ky nang.",
+          "score": 0,
+          "next": "phan-2"
+        }
+      ]
+    },
+    {
+      "id": "phan-2",
+      "title": "Phan 2 - Chinh tri",
+      "context": "Lop ban co tranh luan gay gat ve mot chinh sach moi tren mang xa hoi.",
+      "quote": "Ban linh cong dan duoc the hien qua cach tiep can su that.",
+      "choices": [
+        {
+          "id": "kiem-chung-thong-tin",
+          "label": "Kiem chung truoc khi chia se",
+          "description": "Doc nguon chinh thong va tom tat thong tin dung de thao luan.",
+          "score": 2,
+          "next": "phan-3"
+        },
+        {
+          "id": "tham-gia-doi-thoai",
+          "label": "To chuc doi thoai trong lop",
+          "description": "Moi giang vien ho tro va thuc hanh tranh bien co can cu.",
+          "score": 2,
+          "next": "phan-3"
+        },
+        {
+          "id": "chia-se-cam-tinh",
+          "label": "Chia se theo cam tinh",
+          "description": "Dang lai thong tin chua xac minh vi thay hop quan diem.",
+          "score": 0,
+          "next": "phan-3"
+        }
+      ]
+    },
+    {
+      "id": "phan-3",
+      "title": "Phan 3 - Tu tuong van hoa",
+      "context": "Cau lac bo truyen thong can mot chien dich moi cho gioi tre.",
+      "quote": "Ban sac van hoa khong dung yen, no can duoc sang tao va lan toa.",
+      "choices": [
+        {
+          "id": "du-an-noi-dung-lich-su",
+          "label": "Lam du an noi dung lich su",
+          "description": "Dung video ngan de ke chuyen lich su theo ngon ngu hien dai.",
+          "score": 2,
+          "next": "phan-4"
+        },
+        {
+          "id": "to-chuc-ngay-hoi",
+          "label": "To chuc ngay hoi van hoa",
+          "description": "Ket hop am nhac, my thuat va thu vien so cho hoc sinh.",
+          "score": 2,
+          "next": "phan-4"
+        },
+        {
+          "id": "lam-noi-dung-giat-gon",
+          "label": "Chay theo xu huong de viral",
+          "description": "Tap trung view ngan han, bo qua gia tri giao duc.",
+          "score": 0,
+          "next": "phan-4"
+        }
+      ]
+    },
+    {
+      "id": "phan-4",
+      "title": "Phan 4 - Xa hoi",
+      "context": "Dia phuong can doi thanh nien van hanh mot chuong trinh ho tro hoc sinh vung xa.",
+      "quote": "Cong hien xa hoi la noi dao duc va nang luc gap nhau.",
+      "choices": [
+        {
+          "id": "xay-du-an-dai-han",
+          "label": "Xay du an 6 thang",
+          "description": "Lap ke hoach day ky nang so, do luong ket qua theo tung thang.",
+          "score": 2,
+          "next": "ket-qua"
+        },
+        {
+          "id": "ket-noi-nguon-luc",
+          "label": "Ket noi truong va doanh nghiep",
+          "description": "Goi hoc bong va tai tro thiet bi cho chuong trinh hoc tap.",
+          "score": 2,
+          "next": "ket-qua"
+        },
+        {
+          "id": "tham-gia-ngan-han",
+          "label": "Tham gia 1 ngay cho co",
+          "description": "Co mat theo phong trao nhung khong duy tri dong gop.",
+          "score": 0,
+          "next": "ket-qua"
+        }
+      ]
+    }
+  ],
+  "resultBands": [
+    {
+      "min": 8,
+      "max": 8,
+      "title": "Nha tien phong tri thuc",
+      "text": "Ban tro thanh tri thuc tre co tam nhin dai han va tao duoc tac dong xa hoi ro rang."
+    },
+    {
+      "min": 5,
+      "max": 7,
+      "title": "Nguoi lao dong co ich",
+      "text": "Ban co nen tang tot va dang tren duong tro thanh nhan to then chot cua tap the."
+    },
+    {
+      "min": 2,
+      "max": 4,
+      "title": "Can bo sung dinh huong",
+      "text": "Ban da co mot so lua chon dung, nhung can kien tri hon de tao ket qua ben vung."
+    },
+    {
+      "min": 0,
+      "max": 1,
+      "title": "Can tai khoi dong",
+      "text": "Ban dang de mat co hoi phat trien. Hay choi lai va uu tien cac lua chon co trach nhiem hon."
+    }
+  ]
+}

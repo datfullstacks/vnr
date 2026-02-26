@@ -1,0 +1,404 @@
+.chinhTriPage {
+  display: grid;
+  gap: 1rem;
+  background: #ffffff;
+  border: 1px solid #d3d3d3;
+  border-radius: 0;
+  padding: 0.9rem 1rem 1.2rem;
+}
+
+.heroSection {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.pageTitle {
+  margin: 0;
+  color: #d71920;
+  font-family: var(--font-heading), Impact, sans-serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 4.15vw, 3.05rem);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.03;
+}
+
+.quotePanel {
+  background: #f8fa7d;
+  border: 1px solid #d8cf3f;
+  border-radius: 2rem;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 0.75rem 1rem;
+}
+
+.quoteText {
+  margin: 0;
+  color: #121212;
+  font-size: clamp(0.98rem, 1.42vw, 1.4rem);
+  line-height: 1.42;
+}
+
+.quoteText strong {
+  font-weight: 800;
+}
+
+.quoteSource {
+  margin: 0.45rem 0 0;
+  text-align: right;
+  font-style: italic;
+  color: #2b2b2b;
+  font-size: clamp(0.86rem, 1.06vw, 1.15rem);
+}
+
+.pioneerSection {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #d71920;
+  font-size: clamp(1.4rem, 2.5vw, 2.8rem);
+  line-height: 1.04;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.pioneerLead {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: clamp(0.98rem, 1.36vw, 1.4rem);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.roleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.roleCard {
+  border-radius: 1rem;
+  border: 1px solid #ba2026;
+  background: #d71920;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  min-height: 13rem;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.55rem;
+  padding: 0.65rem;
+  text-align: center;
+}
+
+.roleCard h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1rem, 1.52vw, 1.95rem);
+  line-height: 1.24;
+  font-weight: 500;
+}
+
+.roleIcon {
+  width: 2.55rem;
+  height: 2.55rem;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.arrowCallout {
+  margin: 0;
+  border-radius: 0.8rem;
+  background: #fff3f3;
+  border: 1px solid #e2d5d5;
+  padding: 0.62rem 0.8rem;
+  color: #222222;
+  font-size: clamp(0.94rem, 1.32vw, 1.3rem);
+  line-height: 1.4;
+}
+
+.arrowCallout strong {
+  color: #b4151c;
+}
+
+.actionSection {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.actionPanel {
+  border-radius: 0.95rem;
+  border: 1px solid #e6d9d9;
+  background: #fff3f3;
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.actionArrow {
+  width: 2.1rem;
+  min-height: 2.1rem;
+  border-radius: 999px;
+  border: 1px solid #bfbaba;
+  background: #f5efef;
+  color: #7e7474;
+  font-size: 1.35rem;
+}
+
+.actionContent {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.actionHeading {
+  margin: 0;
+  border-radius: 0.6rem;
+  background: #d71920;
+  padding: 0.48rem 0.7rem;
+  color: #f8fa7d;
+  text-align: center;
+  font-size: clamp(0.96rem, 1.45vw, 1.65rem);
+  line-height: 1.32;
+  font-weight: 800;
+}
+
+.actionMediaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.68rem;
+}
+
+.mediaFigure {
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.mediaImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+}
+
+.mediaFigure figcaption {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(0.86rem, 1.06vw, 1.15rem);
+  line-height: 1.34;
+  font-style: italic;
+  text-align: center;
+}
+
+.sourceLink {
+  color: #191919;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-size: clamp(0.86rem, 1.06vw, 1.15rem);
+  line-height: 1.26;
+  text-align: center;
+  font-weight: 700;
+}
+
+.dotRow {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.dot {
+  width: 0.36rem;
+  height: 0.36rem;
+  border-radius: 999px;
+  background: #7d7777;
+  opacity: 0.45;
+}
+
+.dotActive {
+  opacity: 1;
+  background: #5c5656;
+}
+
+.evidenceSection {
+  display: grid;
+  gap: 0.72rem;
+}
+
+.evidenceTitle {
+  margin: 0;
+  color: #d71920;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: clamp(1.3rem, 2.32vw, 2rem);
+  font-weight: 800;
+}
+
+.highlightBlock {
+  background: #f8fa7d;
+  border: 1px solid #d8cf3f;
+  border-radius: 2rem;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 0.7rem 1rem;
+}
+
+.highlightBlock p {
+  margin: 0;
+  color: #121212;
+  line-height: 1.42;
+  font-size: clamp(0.96rem, 1.33vw, 1.35rem);
+}
+
+.highlightBlock strong {
+  color: #d71920;
+  font-size: 1.2em;
+  margin-right: 0.35rem;
+}
+
+.highlightBlock em {
+  color: #d71920;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.inlineSource {
+  color: inherit;
+  font-style: italic;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.historyLayout {
+  display: grid;
+  grid-template-columns: 737fr 546fr;
+  gap: 0.7rem;
+  align-items: start;
+}
+
+.historyMainFigure {
+  margin: 0;
+  display: grid;
+  gap: 0.42rem;
+}
+
+.historyMainFigure figcaption {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(0.9rem, 1.08vw, 1.2rem);
+  line-height: 1.35;
+  text-align: center;
+}
+
+.historySideColumn {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.downArrow {
+  justify-self: end;
+  width: 1.45rem;
+  height: auto;
+}
+
+.modernBlock {
+  min-height: 8rem;
+}
+
+.modernLayout {
+  display: grid;
+  grid-template-columns: 646fr 676fr;
+  gap: 0.78rem;
+  align-items: start;
+}
+
+.meaningText {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(0.98rem, 1.34vw, 1.35rem);
+  line-height: 1.45;
+}
+
+.meaningText strong {
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+@media (max-width: 980px) {
+  .roleCard {
+    min-height: 11.2rem;
+  }
+
+  .historyLayout,
+  .modernLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .chinhTriPage {
+    padding: 0.6rem;
+    gap: 0.82rem;
+  }
+
+  .pageTitle {
+    font-size: clamp(1.6rem, 8.1vw, 2.2rem);
+  }
+
+  .sectionTitle {
+    font-size: clamp(1.25rem, 6.7vw, 1.82rem);
+  }
+
+  .quotePanel,
+  .highlightBlock {
+    border-radius: 1.4rem;
+    padding: 0.62rem 0.74rem;
+  }
+
+  .roleGrid {
+    gap: 0.48rem;
+  }
+
+  .roleCard {
+    min-height: 9.8rem;
+    border-radius: 0.7rem;
+    padding: 0.48rem;
+  }
+
+  .roleIcon {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-width: 1.5px;
+  }
+
+  .roleCard h3 {
+    font-size: 0.86rem;
+  }
+
+  .actionPanel {
+    padding: 0.5rem;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.4rem;
+  }
+
+  .actionArrow {
+    width: 1.65rem;
+    min-height: 1.65rem;
+    font-size: 1.1rem;
+  }
+
+  .actionMediaGrid {
+    gap: 0.45rem;
+  }
+
+  .sourceLink,
+  .mediaFigure figcaption,
+  .historyMainFigure figcaption {
+    font-size: 0.76rem;
+    line-height: 1.3;
+  }
+}

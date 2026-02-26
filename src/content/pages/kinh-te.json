@@ -1,0 +1,65 @@
+{
+  "slug": "kinh-te",
+  "title": "Tren linh vuc kinh te: Nang luc tao gia tri moi",
+  "lead": "Thanh nien dong vai tro truc tiep trong chuoi gia tri moi thong qua khoi nghiep, cong nghe va nang suat lao dong.",
+  "sections": [
+    {
+      "type": "paragraphs",
+      "heading": "Dong luc phat trien",
+      "items": [
+        "Kinh te so mo ra khong gian viec lam moi trong thuong mai dien tu, du lieu, AI va tu dong hoa.",
+        "Nguoi tre co loi the ve toc do hoc cong nghe, nhung can tu duy ben vung de tranh xu huong ngan han."
+      ]
+    },
+    {
+      "type": "roleCards",
+      "heading": "Huong hanh dong",
+      "items": [
+        {
+          "title": "Nghien cuu cong nghe",
+          "description": "Nang cao ky nang du lieu, lap trinh va khai thac cong cu AI mot cach co trach nhiem."
+        },
+        {
+          "title": "Khoi nghiep giai quyet van de",
+          "description": "Tu bai toan dia phuong tao ra san pham co gia tri thi truong va tac dong xa hoi."
+        },
+        {
+          "title": "Lam viec chuyen nghiep",
+          "description": "Ky luat, minh bach va tinh than hop tac la nen tang cua tang truong dai han."
+        }
+      ]
+    },
+    {
+      "type": "evidence",
+      "heading": "Minh chung lich su",
+      "label": "LICH SU",
+      "text": "Trong cac giai doan kho khan, luc luong tre da tham gia khac phuc hau qua chien tranh, khai hoang va tai thiet san xuat.",
+      "images": [
+        {
+          "alt": "Thanh nien xung phong",
+          "caption": "Luc luong tre tham gia mo duong va phuc hoi san xuat"
+        },
+        {
+          "alt": "Canh lao dong tap the",
+          "caption": "Tinh than lao dong va tu chu trong cac phong trao thanh nien"
+        }
+      ]
+    },
+    {
+      "type": "evidence",
+      "heading": "Minh chung hien dai",
+      "label": "HIEN DAI",
+      "text": "Ngay nay, nhieu startup do nguoi tre sang lap da tham gia chuoi cung ung toan cau va tao viec lam chat luong.",
+      "images": [
+        {
+          "alt": "Nhom startup thao luan",
+          "caption": "Du an startup cong nghe cua sinh vien"
+        },
+        {
+          "alt": "Khong gian lam viec chung",
+          "caption": "He sinh thai doi moi sang tao tai cac thanh pho lon"
+        }
+      ]
+    }
+  ]
+}

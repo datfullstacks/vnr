@@ -1,0 +1,49 @@
+{
+  "slug": "tu-tuong-van-hoa",
+  "title": "Tren linh vuc tu tuong - van hoa: Giu ban sac, mo tam nhin",
+  "lead": "Phat trien con nguoi toan dien can song hanh giua gia tri truyen thong va nang luc hoi nhap van hoa hien dai.",
+  "sections": [
+    {
+      "type": "paragraphs",
+      "heading": "Dinh huong",
+      "items": [
+        "Thanh nien can biet chon loc tinh hoa van hoa the gioi, dong thoi giu vung he gia tri dan toc.",
+        "Giao duc tham my, dao duc so va trach nhiem cong dan la ba tru cot de tranh lech chuan."
+      ]
+    },
+    {
+      "type": "roleCards",
+      "heading": "Nhiem vu trong giai doan moi",
+      "items": [
+        {
+          "title": "Song dep",
+          "description": "Ton trong su khac biet, hanh xu nhan van va biet chia se trach nhiem xa hoi."
+        },
+        {
+          "title": "Hoc su",
+          "description": "Hieu biet lich su dan toc de cuong co ban linh va niem tu hao quoc gia."
+        },
+        {
+          "title": "Sang tao van hoa",
+          "description": "Bien gia tri truyen thong thanh san pham noi dung moi, de tiep can gioi tre."
+        }
+      ]
+    },
+    {
+      "type": "evidence",
+      "heading": "Minh chung hien dai",
+      "label": "HIEN DAI",
+      "text": "Nhi?u du an truyen thong do sinh vien thuc hien da lan toa lich su, am nhac, my thuat Viet Nam tren nen tang so.",
+      "images": [
+        {
+          "alt": "Nhom san xuat noi dung lich su",
+          "caption": "Kenh truyen thong hoc duong ve gia tri lich su"
+        },
+        {
+          "alt": "Su kien van hoa hoc duong",
+          "caption": "Ngay hoi van hoa ket hop truyen thong va cong nghe"
+        }
+      ]
+    }
+  ]
+}

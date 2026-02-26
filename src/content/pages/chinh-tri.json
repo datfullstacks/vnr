@@ -1,0 +1,54 @@
+{
+  "slug": "chinh-tri",
+  "title": "Tren linh vuc chinh tri: Ban linh cong dan tre",
+  "lead": "Thanh nien can tham gia doi song chinh tri - xa hoi bang nhan thuc dung, thai do xay dung va hanh dong co trach nhiem.",
+  "sections": [
+    {
+      "type": "paragraphs",
+      "heading": "Muc tieu",
+      "items": [
+        "Xay dung lop cong dan tre hieu phap luat, ton trong ky cuong va biet tranh bien co can cu.",
+        "Tang nang luc mien dich thong tin truoc tin gia va noi dung kich dong tren moi truong so."
+      ]
+    },
+    {
+      "type": "quote",
+      "quote": "Ly tuong cach mang phai duoc the hien bang hanh dong cu the trong hoc tap, lao dong va phuc vu cong dong.",
+      "author": "Trich huong dan hoc tap"
+    },
+    {
+      "type": "carousel",
+      "heading": "Hanh dong cu the",
+      "items": [
+        {
+          "title": "Nang cao hieu biet phap luat",
+          "detail": "Tham gia cac buoi sinh hoat chinh tri, cap nhat van ban moi va thuc hanh ky nang lap luan."
+        },
+        {
+          "title": "Tham gia to chuc doan hoi",
+          "detail": "Rieng tung vai tro deu huong den muc tieu chung: ky luat, doan ket, phuc vu cong dong."
+        },
+        {
+          "title": "Ung xu van minh tren khong gian so",
+          "detail": "Kiem chung thong tin truoc khi chia se, ton trong su that va khuyen khich doi thoai tich cuc."
+        }
+      ]
+    },
+    {
+      "type": "evidence",
+      "heading": "Minh chung thuc tien",
+      "label": "THUC TIEN",
+      "text": "Nhi?u mo hinh thanh nien tu quan va dien dan doi thoai tre da giup ket noi y kien nguoi hoc voi nha truong va dia phuong.",
+      "images": [
+        {
+          "alt": "Dien dan thanh nien",
+          "caption": "Dien dan doi thoai dinh ky giua thanh nien va can bo"
+        },
+        {
+          "alt": "Sinh vien tranh bien",
+          "caption": "Hoat dong tranh bien ve chinh sach cong"
+        }
+      ]
+    }
+  ]
+}

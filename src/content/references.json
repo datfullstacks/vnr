@@ -1,0 +1,58 @@
+{
+  "title": "Tai lieu tham khao",
+  "description": "Danh sach nguon duoc gom theo tung nhom chu de de doi chieu khi viet noi dung va game.",
+  "groups": [
+    {
+      "title": "Mo dau",
+      "items": [
+        {
+          "label": "Van kien Dai hoi XIII - Dinh huong phat trien dat nuoc",
+          "href": "https://xaydungdang.org.vn"
+        },
+        {
+          "label": "Cong thong tin Chinh phu",
+          "href": "https://chinhphu.vn"
+        }
+      ]
+    },
+    {
+      "title": "Kinh te",
+      "items": [
+        {
+          "label": "Tong cuc Thong ke",
+          "href": "https://www.gso.gov.vn"
+        },
+        {
+          "label": "Bo Ke hoach va Dau tu",
+          "href": "https://www.mpi.gov.vn"
+        }
+      ]
+    },
+    {
+      "title": "Chinh tri - xa hoi",
+      "items": [
+        {
+          "label": "Trung uong Doan TNCS Ho Chi Minh",
+          "href": "https://doanthanhnien.vn"
+        },
+        {
+          "label": "Cong bao dien tu",
+          "href": "https://congbao.chinhphu.vn"
+        }
+      ]
+    },
+    {
+      "title": "Tu tuong - van hoa",
+      "items": [
+        {
+          "label": "Bo Van hoa, The thao va Du lich",
+          "href": "https://bvhttdl.gov.vn"
+        },
+        {
+          "label": "Thu vien Quoc gia Viet Nam",
+          "href": "https://nlv.gov.vn"
+        }
+      ]
+    }
+  ]
+}
