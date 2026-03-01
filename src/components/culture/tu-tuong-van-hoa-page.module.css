@@ -15,7 +15,7 @@
 .pageTitle {
   margin: 0;
   color: #d71920;
-  font-family: var(--font-heading), Impact, sans-serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: clamp(1.4rem, 2.9vw, 2.75rem);
   line-height: 1.02;
   text-transform: uppercase;
@@ -277,11 +277,14 @@
 .modernFigure {
   margin: 0;
   display: grid;
+  grid-template-rows: auto minmax(2.6rem, auto);
   gap: 0.3rem;
+  align-content: start;
 }
 
 .modernImage {
   width: 100%;
+  aspect-ratio: 16 / 9;
   height: auto;
   display: block;
   object-fit: cover;
@@ -293,6 +296,10 @@
   font-style: italic;
   font-size: clamp(0.66rem, 0.9vw, 0.95rem);
   line-height: 1.28;
+  min-height: 2.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 

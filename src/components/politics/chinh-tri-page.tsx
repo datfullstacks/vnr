@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import styles from "./chinh-tri-page.module.css";
 
 const roleItems = [
@@ -7,7 +10,91 @@ const roleItems = [
   "Lan tỏa ý thức công dân và tinh thần thượng tôn pháp luật",
 ];
 
+const actionSlides = [
+  {
+    heading:
+      "Học tập lý luận chính trị và pháp luật, đặc biệt là Hiến pháp và các luật liên quan",
+    items: [
+      {
+        src: "/images/chinhtri/action-left.png",
+        alt: "Sinh viên ĐHQG-HCM theo dõi phiên tòa giả định tại ký túc xá",
+        caption:
+          "Sinh viên ĐHQG-HCM được học pháp luật, theo dõi phiên tòa giả định ngay tại ký túc xá",
+        href: "https://vnuhcm.edu.vn/bai-viet/sinh-vien-dhqg-hcm-duoc-hoc-phap-luat-theo-doi-phien-toa-gia-dinh-ngay-tai-ky-tuc-xa",
+      },
+      {
+        src: "/images/chinhtri/action-right.png",
+        alt: "Hội thi Olympic các môn khoa học Mác-Lênin, tư tưởng Hồ Chí Minh",
+        caption:
+          "Hội thi Olympic các môn khoa học Mác-Lênin, tư tưởng Hồ Chí Minh",
+        href: "https://www.qdnd.vn/quoc-phong-an-ninh/tin-tuc/be-mac-hoi-thi-olympic-cac-mon-khoa-hoc-mac-lenin-tu-tuong-ho-chi-minh-cac-truong-cao-dang-trung-cap-trong-quan-doi-1015027",
+      },
+    ],
+  },
+  {
+    heading: "Tham gia các tổ chức Đoàn – Hội, phong trào xã hội",
+    items: [
+      {
+        src: "/images/chinhtri/07029fd736118db24813ff1bcdf6a11b404efdd9.png",
+        alt: "Sinh viên tình nguyện hỗ trợ người dân làm thủ tục hành chính",
+        caption:
+          "Sinh viên đội hình tình nguyện hỗ trợ người dân thực hiện thủ tục hành chính và sử dụng dịch vụ công trực tuyến - Ảnh: TỔNG DOANH",
+        href: "https://doanthanhnien.vn/tin-tuc/cong-tac-tuyen-truyen-giao-duc/binh-duong-da-dang-cac-hoat-dong-huong-ung-ngay-phap-luat-viet-nam",
+      },
+      {
+        src: "/images/chinhtri/action-v2-right.png",
+        alt: "Chương trình Tiếp sức mùa thi",
+        caption:
+          "Chương trình Tiếp sức mùa thi có sự tham gia của hơn 37.000 lượt sinh viên.",
+        href: "https://doanthanhnien.vn/tin-tuc/mua-he-xanh/xuat-quan-chien-dich-sinh-vien-tinh-nguyen-%E2%80%9Cmua-he-xanh%E2%80%9D-2024-sang-mai-ngon-lua-%E2%80%9Cba-san-sang%E2%80%9D",
+      },
+    ],
+  },
+  {
+    heading:
+      "Lan tỏa thông tin chính thống và phản bác thông tin sai lệch trên không gian mạng",
+    items: [
+      {
+        src: "/images/chinhtri/action-v3-left.png",
+        alt: "Triển lãm Hoàng Sa Trường Sa",
+        caption:
+          "Học sinh huyện Bảo Lạc tham quan triển lãm ảnh, bản đồ, tư liệu về “Hoàng Sa, Trường Sa của Việt Nam - Những bằng chứng lịch sử và pháp lý”.",
+        href: "https://hcmcpv.org.vn/tin-tuc/phong-trao-dau-tranh-yeu-nuoc-cua-hoc-sinh-sinh-vien-mien-nam-trong-thoi-ky-khang-chien-chong-my-cu-1491889344",
+      },
+      {
+        src: "/images/chinhtri/action-v3-right.png",
+        alt: "Phản bác thông tin sai lệch",
+        caption:
+          "Phản bác những thông tin lệch lạc, chống phá, xuyên tạc sự thật",
+        href: "https://hcmcpv.org.vn/tin-tuc/phong-trao-dau-tranh-yeu-nuoc-cua-hoc-sinh-sinh-vien-mien-nam-trong-thoi-ky-khang-chien-chong-my-cu-1491889344",
+      },
+    ],
+  },
+  {
+    heading:
+      "Lan tỏa thông tin chính thống và phản bác thông tin sai lệch trên không gian mạng",
+    items: [
+      {
+        src: "/images/chinhtri/action-v4-left.png",
+        alt: "Hội thảo phổ biến văn bản pháp luật mới",
+        caption:
+          "Hội thảo phổ biến các văn bản pháp luật về sở hữu trí tuệ mới ban hành",
+        href: "https://doanthanhnien.vn/tin-tuc/cong-tac-tuyen-truyen-giao-duc/binh-duong-da-dang-cac-hoat-dong-huong-ung-ngay-phap-luat-viet-nam",
+      },
+      {
+        src: "/images/chinhtri/action-v4-right.png",
+        alt: "Sinh viên công nghệ tham gia khởi nghiệp",
+        caption:
+          "Sinh viên công nghệ phát triển ứng dụng và tham gia các cuộc thi khởi nghiệp như Startup Wheel, được hướng dẫn đăng ký bản quyền sản phẩm.",
+        href: "https://doanthanhnien.vn/tin-tuc/mua-he-xanh/xuat-quan-chien-dich-sinh-vien-tinh-nguyen-%E2%80%9Cmua-he-xanh%E2%80%9D-2024-sang-mai-ngon-lua-%E2%80%9Cba-san-sang%E2%80%9D",
+      },
+    ],
+  },
+];
+
 export function ChinhTriScreen() {
+  const [activeActionIndex, setActiveActionIndex] = useState(0);
+  const activeAction = actionSlides[activeActionIndex];
   return (
     <article className={`paper-panel ${styles.chinhTriPage}`}>
       <header className={styles.heroSection}>
@@ -47,63 +134,55 @@ export function ChinhTriScreen() {
       <section className={styles.actionSection} aria-label="Hành động cụ thể của sinh viên">
         <h2 className={styles.sectionTitle}>HÀNH ĐỘNG CỤ THỂ CỦA SINH VIÊN TRONG LĨNH VỰC CHÍNH TRỊ</h2>
         <div className={styles.actionPanel}>
-          <button type="button" className={styles.actionArrow} aria-label="Slide trước">
+          <button
+            type="button"
+            className={styles.actionArrow}
+            aria-label="Slide trước"
+            onClick={() =>
+              setActiveActionIndex((current) => (current === 0 ? actionSlides.length - 1 : current - 1))
+            }
+          >
             ‹
           </button>
           <div className={styles.actionContent}>
-            <p className={styles.actionHeading}>
-              Học tập lý luận chính trị và pháp luật, đặc biệt là Hiến pháp và các luật liên quan
-            </p>
+            <p className={styles.actionHeading}>{activeAction.heading}</p>
             <div className={styles.actionMediaGrid}>
-              <figure className={styles.mediaFigure}>
-                <Image
-                  src="/images/chinhtri/action-left.png"
-                  alt="Sinh viên ĐHQG-HCM theo dõi phiên tòa giả định tại ký túc xá"
-                  width={1430}
-                  height={804}
-                  className={styles.mediaImage}
-                  sizes="(max-width: 760px) 44vw, 40vw"
-                />
-                <figcaption>
-                  Sinh viên ĐHQG-HCM được học pháp luật, theo dõi phiên toà giả định ngay tại ký túc xá.
-                </figcaption>
-                <a
-                  className={styles.sourceLink}
-                  href="https://vnuhcm.edu.vn/bai-viet/sinh-vien-dhqg-hcm-duoc-hoc-phap-luat-theo-doi-phien-toa-gia-dinh-ngay-tai-ky-tuc-xa"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Xem thêm chi tiết tại đây
-                </a>
-              </figure>
-              <figure className={styles.mediaFigure}>
-                <Image
-                  src="/images/chinhtri/action-right.png"
-                  alt="Hội thi Olympic các môn khoa học Mác-Lênin, tư tưởng Hồ Chí Minh"
-                  width={870}
-                  height={546}
-                  className={styles.mediaImage}
-                  sizes="(max-width: 760px) 44vw, 34vw"
-                />
-                <figcaption>Hội thi Olympic các môn khoa học Mác-Lênin, tư tưởng Hồ Chí Minh.</figcaption>
-                <a
-                  className={styles.sourceLink}
-                  href="https://www.qdnd.vn/quoc-phong-an-ninh/tin-tuc/be-mac-hoi-thi-olympic-cac-mon-khoa-hoc-mac-lenin-tu-tuong-ho-chi-minh-cac-truong-cao-dang-trung-cap-trong-quan-doi-1015027"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Xem thêm chi tiết tại đây
-                </a>
-              </figure>
+              {activeAction.items.map((item) => (
+                <figure key={item.src} className={styles.mediaFigure}>
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    width={1430}
+                    height={804}
+                    className={styles.mediaImage}
+                    sizes="(max-width: 760px) 44vw, 40vw"
+                  />
+                  <figcaption>{item.caption}</figcaption>
+                  <a className={styles.sourceLink} href={item.href} target="_blank" rel="noreferrer">
+                    Xem thêm chi tiết tại đây
+                  </a>
+                </figure>
+              ))}
             </div>
-            <div className={styles.dotRow} aria-hidden="true">
-              <span className={`${styles.dot} ${styles.dotActive}`} />
-              <span className={styles.dot} />
-              <span className={styles.dot} />
-              <span className={styles.dot} />
+            <div className={styles.dotRow} role="tablist" aria-label="Điều hướng nhóm hành động">
+              {actionSlides.map((slide, index) => (
+                <button
+                  key={`${slide.heading}-${index}`}
+                  type="button"
+                  className={`${styles.dot} ${index === activeActionIndex ? styles.dotActive : ""}`}
+                  onClick={() => setActiveActionIndex(index)}
+                  aria-label={`Đến nhóm hành động ${index + 1}`}
+                  aria-pressed={index === activeActionIndex}
+                />
+              ))}
             </div>
           </div>
-          <button type="button" className={styles.actionArrow} aria-label="Slide sau">
+          <button
+            type="button"
+            className={styles.actionArrow}
+            aria-label="Slide sau"
+            onClick={() => setActiveActionIndex((current) => (current + 1) % actionSlides.length)}
+          >
             ›
           </button>
         </div>
@@ -184,15 +263,6 @@ export function ChinhTriScreen() {
           </div>
         </div>
 
-        <Image
-          src="/images/chinhtri/down-arrow.svg"
-          alt=""
-          aria-hidden="true"
-          width={27}
-          height={56}
-          className={styles.downArrow}
-        />
-
         <div className={`${styles.highlightBlock} ${styles.modernBlock}`}>
           <p>
             <strong>HIỆN ĐẠI</strong> Trong thời kỳ hội nhập, nhiều phong trào sinh viên quy mô toàn quốc đã góp phần củng
@@ -246,15 +316,6 @@ export function ChinhTriScreen() {
             </figcaption>
           </figure>
         </div>
-
-        <Image
-          src="/images/chinhtri/down-arrow.svg"
-          alt=""
-          aria-hidden="true"
-          width={27}
-          height={56}
-          className={styles.downArrow}
-        />
 
         <p className={styles.meaningText}>
           <strong>Ý NGHĨA:</strong> Những hoạt động này thể hiện sinh viên là lực lượng chính trị - xã hội quan trọng, góp

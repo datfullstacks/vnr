@@ -1,0 +1,340 @@
+.page {
+  display: grid;
+  gap: 2.6rem;
+  padding: 2rem 0 1.5rem;
+  font-family: "Be Vietnam Pro", var(--font-body), sans-serif;
+}
+
+.mainPanel {
+  width: min(1193px, 100%);
+  margin: 0 auto;
+  border-radius: 32px;
+  border: 1px solid #d6cbcb;
+  background: #fff3f3;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 0 1.7rem 1.3rem;
+}
+
+.titleBar {
+  margin: 0 -1.7rem;
+  border-radius: 32px;
+  background: #d71920;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  min-height: 124px;
+  display: grid;
+  place-items: center;
+  padding: 0.8rem 1.2rem;
+}
+
+.titleBar h1 {
+  margin: 0;
+  color: #f8fa7d;
+  text-align: center;
+  font-size: clamp(2.15rem, 4.1vw, 4rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.contextBlock {
+  margin-top: 2rem;
+  color: #101010;
+}
+
+.contextBlock h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.contextLead {
+  margin: 0.45rem 0 0;
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.teacherLabel {
+  margin: 0.3rem 0 0;
+  font-size: clamp(1.6rem, 2.25vw, 2rem);
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+.teacherQuote {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.15rem, 1.5vw, 1.5rem);
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.chooseLabel {
+  margin: 1.4rem 0 0;
+  font-size: clamp(2rem, 2.2vw, 2.3rem);
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+.choiceGrid {
+  margin-top: 1.3rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.choiceCard {
+  border-radius: 32px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  display: block;
+  text-align: inherit;
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+
+.choiceTop,
+.choiceBottom {
+  border-radius: 24px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.choiceTop {
+  min-height: 270px;
+  background: #d71920;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.choiceBottom {
+  min-height: 260px;
+  background: #000000;
+  color: #ffffff;
+  padding: 1rem 1rem 0.8rem;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 0.8rem;
+}
+
+.choiceLabel {
+  font-size: clamp(1.2rem, 1.8vw, 2.2rem);
+  line-height: 1.08;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.choiceDescription {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
+  line-height: 1.36;
+  text-align: left;
+  white-space: pre-line;
+}
+
+.choiceFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.choiceScore {
+  color: #eff062;
+  font-size: clamp(1.4rem, 1.85vw, 2rem);
+  font-weight: 700;
+}
+
+.choiceArrow {
+  width: 2.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 0;
+  background: #eff062;
+  color: #000000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.choiceCard:hover {
+  transform: translateY(-2px);
+}
+
+.choiceCardActive {
+  transform: translateY(-2px);
+}
+
+.choiceCardActive .choiceTop {
+  outline: 4px solid #f8fa7d;
+  outline-offset: -4px;
+}
+
+.resultReveal {
+  margin-top: 0.9rem;
+}
+
+.choiceHint {
+  margin: 0.95rem 0 0;
+  color: #7a4a1f;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.choiceCard:focus-visible,
+.choiceArrow:focus-visible,
+.backButton:focus-visible {
+  outline: 3px solid #1f1f1f;
+  outline-offset: 3px;
+}
+
+.backWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.backButton {
+  width: min(507px, 100%);
+  min-height: 120px;
+  border-radius: 62px;
+  border: 0;
+  background: #000000;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  text-align: center;
+  font-size: clamp(2.1rem, 3vw, 2.5rem);
+  line-height: 1;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1200px) {
+  .page {
+    padding: 1.35rem 0 1rem;
+    gap: 2rem;
+  }
+
+  .mainPanel {
+    border-radius: 24px;
+    padding: 0 1rem 1rem;
+  }
+
+  .titleBar {
+    margin: 0 -1rem;
+    border-radius: 24px;
+    min-height: 96px;
+  }
+
+  .choiceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .choiceTop {
+    min-height: 205px;
+  }
+
+  .choiceBottom {
+    min-height: 220px;
+  }
+
+  .backButton {
+    min-height: 86px;
+    border-radius: 44px;
+  }
+}
+
+@media (max-width: 760px) {
+  .page {
+    padding: 0.7rem 0 0.8rem;
+    gap: 1.25rem;
+  }
+
+  .mainPanel {
+    padding: 0 0.65rem 0.7rem;
+    border-radius: 18px;
+  }
+
+  .titleBar {
+    margin: 0 -0.65rem;
+    border-radius: 18px;
+    min-height: 72px;
+    padding: 0.7rem 0.4rem;
+  }
+
+  .titleBar h1 {
+    font-size: 1.95rem;
+  }
+
+  .contextBlock {
+    margin-top: 1rem;
+  }
+
+  .contextBlock h2 {
+    font-size: 1.6rem;
+  }
+
+  .teacherLabel {
+    margin-top: 0.5rem;
+    font-size: 1.28rem;
+  }
+
+  .teacherQuote {
+    font-size: 0.95rem;
+  }
+
+  .chooseLabel {
+    margin-top: 0.9rem;
+    font-size: 1.28rem;
+  }
+
+  .choiceGrid {
+    grid-template-columns: 1fr;
+    margin-top: 0.8rem;
+    gap: 0.58rem;
+  }
+
+  .choiceTop {
+    min-height: 130px;
+    border-radius: 16px;
+    padding: 0.55rem;
+  }
+
+  .choiceBottom {
+    min-height: 185px;
+    border-radius: 16px;
+    padding: 0.65rem 0.7rem 0.55rem;
+  }
+
+  .choiceLabel {
+    font-size: 0.92rem;
+  }
+
+  .choiceDescription {
+    font-size: 0.78rem;
+  }
+
+  .choiceScore {
+    font-size: 1.1rem;
+  }
+
+  .choiceArrow {
+    width: 2rem;
+    height: 1.05rem;
+    font-size: 0.88rem;
+  }
+
+  .backButton {
+    min-height: 66px;
+    border-radius: 34px;
+    font-size: 1.45rem;
+  }
+}

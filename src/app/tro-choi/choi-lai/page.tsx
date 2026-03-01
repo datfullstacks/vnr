@@ -13,5 +13,5 @@ export default function ChoiLaiPage() {
     router.replace("/tro-choi/intro");
   }, [resetGame, router]);
 
-  return <section className="paper-panel">Dang khoi tao lai tro choi...</section>;
+  return <section className="paper-panel">Đang khởi tạo lại trò chơi...</section>;
 }

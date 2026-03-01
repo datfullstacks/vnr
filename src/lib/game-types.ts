@@ -9,6 +9,7 @@ export type GameChoice = {
 export type GameStep = {
   id: string;
   title: string;
+  scenario?: string;
   context: string;
   quote: string;
   choices: GameChoice[];

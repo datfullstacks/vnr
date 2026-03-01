@@ -15,43 +15,43 @@ type QuizQuestion = {
 const quizQuestions: QuizQuestion[] = [
   {
     id: "q1",
-    question: "Khi gap mot thong tin nong tren mang, ban thuong lam gi dau tien?",
+    question: "Khi gặp một thông tin nóng trên mạng, bạn thường làm gì đầu tiên?",
     answers: [
-      { id: "a", label: "Kiem chung nguon", score: 2 },
-      { id: "b", label: "Hoi nguoi co chuyen mon", score: 1 },
-      { id: "c", label: "Chia se ngay", score: -1 },
+      { id: "a", label: "Kiểm chứng nguồn", score: 2 },
+      { id: "b", label: "Hỏi người có chuyên môn", score: 1 },
+      { id: "c", label: "Chia sẻ ngay", score: -1 },
     ],
   },
   {
     id: "q2",
-    question: "Ban chon cach nao de dong gop cho cong dong?",
+    question: "Bạn chọn cách nào để đóng góp cho cộng đồng?",
     answers: [
-      { id: "a", label: "Lam du an co ke hoach", score: 2 },
-      { id: "b", label: "Tham gia theo dot", score: 1 },
-      { id: "c", label: "Chi tham gia khi bi ep", score: -1 },
+      { id: "a", label: "Làm dự án có kế hoạch", score: 2 },
+      { id: "b", label: "Tham gia theo đợt", score: 1 },
+      { id: "c", label: "Chỉ tham gia khi bị ép", score: -1 },
     ],
   },
   {
     id: "q3",
-    question: "Trong hoc tap, ban uu tien dieu gi?",
+    question: "Trong học tập, bạn ưu tiên điều gì?",
     answers: [
-      { id: "a", label: "Ky nang dai han", score: 2 },
-      { id: "b", label: "Can bang hoc va lam", score: 1 },
-      { id: "c", label: "Ket qua ngan han", score: -1 },
+      { id: "a", label: "Kỹ năng dài hạn", score: 2 },
+      { id: "b", label: "Cân bằng học và làm", score: 1 },
+      { id: "c", label: "Kết quả ngắn hạn", score: -1 },
     ],
   },
 ];
 
 function getQuizResult(score: number) {
   if (score >= 5) {
-    return "Muc nhiet huyet cao: Ban co xu huong lua chon ben vung va co trach nhiem.";
+    return "Mức nhiệt huyết cao: Bạn có xu hướng lựa chọn bền vững và có trách nhiệm.";
   }
 
   if (score >= 2) {
-    return "Muc nhiet huyet kha: Ban dang di dung huong, can tang tinh kien tri.";
+    return "Mức nhiệt huyết khá: Bạn đang đi đúng hướng, cần tăng tính kiên trì.";
   }
 
-  return "Muc nhiet huyet thap: Nen dat lai uu tien hoc tap va dong gop xa hoi.";
+  return "Mức nhiệt huyết thấp: Nên đặt lại ưu tiên học tập và đóng góp xã hội.";
 }
 
 export default function QuizPage() {
@@ -61,7 +61,7 @@ export default function QuizPage() {
 
   const question = quizQuestions[index];
   const progressText = useMemo(
-    () => `Cau ${Math.min(index + 1, quizQuestions.length)}/${quizQuestions.length}`,
+    () => `Câu ${Math.min(index + 1, quizQuestions.length)}/${quizQuestions.length}`,
     [index],
   );
 
@@ -88,18 +88,18 @@ export default function QuizPage() {
   return (
     <article className="paper-panel game-panel">
       <header className="page-header">
-        <p className="page-kicker">Game phu</p>
-        <h1 className="page-title">Bo cau hoi quiz</h1>
-        <p className="page-lead">Che do nhanh de danh gia muc do nhiet huyet theo cach lua chon cua ban.</p>
+        <p className="page-kicker">Game phụ</p>
+        <h1 className="page-title">Bộ câu hỏi quiz</h1>
+        <p className="page-lead">Chế độ nhanh để đánh giá mức độ nhiệt huyết theo cách lựa chọn của bạn.</p>
       </header>
 
       {done ? (
         <section className="content-section">
-          <h2 className="section-title">Ket qua quiz</h2>
-          <p>Tong diem: {score}</p>
+          <h2 className="section-title">Kết quả quiz</h2>
+          <p>Tổng điểm: {score}</p>
           <p>{getQuizResult(score)}</p>
           <button type="button" className="primary-button" onClick={resetQuiz}>
-            Lam lai quiz
+            Làm lại quiz
           </button>
         </section>
       ) : (
@@ -115,7 +115,7 @@ export default function QuizPage() {
                 onClick={() => handleAnswer(answer.score)}
               >
                 <h3>{answer.label}</h3>
-                <p>Diem: {answer.score > 0 ? `+${answer.score}` : answer.score}</p>
+                <p>Điểm: {answer.score > 0 ? `+${answer.score}` : answer.score}</p>
               </button>
             ))}
           </div>

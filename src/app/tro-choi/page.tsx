@@ -3,7 +3,7 @@ import Link from "next/link";
 import { gameFlow } from "@/lib/game-engine";
 
 export const metadata: Metadata = {
-  title: "Tro choi",
+  title: "Trò chơi",
   description: gameFlow.overview,
 };
 
@@ -11,13 +11,13 @@ export default function TroChoiLandingPage() {
   return (
     <article className="paper-panel game-panel">
       <header className="page-header">
-        <p className="page-kicker">Module tuong tac</p>
+        <p className="page-kicker">Module tương tác</p>
         <h1 className="page-title">{gameFlow.title}</h1>
         <p className="page-lead">{gameFlow.overview}</p>
       </header>
 
       <section className="content-section">
-        <h2 className="section-title">Tong the cot truyen</h2>
+        <h2 className="section-title">Tổng thể cốt truyện</h2>
         <ul className="game-list">
           {gameFlow.intro.summary.map((line) => (
             <li key={line}>{line}</li>
@@ -26,11 +26,11 @@ export default function TroChoiLandingPage() {
       </section>
 
       <section className="content-section">
-        <h2 className="section-title">4 phan gameplay</h2>
+        <h2 className="section-title">4 phần gameplay</h2>
         <ol className="timeline-list compact">
           {gameFlow.steps.map((step, index) => (
             <li key={step.id}>
-              <p className="timeline-step">Phan {index + 1}</p>
+              <p className="timeline-step">Phần {index + 1}</p>
               <h3>{step.title}</h3>
               <p>{step.context}</p>
             </li>
@@ -40,10 +40,10 @@ export default function TroChoiLandingPage() {
 
       <div className="game-actions">
         <Link href="/tro-choi/intro" className="primary-button">
-          Bat dau
+          Bắt đầu
         </Link>
         <Link href="/tro-choi/quiz" className="secondary-button">
-          Bo cau hoi quiz
+          Bộ câu hỏi quiz
         </Link>
       </div>
     </article>

@@ -15,7 +15,7 @@
 .pageTitle {
   margin: 0;
   color: #d71920;
-  font-family: var(--font-heading), Impact, sans-serif;
+  font-family: "Times New Roman", Times, serif;
   font-weight: 400;
   font-size: clamp(2rem, 4.15vw, 3.05rem);
   text-transform: uppercase;
@@ -148,6 +148,7 @@
   background: #f5efef;
   color: #7e7474;
   font-size: 1.35rem;
+  cursor: pointer;
 }
 
 .actionContent {
@@ -218,6 +219,9 @@
   border-radius: 999px;
   background: #7d7777;
   opacity: 0.45;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
 .dotActive {
@@ -283,6 +287,7 @@
 .historyMainFigure {
   margin: 0;
   display: grid;
+  grid-template-rows: auto minmax(3.2rem, auto);
   gap: 0.42rem;
 }
 
@@ -291,18 +296,32 @@
   color: #111111;
   font-size: clamp(0.9rem, 1.08vw, 1.2rem);
   line-height: 1.35;
+  min-height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
 }
 
 .historySideColumn {
   display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 0.7rem;
 }
 
-.downArrow {
-  justify-self: end;
-  width: 1.45rem;
-  height: auto;
+.historySideColumn .mediaFigure {
+  grid-template-rows: auto minmax(3.2rem, auto);
+}
+
+.historySideColumn .mediaImage {
+  aspect-ratio: 4 / 3;
+}
+
+.historySideColumn .mediaFigure figcaption {
+  min-height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modernBlock {

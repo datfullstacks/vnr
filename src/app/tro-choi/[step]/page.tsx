@@ -6,25 +6,31 @@ import { gameStepIds } from "@/lib/game-engine";
 const validStepSet = new Set(["intro", "ket-qua", ...gameStepIds]);
 
 type GameStepRouteProps = {
-  params: {
+  params: Promise<{
     step: string;
-  };
+  }>;
 };
 
 export function generateStaticParams() {
   return [...validStepSet].map((step) => ({ step }));
 }
 
-export function generateMetadata({ params }: GameStepRouteProps): Metadata {
+export async function generateMetadata({
+  params,
+}: GameStepRouteProps): Promise<Metadata> {
+  const { step } = await params;
+
   return {
-    title: `Tro choi - ${params.step}`,
+    title: `Trò chơi - ${step}`,
   };
 }
 
-export default function GameStepRoutePage({ params }: GameStepRouteProps) {
-  if (!validStepSet.has(params.step)) {
+export default async function GameStepRoutePage({ params }: GameStepRouteProps) {
+  const { step } = await params;
+
+  if (!validStepSet.has(step)) {
     notFound();
   }
 
-  return <GameFlowPage stepId={params.step} />;
+  return <GameFlowPage stepId={step} />;
 }

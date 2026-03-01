@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { useGame } from "@/components/game/game-provider";
+import { GameStepScreen } from "@/components/game/game-step-screen";
 import {
   gameFlow,
   getNextUnlockedStep,
@@ -24,7 +25,7 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
   const step = useMemo(() => getStepById(stepId), [stepId]);
 
   if (!hydrated) {
-    return <section className="paper-panel">Dang tai tien trinh game...</section>;
+    return <section className="paper-panel">Đang tải tiến trình game...</section>;
   }
 
   if (stepId === "intro") {
@@ -33,7 +34,7 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
     return (
       <article className="paper-panel game-panel">
         <header className="page-header">
-          <p className="page-kicker">Tro choi tuong tac</p>
+          <p className="page-kicker">Trò chơi tương tác</p>
           <h1 className="page-title">{gameFlow.intro.title}</h1>
           <p className="page-lead">{gameFlow.overview}</p>
         </header>
@@ -55,12 +56,12 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
               router.push(`/tro-choi/${gameFlow.intro.next}`);
             }}
           >
-            Bat dau
+            Bắt đầu
           </button>
 
           {progress.started ? (
             <Link className="secondary-button" href={`/tro-choi/${continueStep}`}>
-              Tiep tuc
+              Tiếp tục
             </Link>
           ) : null}
         </div>
@@ -72,10 +73,10 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
     if (!progress.started) {
       return (
         <article className="paper-panel game-panel">
-          <h1 className="page-title">Ban chua bat dau game</h1>
-          <p>Hay quay ve man intro de bat dau hanh trinh.</p>
+          <h1 className="page-title">Bạn chưa bắt đầu game</h1>
+          <p>Hãy quay về màn intro để bắt đầu hành trình.</p>
           <Link href="/tro-choi/intro" className="primary-button">
-            Ve intro
+            Về intro
           </Link>
         </article>
       );
@@ -84,10 +85,10 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
     if (!isGameComplete(progress)) {
       return (
         <article className="paper-panel game-panel">
-          <h1 className="page-title">Ban chua hoan thanh 4 phan</h1>
-          <p>Can hoan thanh day du cac buoc de mo ket qua tong ket.</p>
+          <h1 className="page-title">Bạn chưa hoàn thành 4 phần</h1>
+          <p>Cần hoàn thành đầy đủ các bước để mở kết quả tổng kết.</p>
           <Link href={`/tro-choi/${getNextUnlockedStep(progress)}`} className="primary-button">
-            Tiep tuc choi
+            Tiếp tục chơi
           </Link>
         </article>
       );
@@ -98,9 +99,9 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
     return (
       <article className="paper-panel game-panel">
         <header className="page-header">
-          <p className="page-kicker">Ket qua tong ket</p>
+          <p className="page-kicker">Kết quả tổng kết</p>
           <h1 className="page-title">{result.title}</h1>
-          <p className="page-lead">Tong diem: {progress.score}/8</p>
+          <p className="page-lead">Tổng điểm: {progress.score}/8</p>
         </header>
 
         <section className="content-section">
@@ -113,7 +114,7 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
               return (
                 <article key={flowStep.id} className="decision-item">
                   <h3>{flowStep.title}</h3>
-                  <p>{choice?.label ?? "Chua lua chon"}</p>
+                  <p>{choice?.label ?? "Chưa lựa chọn"}</p>
                 </article>
               );
             })}
@@ -129,10 +130,10 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
               router.push("/tro-choi/intro");
             }}
           >
-            Choi lai
+            Chơi lại
           </button>
           <Link href="/tro-choi" className="secondary-button">
-            Quay lai landing
+            Quay lại landing
           </Link>
         </div>
       </article>
@@ -142,9 +143,9 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
   if (!step) {
     return (
       <article className="paper-panel game-panel">
-        <h1 className="page-title">Khong tim thay buoc game</h1>
+        <h1 className="page-title">Không tìm thấy bước game</h1>
         <Link href="/tro-choi" className="primary-button">
-          Ve landing
+          Về landing
         </Link>
       </article>
     );
@@ -153,10 +154,10 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
   if (!progress.started) {
     return (
       <article className="paper-panel game-panel">
-        <h1 className="page-title">Ban chua bat dau game</h1>
-        <p>He thong se mo buoc nay sau khi ban nhan Bat dau o man intro.</p>
+        <h1 className="page-title">Bạn chưa bắt đầu game</h1>
+        <p>Hệ thống sẽ mở bước này sau khi bạn nhấn Bắt đầu ở màn intro.</p>
         <Link href="/tro-choi/intro" className="primary-button">
-          Di den intro
+          Đi đến intro
         </Link>
       </article>
     );
@@ -165,58 +166,25 @@ export function GameFlowPage({ stepId }: GameFlowPageProps) {
   if (!isStepUnlocked(step.id, progress)) {
     return (
       <article className="paper-panel game-panel">
-        <h1 className="page-title">Buoc nay chua mo</h1>
-        <p>Hay di lan luot theo flow de giu logic game.</p>
+        <h1 className="page-title">Bước này chưa mở</h1>
+        <p>Hãy đi lần lượt theo flow để giữ logic game.</p>
         <Link href={`/tro-choi/${getNextUnlockedStep(progress)}`} className="primary-button">
-          Di den buoc tiep theo
+          Đi đến bước tiếp theo
         </Link>
       </article>
     );
   }
 
-  const selected = progress.choices[step.id];
-  const selectedChoice = step.choices.find((choice) => choice.id === selected?.choiceId);
+  const selectedChoiceId = progress.choices[step.id]?.choiceId;
 
   return (
-    <article className="paper-panel game-panel">
-      <header className="page-header">
-        <p className="page-kicker">Tro choi - lua chon theo chu de</p>
-        <h1 className="page-title">{step.title}</h1>
-        <p className="page-lead">{step.context}</p>
-      </header>
-
-      <section className="quote-banner">
-        <blockquote>{step.quote}</blockquote>
-      </section>
-
-      <section className="choice-grid" aria-label="Danh sach lua chon">
-        {step.choices.map((choice) => {
-          const active = selected?.choiceId === choice.id;
-
-          return (
-            <button
-              key={choice.id}
-              type="button"
-              className={active ? "choice-card choice-card-active" : "choice-card"}
-              onClick={() => chooseForStep(step.id, choice)}
-            >
-              <h3>{choice.label}</h3>
-              <p>{choice.description}</p>
-              <p className="choice-score">Diem: +{choice.score}</p>
-            </button>
-          );
-        })}
-      </section>
-
-      <div className="game-actions">
-        {selectedChoice ? (
-          <Link href={`/tro-choi/${selectedChoice.next}`} className="primary-button">
-            Tiep tuc
-          </Link>
-        ) : (
-          <p className="hint-text">Chon mot phuong an de tiep tuc.</p>
-        )}
-      </div>
-    </article>
+    <GameStepScreen
+      step={step}
+      selectedChoiceId={selectedChoiceId}
+      onChoose={(choice) => {
+        chooseForStep(step.id, choice);
+        router.push(`/tro-choi/${choice.next}`);
+      }}
+    />
   );
 }
