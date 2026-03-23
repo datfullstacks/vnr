@@ -6,22 +6,29 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import type { PeriodRecord } from '@/lib/content-types'
 import type { SearchState } from '@/lib/search-state'
 
+import { resolvePeriodForYear } from '@/components/explorer-helpers'
+
 export function TimelineController({
   filters,
   maxYear,
   minYear,
   periods,
+  variant = 'full',
 }: {
   filters: SearchState
   maxYear: number
   minYear: number
   periods: PeriodRecord[]
+  variant?: 'compact' | 'full'
 }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
   const [year, setYear] = useState(filters.year ?? filters.to ?? maxYear)
+  const visiblePeriod =
+    (filters.period ? periods.find((period) => period.slug === filters.period) : null) ??
+    resolvePeriodForYear(periods, year)
 
   function pushState(next: { period?: string; year?: number }) {
     const params = new URLSearchParams(searchParams.toString())
@@ -49,32 +56,86 @@ export function TimelineController({
     })
   }
 
+  if (variant === 'compact') {
+    return (
+      <section className="timeline-card timeline-card-inline">
+        <p className="eyebrow">Lát cắt đang xem</p>
+        <h2>Năm {year}</h2>
+        <p className="timeline-copy">
+          {visiblePeriod ? visiblePeriod.title : 'Chọn một năm để mở lát cắt kể chuyện tương ứng.'}
+        </p>
+
+        <div className="timeline-range-grid timeline-range-grid-compact">
+          <label>
+            <span>Trượt để đổi năm</span>
+            <input
+              max={maxYear}
+              min={minYear}
+              onChange={(event) => setYear(Number(event.target.value))}
+              type="range"
+              value={year}
+            />
+            <small>
+              Từ {minYear} đến {maxYear}
+            </small>
+          </label>
+        </div>
+
+        <div className="timeline-actions timeline-actions-inline">
+          <button
+            className="ghost-button"
+            onClick={() => {
+              setYear(maxYear)
+              pushState({ period: '', year: maxYear })
+            }}
+            type="button"
+          >
+            Năm mới nhất
+          </button>
+          <button
+            className="ghost-button timeline-apply-button"
+            onClick={() => pushState({ period: '', year })}
+            type="button"
+          >
+            Chuyển sang năm {year}
+          </button>
+        </div>
+      </section>
+    )
+  }
+
   return (
-    <section className="timeline-card">
+    <section className="timeline-card timeline-card-atlas">
       <div className="timeline-header">
         <div>
-          <p className="eyebrow">Dẫn tuyến thời gian</p>
-          <h2>Kéo theo năm để nhìn thấy bước chuyển của cách mạng trên cùng một trục bản đồ và tư liệu</h2>
+          <p className="eyebrow">Mốc năm và giai đoạn</p>
+          <h2>Điều chỉnh trục thời gian của atlas</h2>
           <p className="timeline-copy">
-            Mỗi mốc năm sẽ làm đổi bối cảnh lịch sử trên bản đồ, đồng thời gọi ra những bản ghi tiêu biểu
-            của giai đoạn tương ứng.
+            Kéo theo năm hoặc chọn nhanh một giai đoạn để đồng bộ lớp nền lịch sử, bản đồ và danh sách bản ghi.
           </p>
         </div>
-        <button
-          className="ghost-button"
-          onClick={() => {
-            setYear(maxYear)
-            pushState({ period: '', year: maxYear })
-          }}
-          type="button"
-        >
-          Về năm gần nhất
-        </button>
+        <div className="timeline-actions">
+          <button
+            className="ghost-button"
+            onClick={() => {
+              setYear(maxYear)
+              pushState({ period: '', year: maxYear })
+            }}
+            type="button"
+          >
+            Năm mới nhất
+          </button>
+          <button className="primary-button" onClick={() => pushState({ year })} type="button">
+            Xem năm {year}
+          </button>
+        </div>
       </div>
 
       <div className="timeline-range-grid">
         <label>
-          <span>Lát cắt đang xem: {year}</span>
+          <span>
+            Năm đang xem: <strong>{year}</strong>
+          </span>
           <input
             max={maxYear}
             min={minYear}
@@ -82,15 +143,10 @@ export function TimelineController({
             type="range"
             value={year}
           />
+          <small>
+            Từ {minYear} đến {maxYear}
+          </small>
         </label>
-
-        <button
-          className="primary-button"
-          onClick={() => pushState({ year })}
-          type="button"
-        >
-          Cập nhật bản đồ và bản ghi
-        </button>
       </div>
 
       <div className="period-rail" role="list">

@@ -26,12 +26,6 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-      "@payload-importmap": [
-        "./src/app/(payload)/admin/importMap.js"
-      ],
-      "@payload-config": [
-        "./payload.config.ts"
       ]
     }
   },

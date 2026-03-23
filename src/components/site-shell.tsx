@@ -22,12 +22,11 @@ export function SiteShell({
             VNR Atlas
           </Link>
           <p className="brand-subtitle">
-            Dòng thời gian và bản đồ lịch sử Đảng Cộng sản Việt Nam, nối sự kiện, địa danh, chiến dịch
-            và các gương mặt tiêu biểu qua từng giai đoạn.
+            Atlas lịch sử Đảng, ưu tiên tra cứu theo mốc năm và không gian cách mạng.
           </p>
         </div>
 
-        <nav className="site-nav" aria-label="Chính">
+        <nav aria-label="Chính" className="site-nav">
           {nav.map((item) => (
             <Link key={item.href} href={item.href}>
               {item.label}
@@ -46,8 +45,7 @@ export function SiteShell({
       </main>
 
       <footer className="site-footer">
-        <p>Mỗi mốc năm mở ra một lát cắt lịch sử với không gian cách mạng, chiến trường, căn cứ địa và bước ngoặt của dân tộc.</p>
-        <p>Từ dòng thời gian, người đọc có thể đi thẳng sang bản đồ, hồ sơ sự kiện, địa danh, chiến dịch và các giai đoạn lớn của lịch sử Đảng.</p>
+        <p>Mỗi mốc năm mở ra một lát cắt lịch sử để đối chiếu bản đồ, sự kiện, chiến dịch và địa danh.</p>
       </footer>
     </div>
   )

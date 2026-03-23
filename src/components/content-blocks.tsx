@@ -60,43 +60,112 @@ type FigureHighlight = {
 const prominentFiguresByPeriod: Record<string, FigureHighlight[]> = {
   '1858-1918': [
     { name: 'Trương Định', role: 'Gương mặt tiêu biểu của phong trào kháng Pháp buổi đầu ở Nam Kỳ.' },
-    { name: 'Phan Đình Phùng', role: 'Biểu tượng của khởi nghĩa Cần Vương và tinh thần chống xâm lược cuối thế kỷ XIX.' },
-    { name: 'Phan Bội Châu', role: 'Người mở rộng tầm nhìn cứu nước đầu thế kỷ XX bằng các tổ chức và mạng lưới mới.' },
+    {
+      name: 'Phan Đình Phùng',
+      role: 'Biểu tượng của khởi nghĩa Cần Vương và tinh thần chống xâm lược cuối thế kỷ XIX.',
+    },
+    {
+      name: 'Phan Bội Châu',
+      role: 'Người mở rộng tầm nhìn cứu nước đầu thế kỷ XX bằng các tổ chức và mạng lưới mới.',
+    },
   ],
   '1919-1930': [
-    { name: 'Nguyễn Ái Quốc', role: 'Người kết nối hành trình tìm đường cứu nước với con đường cách mạng vô sản.' },
-    { name: 'Tôn Đức Thắng', role: 'Đại diện cho sự trưởng thành của phong trào công nhân và tinh thần quốc tế.' },
-    { name: 'Phan Châu Trinh', role: 'Một tiếng nói quan trọng của khuynh hướng canh tân và thức tỉnh dân quyền.' },
+    {
+      name: 'Nguyễn Ái Quốc',
+      role: 'Người kết nối hành trình tìm đường cứu nước với con đường cách mạng vô sản.',
+    },
+    {
+      name: 'Tôn Đức Thắng',
+      role: 'Đại diện cho sự trưởng thành của phong trào công nhân và tinh thần quốc tế.',
+    },
+    {
+      name: 'Phan Châu Trinh',
+      role: 'Một tiếng nói quan trọng của khuynh hướng canh tân và thức tỉnh dân quyền.',
+    },
   ],
   '1930-1945': [
-    { name: 'Hồ Chí Minh', role: 'Lãnh tụ gắn việc thành lập Đảng với chiến lược giải phóng dân tộc.' },
-    { name: 'Trường Chinh', role: 'Nhà lý luận và tổ chức quan trọng trong việc giữ vững đường lối cách mạng.' },
-    { name: 'Võ Nguyên Giáp', role: 'Người góp phần tổ chức lực lượng vũ trang và chuẩn bị cho Tổng khởi nghĩa.' },
+    {
+      name: 'Hồ Chí Minh',
+      role: 'Lãnh tụ gắn việc thành lập Đảng với chiến lược giải phóng dân tộc.',
+    },
+    {
+      name: 'Trường Chinh',
+      role: 'Nhà lý luận và tổ chức quan trọng trong việc giữ vững đường lối cách mạng.',
+    },
+    {
+      name: 'Võ Nguyên Giáp',
+      role: 'Người góp phần tổ chức lực lượng vũ trang và chuẩn bị cho Tổng khởi nghĩa.',
+    },
   ],
   '1945-1954': [
-    { name: 'Hồ Chí Minh', role: 'Linh hồn của chính quyền cách mạng non trẻ và đường lối kháng chiến kiến quốc.' },
-    { name: 'Võ Nguyên Giáp', role: 'Tư lệnh gắn với những bước ngoặt quân sự từ Việt Bắc đến Điện Biên Phủ.' },
-    { name: 'Phạm Văn Đồng', role: 'Gương mặt nổi bật trên mặt trận ngoại giao, đặc biệt ở Hội nghị Genève.' },
+    {
+      name: 'Hồ Chí Minh',
+      role: 'Linh hồn của chính quyền cách mạng non trẻ và đường lối kháng chiến kiến quốc.',
+    },
+    {
+      name: 'Võ Nguyên Giáp',
+      role: 'Tư lệnh gắn với những bước ngoặt quân sự từ Việt Bắc đến Điện Biên Phủ.',
+    },
+    {
+      name: 'Phạm Văn Đồng',
+      role: 'Gương mặt nổi bật trên mặt trận ngoại giao, đặc biệt tại Hội nghị Genève.',
+    },
   ],
   '1954-1965': [
-    { name: 'Hồ Chí Minh', role: 'Biểu tượng đoàn kết dân tộc và định hướng chiến lược cho cả hai miền.' },
-    { name: 'Lê Duẩn', role: 'Nhân vật trung tâm trong hoạch định đường lối cách mạng miền Nam.' },
-    { name: 'Nguyễn Chí Thanh', role: 'Gắn với chỉ đạo chiến trường và phát triển thế trận cách mạng ở miền Nam.' },
+    {
+      name: 'Hồ Chí Minh',
+      role: 'Biểu tượng đoàn kết dân tộc và định hướng chiến lược cho cả hai miền.',
+    },
+    {
+      name: 'Lê Duẩn',
+      role: 'Nhân vật trung tâm trong hoạch định đường lối cách mạng miền Nam.',
+    },
+    {
+      name: 'Nguyễn Chí Thanh',
+      role: 'Gắn với chỉ đạo chiến trường và phát triển thế trận cách mạng ở miền Nam.',
+    },
   ],
   '1965-1973': [
-    { name: 'Lê Duẩn', role: 'Một trong những người định hình quyết tâm chiến lược trong giai đoạn chiến tranh ác liệt nhất.' },
-    { name: 'Võ Nguyên Giáp', role: 'Gương mặt chỉ huy quân sự tiêu biểu trên mặt trận toàn quốc.' },
-    { name: 'Nguyễn Thị Bình', role: 'Tiếng nói nổi bật của mặt trận ngoại giao cách mạng tại Paris.' },
+    {
+      name: 'Lê Duẩn',
+      role: 'Một trong những người định hình quyết tâm chiến lược ở giai đoạn chiến tranh ác liệt nhất.',
+    },
+    {
+      name: 'Võ Nguyên Giáp',
+      role: 'Gương mặt chỉ huy quân sự tiêu biểu trên mặt trận toàn quốc.',
+    },
+    {
+      name: 'Nguyễn Thị Bình',
+      role: 'Tiếng nói nổi bật của mặt trận ngoại giao cách mạng tại Paris.',
+    },
   ],
   '1973-1975': [
-    { name: 'Lê Duẩn', role: 'Gắn với quyết tâm chớp thời cơ và chỉ đạo tổng tiến công chiến lược.' },
-    { name: 'Văn Tiến Dũng', role: 'Người chỉ huy các chiến dịch lớn trong mùa Xuân 1975.' },
-    { name: 'Phạm Hùng', role: 'Nhân vật chủ chốt trong chỉ đạo chiến trường miền Nam giai đoạn cuối.' },
+    {
+      name: 'Lê Duẩn',
+      role: 'Gắn với quyết tâm chớp thời cơ và chỉ đạo tổng tiến công chiến lược.',
+    },
+    {
+      name: 'Văn Tiến Dũng',
+      role: 'Người chỉ huy các chiến dịch lớn trong mùa Xuân 1975.',
+    },
+    {
+      name: 'Phạm Hùng',
+      role: 'Nhân vật chủ chốt trong chỉ đạo chiến trường miền Nam giai đoạn cuối.',
+    },
   ],
   '1975-1986': [
-    { name: 'Lê Duẩn', role: 'Một trong những gương mặt trung tâm của thời kỳ hậu chiến và xây dựng lại đất nước.' },
-    { name: 'Trường Chinh', role: 'Đại diện cho nỗ lực điều chỉnh tư duy và chuẩn bị cho những chuyển biến mới.' },
-    { name: 'Phạm Văn Đồng', role: 'Gắn với điều hành nhà nước trong giai đoạn thống nhất và khắc phục hậu quả chiến tranh.' },
+    {
+      name: 'Lê Duẩn',
+      role: 'Một trong những gương mặt trung tâm của thời kỳ hậu chiến và xây dựng lại đất nước.',
+    },
+    {
+      name: 'Trường Chinh',
+      role: 'Đại diện cho nỗ lực điều chỉnh tư duy và chuẩn bị cho những chuyển biến mới.',
+    },
+    {
+      name: 'Phạm Văn Đồng',
+      role: 'Gắn với điều hành nhà nước trong giai đoạn thống nhất và khắc phục hậu quả chiến tranh.',
+    },
   ],
 }
 

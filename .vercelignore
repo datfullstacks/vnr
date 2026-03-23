@@ -1,4 +1,6 @@
+.git
 .next
+.tools
 node_modules
 .env
 .env.local
@@ -7,6 +9,3 @@ coverage
 payload-types.ts
 tsconfig.tsbuildinfo
 *.log
-.tools
-
-.vercel

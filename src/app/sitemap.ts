@@ -2,26 +2,39 @@ import type { MetadataRoute } from 'next'
 
 import { getExplorerSnapshot } from '@/lib/content-service'
 
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const snapshot = await getExplorerSnapshot()
+  const siteUrl = process.env.SITE_URL?.trim() || 'http://localhost:3000'
+
+  let snapshot
+
+  try {
+    snapshot = await getExplorerSnapshot()
+  } catch {
+    return [
+      { url: `${siteUrl}/` },
+      { url: `${siteUrl}/atlas` },
+    ]
+  }
 
   return [
-    { url: 'http://localhost:3000/' },
-    { url: 'http://localhost:3000/atlas' },
+    { url: `${siteUrl}/` },
+    { url: `${siteUrl}/atlas` },
     ...snapshot.periods.map((period) => ({
-      url: `http://localhost:3000/giai-doan/${period.slug}`,
+      url: `${siteUrl}/giai-doan/${period.slug}`,
     })),
     ...snapshot.events.map((event) => ({
-      url: `http://localhost:3000/su-kien/${event.slug}`,
+      url: `${siteUrl}/su-kien/${event.slug}`,
     })),
     ...snapshot.campaigns.map((campaign) => ({
-      url: `http://localhost:3000/chien-dich/${campaign.slug}`,
+      url: `${siteUrl}/chien-dich/${campaign.slug}`,
     })),
     ...snapshot.places.map((place) => ({
-      url: `http://localhost:3000/dia-danh/${place.slug}`,
+      url: `${siteUrl}/dia-danh/${place.slug}`,
     })),
     ...snapshot.quizzes.map((quiz) => ({
-      url: `http://localhost:3000/quiz/${quiz.slug}`,
+      url: `${siteUrl}/quiz/${quiz.slug}`,
     })),
   ]
 }
