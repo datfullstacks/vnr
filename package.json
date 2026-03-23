@@ -1,0 +1,42 @@
+{
+  "name": "vnr-history-map",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "db:start": "powershell -ExecutionPolicy Bypass -File ./scripts/start-mongodb.ps1",
+    "db:stop": "powershell -ExecutionPolicy Bypass -File ./scripts/stop-mongodb.ps1",
+    "prepare:map": "node ./scripts/generate-modern-boundaries.mjs",
+    "seed:demo": "tsx ./scripts/seed-demo.ts",
+    "audit:content": "tsx ./scripts/audit-content-quality.ts",
+    "generate:types": "payload generate:types",
+    "generate:importmap": "payload generate:importmap"
+  },
+  "dependencies": {
+    "@payloadcms/db-mongodb": "3.80.0",
+    "@payloadcms/next": "3.80.0",
+    "@payloadcms/richtext-lexical": "3.80.0",
+    "@payloadcms/storage-s3": "3.80.0",
+    "clsx": "^2.1.1",
+    "maplibre-gl": "5.21.0",
+    "next": "16.2.1",
+    "payload": "3.80.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sharp": "^0.34.4"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@types/node": "^24.7.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "eslint": "^9.38.0",
+    "eslint-config-next": "16.2.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

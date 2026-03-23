@@ -1,0 +1,322 @@
+[
+    {
+        "id":  "VN-01",
+        "title":  "Lai Châu",
+        "file":  "VN-01-lai-chau.svg"
+    },
+    {
+        "id":  "VN-02",
+        "title":  "Lào Cai",
+        "file":  "VN-02-lao-cai.svg"
+    },
+    {
+        "id":  "VN-03",
+        "title":  "Hà Giang",
+        "file":  "VN-03-ha-giang.svg"
+    },
+    {
+        "id":  "VN-04",
+        "title":  "Cao Bằng",
+        "file":  "VN-04-cao-bang.svg"
+    },
+    {
+        "id":  "VN-05",
+        "title":  "Sơn La",
+        "file":  "VN-05-son-la.svg"
+    },
+    {
+        "id":  "VN-06",
+        "title":  "Yên Bái",
+        "file":  "VN-06-yen-bai.svg"
+    },
+    {
+        "id":  "VN-07",
+        "title":  "Tuyên Quang",
+        "file":  "VN-07-tuyen-quang.svg"
+    },
+    {
+        "id":  "VN-09",
+        "title":  "Lạng Sơn",
+        "file":  "VN-09-lang-son.svg"
+    },
+    {
+        "id":  "VN-13",
+        "title":  "Quảng Ninh",
+        "file":  "VN-13-quang-ninh.svg"
+    },
+    {
+        "id":  "VN-14",
+        "title":  "Hòa Bình",
+        "file":  "VN-14-hoa-binh.svg"
+    },
+    {
+        "id":  "VN-15",
+        "title":  "Hà Tây",
+        "file":  "VN-15-ha-tay.svg"
+    },
+    {
+        "id":  "VN-18",
+        "title":  "Ninh Bình",
+        "file":  "VN-18-ninh-binh.svg"
+    },
+    {
+        "id":  "VN-20",
+        "title":  "Thái Bình",
+        "file":  "VN-20-thai-binh.svg"
+    },
+    {
+        "id":  "VN-21",
+        "title":  "Thanh Hóa",
+        "file":  "VN-21-thanh-hoa.svg"
+    },
+    {
+        "id":  "VN-22",
+        "title":  "Nghệ An",
+        "file":  "VN-22-nghe-an.svg"
+    },
+    {
+        "id":  "VN-23",
+        "title":  "Hà Tĩnh",
+        "file":  "VN-23-ha-tinh.svg"
+    },
+    {
+        "id":  "VN-24",
+        "title":  "Quảng Bình",
+        "file":  "VN-24-quang-binh.svg"
+    },
+    {
+        "id":  "VN-25",
+        "title":  "Quảng Trị",
+        "file":  "VN-25-quang-tri.svg"
+    },
+    {
+        "id":  "VN-26",
+        "title":  "Thừa Thiên–Huế",
+        "file":  "VN-26-thua-thien-hue.svg"
+    },
+    {
+        "id":  "VN-27",
+        "title":  "Quảng Nam",
+        "file":  "VN-27-quang-nam.svg"
+    },
+    {
+        "id":  "VN-28",
+        "title":  "Kon Tum",
+        "file":  "VN-28-kon-tum.svg"
+    },
+    {
+        "id":  "VN-29",
+        "title":  "Quảng Ngãi",
+        "file":  "VN-29-quang-ngai.svg"
+    },
+    {
+        "id":  "VN-30",
+        "title":  "Gia Lai",
+        "file":  "VN-30-gia-lai.svg"
+    },
+    {
+        "id":  "VN-31",
+        "title":  "Bình Định",
+        "file":  "VN-31-binh-dinh.svg"
+    },
+    {
+        "id":  "VN-32",
+        "title":  "Phú Yên",
+        "file":  "VN-32-phu-yen.svg"
+    },
+    {
+        "id":  "VN-33",
+        "title":  "Đắk Lắk",
+        "file":  "VN-33-dak-lak.svg"
+    },
+    {
+        "id":  "VN-34",
+        "title":  "Khánh Hòa",
+        "file":  "VN-34-khanh-hoa.svg"
+    },
+    {
+        "id":  "VN-35",
+        "title":  "Lâm Đồng",
+        "file":  "VN-35-lam-dong.svg"
+    },
+    {
+        "id":  "VN-36",
+        "title":  "Ninh Thuận",
+        "file":  "VN-36-ninh-thuan.svg"
+    },
+    {
+        "id":  "VN-37",
+        "title":  "Tây Ninh",
+        "file":  "VN-37-tay-ninh.svg"
+    },
+    {
+        "id":  "VN-39",
+        "title":  "Đồng Nai",
+        "file":  "VN-39-dong-nai.svg"
+    },
+    {
+        "id":  "VN-40",
+        "title":  "Bình Thuận",
+        "file":  "VN-40-binh-thuan.svg"
+    },
+    {
+        "id":  "VN-41",
+        "title":  "Long An",
+        "file":  "VN-41-long-an.svg"
+    },
+    {
+        "id":  "VN-43",
+        "title":  "Bà Rịa–Vũng Tàu",
+        "file":  "VN-43-ba-ria-vung-tau.svg"
+    },
+    {
+        "id":  "VN-44",
+        "title":  "An Giang",
+        "file":  "VN-44-an-giang.svg"
+    },
+    {
+        "id":  "VN-45",
+        "title":  "Đồng Tháp",
+        "file":  "VN-45-dong-thap.svg"
+    },
+    {
+        "id":  "VN-46",
+        "title":  "Tiền Giang",
+        "file":  "VN-46-tien-giang.svg"
+    },
+    {
+        "id":  "VN-47",
+        "title":  "Kiên Giang",
+        "file":  "VN-47-kien-giang.svg"
+    },
+    {
+        "id":  "VN-49",
+        "title":  "Vĩnh Long",
+        "file":  "VN-49-vinh-long.svg"
+    },
+    {
+        "id":  "VN-50",
+        "title":  "Bến Tre",
+        "file":  "VN-50-ben-tre.svg"
+    },
+    {
+        "id":  "VN-51",
+        "title":  "Trà Vinh",
+        "file":  "VN-51-tra-vinh.svg"
+    },
+    {
+        "id":  "VN-52",
+        "title":  "Sóc Trăng",
+        "file":  "VN-52-soc-trang.svg"
+    },
+    {
+        "id":  "VN-53",
+        "title":  "Bắc Kạn",
+        "file":  "VN-53-bac-kan.svg"
+    },
+    {
+        "id":  "VN-54",
+        "title":  "Bắc Giang",
+        "file":  "VN-54-bac-giang.svg"
+    },
+    {
+        "id":  "VN-55",
+        "title":  "Bạc Liêu",
+        "file":  "VN-55-bac-lieu.svg"
+    },
+    {
+        "id":  "VN-56",
+        "title":  "Bắc Ninh",
+        "file":  "VN-56-bac-ninh.svg"
+    },
+    {
+        "id":  "VN-57",
+        "title":  "Bình Dương",
+        "file":  "VN-57-binh-duong.svg"
+    },
+    {
+        "id":  "VN-58",
+        "title":  "Bình Phước",
+        "file":  "VN-58-binh-phuoc.svg"
+    },
+    {
+        "id":  "VN-59",
+        "title":  "Cà Mau",
+        "file":  "VN-59-ca-mau.svg"
+    },
+    {
+        "id":  "VN-61",
+        "title":  "Hải Dương",
+        "file":  "VN-61-hai-duong.svg"
+    },
+    {
+        "id":  "VN-63",
+        "title":  "Hà Nam",
+        "file":  "VN-63-ha-nam.svg"
+    },
+    {
+        "id":  "VN-66",
+        "title":  "Hưng Yên",
+        "file":  "VN-66-hung-yen.svg"
+    },
+    {
+        "id":  "VN-67",
+        "title":  "Nam Định",
+        "file":  "VN-67-nam-dinh.svg"
+    },
+    {
+        "id":  "VN-68",
+        "title":  "Phú Thọ",
+        "file":  "VN-68-phu-tho.svg"
+    },
+    {
+        "id":  "VN-69",
+        "title":  "Thái Nguyên",
+        "file":  "VN-69-thai-nguyen.svg"
+    },
+    {
+        "id":  "VN-70",
+        "title":  "Vĩnh Phúc",
+        "file":  "VN-70-vinh-phuc.svg"
+    },
+    {
+        "id":  "VN-71",
+        "title":  "Điện Biên",
+        "file":  "VN-71-dien-bien.svg"
+    },
+    {
+        "id":  "VN-72",
+        "title":  "Đắk Nông",
+        "file":  "VN-72-dak-nong.svg"
+    },
+    {
+        "id":  "VN-73",
+        "title":  "Hậu Giang",
+        "file":  "VN-73-hau-giang.svg"
+    },
+    {
+        "id":  "VN-CT",
+        "title":  "Cần Thơ",
+        "file":  "VN-CT-can-tho.svg"
+    },
+    {
+        "id":  "VN-DN",
+        "title":  "Đà Nẵng",
+        "file":  "VN-DN-da-nang.svg"
+    },
+    {
+        "id":  "VN-HN",
+        "title":  "Hà Nội",
+        "file":  "VN-HN-ha-noi.svg"
+    },
+    {
+        "id":  "VN-HP",
+        "title":  "Hải Phòng",
+        "file":  "VN-HP-hai-phong.svg"
+    },
+    {
+        "id":  "VN-SG",
+        "title":  "Hồ Chí Minh",
+        "file":  "VN-SG-ho-chi-minh.svg"
+    }
+]
