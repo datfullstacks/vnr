@@ -79,7 +79,6 @@ const archipelagoFeatures: FeatureCollection = {
 }
 
 const blankStyle: StyleSpecification = {
-  glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
   layers: [
     {
       id: 'background',
@@ -91,6 +90,59 @@ const blankStyle: StyleSpecification = {
   ],
   sources: {},
   version: 8,
+}
+
+function clearMarkers(markers: maplibregl.Marker[]) {
+  markers.forEach((marker) => marker.remove())
+  markers.length = 0
+}
+
+function syncTextMarkers({
+  className,
+  features,
+  map,
+  markers,
+  offset = [0, 0],
+  visible,
+}: {
+  className: string
+  features: FeatureCollection
+  map: Map
+  markers: maplibregl.Marker[]
+  offset?: [number, number]
+  visible: boolean
+}) {
+  clearMarkers(markers)
+
+  if (!visible) {
+    return
+  }
+
+  for (const feature of features.features) {
+    if (feature.geometry?.type !== 'Point') {
+      continue
+    }
+
+    const title = typeof feature.properties?.title === 'string' ? feature.properties.title.trim() : ''
+
+    if (!title) {
+      continue
+    }
+
+    const element = document.createElement('div')
+    element.className = `map-label ${className}`
+    element.textContent = title
+
+    const marker = new maplibregl.Marker({
+      anchor: 'center',
+      element,
+      offset,
+    })
+      .setLngLat(feature.geometry.coordinates as [number, number])
+      .addTo(map)
+
+    markers.push(marker)
+  }
 }
 
 function recordFeature(
@@ -575,6 +627,8 @@ export function AtlasMap({
   const defaultViewBoundsRef = useRef<LngLatBoundsLike>(VIETNAM_BOUNDS)
   const overlayFeaturesRef = useRef<FeatureCollection>(emptyFeatureCollection())
   const recordFeaturesRef = useRef<FeatureCollection>(emptyFeatureCollection())
+  const archipelagoLabelMarkersRef = useRef<maplibregl.Marker[]>([])
+  const adminLabelMarkersRef = useRef<maplibregl.Marker[]>([])
   const hoveredFeatureKeyRef = useRef('')
   const autoFitEpochKeyRef = useRef<string | null>(null)
   const [selected, setSelected] = useState<SelectedFeature | null>(null)
@@ -605,6 +659,8 @@ export function AtlasMap({
       style: blankStyle,
       zoom: 4.35,
     })
+    const archipelagoLabelMarkers = archipelagoLabelMarkersRef.current
+    const adminLabelMarkers = adminLabelMarkersRef.current
 
     map.dragRotate.disable()
     map.touchZoomRotate.disableRotation()
@@ -617,6 +673,8 @@ export function AtlasMap({
     mapRef.current = map
 
     return () => {
+      clearMarkers(archipelagoLabelMarkers)
+      clearMarkers(adminLabelMarkers)
       map.remove()
       mapRef.current = null
     }
@@ -769,22 +827,6 @@ export function AtlasMap({
           source: 'archipelago-reference',
           type: 'circle',
         })
-        activeMap.addLayer({
-          id: 'archipelago-labels-layer',
-          layout: {
-            'text-field': ['get', 'title'],
-            'text-font': ['Open Sans Regular'],
-            'text-offset': [0, 1.2],
-            'text-size': 12,
-          },
-          paint: {
-            'text-color': '#234968',
-            'text-halo-color': '#f8efde',
-            'text-halo-width': 1.1,
-          },
-          source: 'archipelago-reference',
-          type: 'symbol',
-        })
       }
 
       if (activeMap.getSource('historical-admin-boundaries')) {
@@ -804,29 +846,6 @@ export function AtlasMap({
           },
           source: 'historical-admin-boundaries',
           type: 'fill',
-        })
-      }
-
-      if (activeMap.getSource('historical-admin-labels')) {
-        ;(activeMap.getSource('historical-admin-labels') as maplibregl.GeoJSONSource).setData(
-          adminLabelFeatures,
-        )
-      } else {
-        activeMap.addSource('historical-admin-labels', { data: adminLabelFeatures, type: 'geojson' })
-        activeMap.addLayer({
-          id: 'historical-admin-labels-layer',
-          layout: {
-            'text-field': ['get', 'title'],
-            'text-font': ['Open Sans Regular'],
-            'text-size': 11,
-          },
-          paint: {
-            'text-color': '#362314',
-            'text-halo-color': '#f8efde',
-            'text-halo-width': 1.1,
-          },
-          source: 'historical-admin-labels',
-          type: 'symbol',
         })
       }
 
@@ -900,10 +919,24 @@ export function AtlasMap({
       const showHistorical = layer === 'all' || layer === 'historical'
       const showRecords = layer === 'all' || layer === 'records'
 
+      syncTextMarkers({
+        className: 'map-label-archipelago',
+        features: archipelagoFeatures,
+        map: activeMap,
+        markers: archipelagoLabelMarkersRef.current,
+        offset: [0, 18],
+        visible: showBoundaries,
+      })
+      syncTextMarkers({
+        className: 'map-label-admin',
+        features: adminLabelFeatures,
+        map: activeMap,
+        markers: adminLabelMarkersRef.current,
+        visible: showBoundaries,
+      })
+
       setLayerVisibility(activeMap, 'archipelago-points-layer', showBoundaries)
-      setLayerVisibility(activeMap, 'archipelago-labels-layer', showBoundaries)
       setLayerVisibility(activeMap, 'historical-admin-fill', showBoundaries)
-      setLayerVisibility(activeMap, 'historical-admin-labels-layer', showBoundaries)
       setLayerVisibility(activeMap, 'historical-overlays-fill', showHistorical)
       setLayerVisibility(activeMap, 'historical-overlays-line', showHistorical)
       setLayerVisibility(activeMap, 'historical-overlays-point', showHistorical)

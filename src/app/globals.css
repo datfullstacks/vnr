@@ -437,6 +437,29 @@ textarea {
   min-height: 520px;
 }
 
+.map-label {
+  pointer-events: none;
+  max-width: 160px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(87, 61, 36, 0.14);
+  background: rgba(255, 248, 236, 0.92);
+  box-shadow: 0 8px 22px rgba(60, 33, 18, 0.12);
+  color: #2d2014;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.map-label-admin {
+  transform: translateY(-2px);
+}
+
+.map-label-archipelago {
+  color: #234968;
+}
+
 .map-loading {
   display: grid;
   place-items: center;
