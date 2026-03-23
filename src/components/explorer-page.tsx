@@ -1,9 +1,33 @@
+import dynamic from 'next/dynamic'
+
 import type { ExplorerRecord, ExplorerSnapshot, PeriodRecord } from '@/lib/content-types'
 import type { SearchState } from '@/lib/search-state'
 
-import { AtlasMap } from '@/components/atlas-map'
 import { NarrativeFocus, PeriodHighlights, RecordGrid } from '@/components/content-blocks'
 import { TimelineController } from '@/components/timeline-controller'
+
+const AtlasMap = dynamic(
+  () => import('@/components/atlas-map').then((module) => module.AtlasMap),
+  {
+    loading: () => (
+      <div className="map-shell map-shell-loading" aria-busy="true">
+        <div className="map-stage">
+          <div className="map-loading">
+            <div className="map-loading-bar" />
+            <p>Đang nạp bản đồ lịch sử...</p>
+          </div>
+        </div>
+        <aside className="map-aside">
+          <p className="eyebrow">Chú giải bản đồ</p>
+          <div className="map-loading-copy">
+            Bản đồ sẽ được tải sau khi phần giao diện chính đã sẵn sàng để trang phản hồi nhanh hơn.
+          </div>
+        </aside>
+      </div>
+    ),
+    ssr: false,
+  },
+)
 
 function periodOptions(periods: PeriodRecord[]) {
   return periods.map((period) => (

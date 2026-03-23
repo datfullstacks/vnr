@@ -144,8 +144,8 @@ function featureCollectionFromFeature(feature: Feature<Geometry, GeoJsonProperti
 
 function cloneFeature(feature: Feature<Geometry, GeoJsonProperties>): Feature<Geometry, GeoJsonProperties> {
   return {
-    geometry: JSON.parse(JSON.stringify(feature.geometry)) as Geometry,
-    properties: JSON.parse(JSON.stringify(feature.properties ?? {})) as GeoJsonProperties,
+    geometry: feature.geometry,
+    properties: feature.properties ?? {},
     type: 'Feature',
   }
 }
@@ -300,8 +300,8 @@ function selectedMeta(properties: GeoJsonProperties | null | undefined) {
 
 function normalizeFeature(feature: MapGeoJSONFeature): Feature<Geometry, GeoJsonProperties> {
   return {
-    geometry: JSON.parse(JSON.stringify(feature.geometry)) as Geometry,
-    properties: JSON.parse(JSON.stringify(feature.properties ?? {})) as GeoJsonProperties,
+    geometry: feature.geometry as Geometry,
+    properties: (feature.properties ?? {}) as GeoJsonProperties,
     type: 'Feature',
   }
 }
@@ -576,6 +576,7 @@ export function AtlasMap({
   const overlayFeaturesRef = useRef<FeatureCollection>(emptyFeatureCollection())
   const recordFeaturesRef = useRef<FeatureCollection>(emptyFeatureCollection())
   const hoveredFeatureKeyRef = useRef('')
+  const autoFitEpochKeyRef = useRef<string | null>(null)
   const [selected, setSelected] = useState<SelectedFeature | null>(null)
 
   const dataSignature = [
@@ -908,17 +909,27 @@ export function AtlasMap({
       setLayerVisibility(activeMap, 'historical-overlays-point', showHistorical)
       setLayerVisibility(activeMap, 'record-points-layer', showRecords)
 
-      resetMapView(activeMap, defaultViewBoundsRef.current, false)
+      const nextAutoFitKey = boundaryEpoch?.slug ?? 'none'
+
+      if (autoFitEpochKeyRef.current !== nextAutoFitKey) {
+        autoFitEpochKeyRef.current = nextAutoFitKey
+        resetMapView(activeMap, defaultViewBoundsRef.current, false)
+      }
     }
 
-    function handleMouseMove(event: maplibregl.MapMouseEvent) {
+    let hoverFrame = 0
+    let pendingHoverPoint: maplibregl.Point | null = null
+
+    function flushHoverState() {
+      hoverFrame = 0
+
       const activeMap = mapRef.current
 
       if (!activeMap) {
         return
       }
 
-      const feature = pickFeature(activeMap, event.point)
+      const feature = pendingHoverPoint ? pickFeature(activeMap, pendingHoverPoint) : null
       const nextKey = feature ? featureIdentity(feature) : ''
 
       if (nextKey === hoveredFeatureKeyRef.current) {
@@ -934,11 +945,16 @@ export function AtlasMap({
             records: recordFeaturesRef.current,
           })
         : null
-      setSourceData(
-        activeMap,
-        'hover-feature',
-        featureCollectionFromFeature(resolvedFeature),
-      )
+
+      setSourceData(activeMap, 'hover-feature', featureCollectionFromFeature(resolvedFeature))
+    }
+
+    function handleMouseMove(event: maplibregl.MapMouseEvent) {
+      pendingHoverPoint = event.point
+
+      if (!hoverFrame) {
+        hoverFrame = requestAnimationFrame(flushHoverState)
+      }
     }
 
     function handleMouseLeave() {
@@ -948,6 +964,9 @@ export function AtlasMap({
         return
       }
 
+      pendingHoverPoint = null
+      cancelAnimationFrame(hoverFrame)
+      hoverFrame = 0
       hoveredFeatureKeyRef.current = ''
       activeMap.getCanvas().style.cursor = ''
       setSourceData(activeMap, 'hover-feature', emptyFeatureCollection())
@@ -986,6 +1005,7 @@ export function AtlasMap({
 
     return () => {
       cancelled = true
+      cancelAnimationFrame(hoverFrame)
       map.off('mousemove', handleMouseMove)
       map.off('click', handleClick)
       map.getCanvasContainer().removeEventListener('mouseleave', handleMouseLeave)

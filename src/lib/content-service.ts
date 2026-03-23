@@ -31,6 +31,15 @@ import { getMongoConnectionString, isDemoFallbackEnabled } from '@/lib/storage-c
 import { toPlainText } from '@/lib/richtext'
 
 let payloadPromise: Promise<Awaited<ReturnType<typeof getPayload>> | null> | null = null
+let fallbackSnapshotCache: ExplorerSnapshot | null = null
+let explorerSnapshotCache:
+  | {
+      expiresAt: number
+      snapshot: ExplorerSnapshot
+    }
+  | null = null
+
+const SNAPSHOT_CACHE_TTL_MS = 60_000
 
 async function getPayloadSafe() {
   if (!getMongoConnectionString()) {
@@ -71,6 +80,10 @@ function makeRecordId(prefix: string, slug: string) {
 }
 
 function buildFallbackSnapshot(): ExplorerSnapshot {
+  if (fallbackSnapshotCache) {
+    return fallbackSnapshotCache
+  }
+
   const sources: SourceRecord[] = demoSources.map((source) => ({
     ...source,
     id: makeSourceId(source.slug),
@@ -203,7 +216,7 @@ function buildFallbackSnapshot(): ExplorerSnapshot {
     sources: quiz.sources.map((slug) => sourceMap.get(slug)!).filter(Boolean),
   }))
 
-  return {
+  fallbackSnapshotCache = {
     adminUnits,
     boundaryEpochs,
     campaigns,
@@ -214,6 +227,8 @@ function buildFallbackSnapshot(): ExplorerSnapshot {
     quizzes,
     sources,
   }
+
+  return fallbackSnapshotCache
 }
 
 function mapSourceDoc(doc: any): SourceRecord {
@@ -530,7 +545,7 @@ async function buildPayloadSnapshot(): Promise<ExplorerSnapshot | null> {
   }
 }
 
-export async function getExplorerSnapshot() {
+async function buildExplorerSnapshot() {
   const payloadSnapshot = await buildPayloadSnapshot()
 
   if (payloadSnapshot) {
@@ -542,6 +557,23 @@ export async function getExplorerSnapshot() {
   }
 
   throw new Error('Không lấy được dữ liệu từ MongoDB và chế độ demo fallback đang tắt.')
+}
+
+export async function getExplorerSnapshot() {
+  const now = Date.now()
+
+  if (explorerSnapshotCache && explorerSnapshotCache.expiresAt > now) {
+    return explorerSnapshotCache.snapshot
+  }
+
+  const snapshot = await buildExplorerSnapshot()
+
+  explorerSnapshotCache = {
+    expiresAt: now + SNAPSHOT_CACHE_TTL_MS,
+    snapshot,
+  }
+
+  return snapshot
 }
 
 function matchesQuery(record: ExplorerRecord | PeriodRecord, q?: string) {

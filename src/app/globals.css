@@ -437,6 +437,37 @@ textarea {
   min-height: 520px;
 }
 
+.map-loading {
+  display: grid;
+  place-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 520px;
+  padding: 28px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.map-loading-bar,
+.map-loading-copy {
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(171, 47, 36, 0.08), rgba(171, 47, 36, 0.22), rgba(171, 47, 36, 0.08));
+  background-size: 220% 100%;
+  animation: map-loading-shimmer 1.35s linear infinite;
+}
+
+.map-loading-bar {
+  width: min(320px, 72%);
+  height: 14px;
+}
+
+.map-loading-copy {
+  min-height: 108px;
+  padding: 16px 18px;
+  line-height: 1.6;
+}
+
 .map-aside {
   display: grid;
   align-content: start;
@@ -575,6 +606,16 @@ textarea {
 .ghost-button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+@keyframes map-loading-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @media (max-width: 1024px) {
