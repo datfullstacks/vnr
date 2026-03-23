@@ -29,6 +29,30 @@ const enableS3 =
   Boolean(process.env.S3_ACCESS_KEY_ID) &&
   Boolean(process.env.S3_SECRET_ACCESS_KEY)
 
+function resolveServerUrl() {
+  const configuredUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL?.trim()
+
+  if (configuredUrl) {
+    return configuredUrl
+  }
+
+  const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim()
+
+  if (vercelProductionUrl) {
+    return `https://${vercelProductionUrl.replace(/^https?:\/\//, '')}`
+  }
+
+  const vercelUrl = process.env.VERCEL_URL?.trim()
+
+  if (vercelUrl) {
+    return `https://${vercelUrl.replace(/^https?:\/\//, '')}`
+  }
+
+  return 'http://localhost:3000'
+}
+
+const serverUrl = resolveServerUrl()
+
 export default buildConfig({
   admin: {
     importMap: {
@@ -49,8 +73,8 @@ export default buildConfig({
     HistoricalOverlays,
     Quizzes,
   ],
-  cors: [process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000'],
-  csrf: [process.env.PAYLOAD_PUBLIC_SERVER_URL ?? 'http://localhost:3000'],
+  cors: [serverUrl],
+  csrf: [serverUrl],
   db: mongooseAdapter({
     url: requireMongoConnectionString(),
   }),
@@ -79,7 +103,7 @@ export default buildConfig({
   ],
   sharp,
   secret: process.env.PAYLOAD_SECRET || 'replace-me-in-production',
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  serverURL: serverUrl,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
