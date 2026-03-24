@@ -5,13 +5,14 @@ import type { SearchState } from '@/lib/search-state'
 
 import { AtlasMapShell } from '@/components/atlas-map-shell'
 import {
-  buildTimeSliceHref,
   listForType,
+  resolveActiveLeader,
   resolveActivePeriod,
   resolveActiveYear,
   resolveTimelineBounds,
 } from '@/components/explorer-helpers'
-import { NarrativeFocus, RecordGrid } from '@/components/content-blocks'
+import { RecordGrid } from '@/components/content-blocks'
+import { FormationOverview, LeaderContextCard, LeaderTimelineSection } from '@/components/leader-blocks'
 import { TimelineController } from '@/components/timeline-controller'
 
 export function HomeStoryPage({
@@ -23,39 +24,64 @@ export function HomeStoryPage({
 }) {
   const activeYear = resolveActiveYear(snapshot, filters)
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
+  const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
   const { maxYear, minYear } = resolveTimelineBounds(snapshot)
   const visibleRecords = listForType(snapshot, 'all')
-  const activeThemes = activePeriod?.keyThemes.slice(0, 3) ?? []
-  const atlasHref = buildTimeSliceHref('/atlas', activeYear, filters.period)
+  const atlasParams = new URLSearchParams({
+    year: String(activeYear),
+  })
+
+  if (filters.period) {
+    atlasParams.set('period', filters.period)
+  }
+
+  if (filters.leader) {
+    atlasParams.set('leader', filters.leader)
+  }
+
+  const atlasHref = `/atlas?${atlasParams.toString()}`
 
   return (
     <div className="page-stack">
       <section className="hero-panel story-hero">
         <div className="story-hero-copy">
-          <p className="eyebrow">Dòng thời gian lịch sử Đảng</p>
-          <h1>Theo dòng lịch sử Đảng trên bản đồ Việt Nam</h1>
-          <p>Chọn một mốc năm để đọc bối cảnh lịch sử, rồi đi tiếp sang bản đồ và các hồ sơ tiêu biểu.</p>
+          <p className="eyebrow">Bản đồ cách mạng Việt Nam</p>
+          <h1>Theo dấu các giai đoạn và thời kỳ lãnh đạo trên bản đồ Việt Nam</h1>
+          <p>
+            Màn hình này mở ra hai lối đọc chính: tiến trình hình thành Đảng từ 1858 đến 1930, và các
+            thời kỳ lãnh đạo từ 1930 đến nay.
+          </p>
           <p className="hero-context">
             Năm <strong>{activeYear}</strong>
-            {activePeriod ? (
+            {activeLeader ? (
               <>
-                {' '}
-                đang mở ra <strong>{activePeriod.title}</strong>.
+                {' đang đặt vào '}
+                <strong>{activeLeader.name}</strong>
+                {activePeriod ? (
+                  <>
+                    {' '}
+                    trong <strong>{activePeriod.title}</strong>.
+                  </>
+                ) : (
+                  '.'
+                )}
               </>
             ) : (
-              '.'
+              activePeriod ? (
+                <>
+                  {' đang nằm trong '}
+                  <strong>{activePeriod.title}</strong>.
+                </>
+              ) : (
+                '.'
+              )
             )}
           </p>
 
           <div className="hero-actions">
             <Link className="primary-button" href={atlasHref}>
-              Khám phá trên atlas
+              Mở atlas theo lát cắt này
             </Link>
-            {activePeriod ? (
-              <Link className="ghost-button" href={`/giai-doan/${activePeriod.slug}`}>
-                Đọc giai đoạn này
-              </Link>
-            ) : null}
           </div>
         </div>
 
@@ -68,20 +94,22 @@ export function HomeStoryPage({
         />
       </section>
 
-      <NarrativeFocus period={activePeriod} year={activeYear} />
+      <FormationOverview periods={snapshot.periods} />
+      <LeaderTimelineSection leaders={snapshot.leaders} periods={snapshot.periods} />
 
       <section className="content-section story-map-section">
         <div className="section-heading">
           <div>
             <p className="eyebrow">Bản đồ của lát cắt</p>
-            <h2>Điều gì đáng nhìn trên bản đồ ở năm {activeYear}?</h2>
+            <h2>Lát cắt lịch sử đang hiện lên thế nào trên bản đồ?</h2>
             {snapshot.activeBoundaryEpoch ? (
               <p className="section-copy">
                 {snapshot.activeBoundaryEpoch.title}. {snapshot.activeBoundaryEpoch.summary}
               </p>
             ) : activePeriod ? (
               <p className="section-copy">
-                Bản đồ đang đặt sự kiện, chiến dịch và địa danh vào đúng bối cảnh của {activePeriod.title}.
+                Bản đồ đang đặt sự kiện, chiến dịch và địa danh vào đúng bối cảnh của{' '}
+                {activePeriod.title}.
               </p>
             ) : (
               <p className="section-copy">Chưa có lớp nền lịch sử phù hợp cho năm đang xem.</p>
@@ -93,17 +121,6 @@ export function HomeStoryPage({
           </Link>
         </div>
 
-        {activePeriod ? (
-          <div className="map-focus-strip">
-            <strong>{activePeriod.title}</strong>
-            <span>
-              {activeThemes.length > 0
-                ? activeThemes.join(' · ')
-                : 'Chọn một điểm trên bản đồ để mở ngữ cảnh lịch sử tương ứng.'}
-            </span>
-          </div>
-        ) : null}
-
         <AtlasMapShell
           activeYear={activeYear}
           boundaryEpoch={snapshot.activeBoundaryEpoch ?? null}
@@ -113,12 +130,15 @@ export function HomeStoryPage({
           overlays={snapshot.overlays}
           places={snapshot.places}
         />
+
+        <LeaderContextCard leader={activeLeader} periods={snapshot.periods} title="Lãnh đạo của lát cắt này" />
       </section>
 
       <RecordGrid
-        description="Một vài điểm vào tiêu biểu để đi tiếp từ lát cắt đang xem, thay vì dàn trải toàn bộ tư liệu ngay trên trang chủ."
-        records={visibleRecords.slice(0, 4)}
-        title={`Những bản ghi nổi bật ở năm ${activeYear}`}
+        description="Một vài hồ sơ tiêu biểu của lát cắt đang xem, giữ trang chủ như một cửa vào thay vì biến thành danh mục tư liệu quá dài."
+        maxItems={3}
+        records={visibleRecords}
+        title={`Những bản ghi nổi bật quanh năm ${activeYear}`}
       />
     </div>
   )

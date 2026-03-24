@@ -43,5 +43,5 @@ export function AtlasMapShell(props: {
   overlays: OverlayRecord[]
   places: PlaceRecord[]
 }) {
-  return <AtlasMapClient {...props} />
+  return <AtlasMapClient key={`${props.activeYear}:${props.boundaryEpoch?.slug ?? 'none'}`} {...props} />
 }

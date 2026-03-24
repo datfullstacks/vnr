@@ -52,6 +52,22 @@ function yearLabel(record: ExplorerRecord) {
   return undefined
 }
 
+function recordNarrative(record: CampaignRecord | EventRecord) {
+  const raw = 'content' in record ? record.content : record.body
+  const normalized = raw.replace(/\s+/g, ' ').trim()
+
+  if (!normalized) {
+    return record.summary
+  }
+
+  return normalized.length > 260 ? `${normalized.slice(0, 257).trimEnd()}...` : normalized
+}
+
+function relatedPlaceLabels(record: CampaignRecord | EventRecord) {
+  const places = 'content' in record ? record.places : record.relatedPlaces
+  return places.slice(0, 3).map((place) => place.title)
+}
+
 type FigureHighlight = {
   name: string
   role: string
@@ -176,15 +192,48 @@ function figuresForPeriod(period: PeriodRecord) {
 export function NarrativeFocus({
   period,
   year,
+  variant = 'full',
 }: {
   period: PeriodRecord | null
   year: number
+  variant?: 'compact' | 'full'
 }) {
   if (!period) {
     return null
   }
 
   const figures = figuresForPeriod(period)
+
+  if (variant === 'compact') {
+    return (
+      <section className="content-section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Mạch lịch sử</p>
+            <h2>{period.title}</h2>
+            <p className="section-copy">{period.summary}</p>
+          </div>
+        </div>
+
+        <article
+          className="period-panel"
+          style={{ '--period-accent': period.accentColor } as React.CSSProperties}
+        >
+          <span>
+            {period.startYear} - {period.endYear}
+          </span>
+          <h3>Điểm nhấn của lát cắt năm {year}</h3>
+          <p>{period.overview}</p>
+          <div className="detail-meta">
+            {period.leadershipLabel ? <span>{period.leadershipLabel}</span> : null}
+            {period.keyThemes.slice(0, 3).map((theme) => (
+              <span key={theme}>{theme}</span>
+            ))}
+          </div>
+        </article>
+      </section>
+    )
+  }
 
   return (
     <section className="content-section">
@@ -207,21 +256,24 @@ export function NarrativeFocus({
           <h3>{period.title}</h3>
           <p>{period.overview}</p>
           <div className="detail-meta">
+            {period.leadershipLabel ? <span>{period.leadershipLabel}</span> : null}
             {period.keyThemes.map((theme) => (
               <span key={theme}>{theme}</span>
             ))}
           </div>
         </article>
 
-        <div className="figure-grid">
-          {figures.map((figure) => (
-            <article className="record-card" key={figure.name}>
-              <span className="record-kind">Nhân vật nổi bật</span>
-              <h3>{figure.name}</h3>
-              <p>{figure.role}</p>
-            </article>
-          ))}
-        </div>
+        {figures.length > 0 ? (
+          <div className="figure-grid">
+            {figures.map((figure) => (
+              <article className="record-card" key={figure.name}>
+                <span className="record-kind">Nhân vật nổi bật</span>
+                <h3>{figure.name}</h3>
+                <p>{figure.role}</p>
+              </article>
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   )
@@ -230,14 +282,18 @@ export function NarrativeFocus({
 export function RecordGrid({
   description,
   emptyLabel = 'Không có bản ghi phù hợp.',
+  maxItems,
   records,
   title,
 }: {
   description?: string
   emptyLabel?: string
+  maxItems?: number
   records: ExplorerRecord[]
   title: string
 }) {
+  const visibleRecords = typeof maxItems === 'number' ? records.slice(0, maxItems) : records
+
   return (
     <section className="content-section">
       <div className="section-heading">
@@ -248,11 +304,11 @@ export function RecordGrid({
         </div>
       </div>
 
-      {records.length === 0 ? (
+      {visibleRecords.length === 0 ? (
         <p className="empty-state">{emptyLabel}</p>
       ) : (
         <div className="record-grid">
-          {records.map((record) => (
+          {visibleRecords.map((record) => (
             <Link className="record-card" href={hrefForRecord(record)} key={record.id}>
               <span className="record-kind">{kindLabel(record)}</span>
               <h3>{record.title}</h3>
@@ -263,6 +319,63 @@ export function RecordGrid({
                 <span>{regionLabel(record.region)}</span>
               </div>
             </Link>
+          ))}
+        </div>
+      )}
+    </section>
+  )
+}
+
+export function HistoricalNarrativeDigest({
+  campaigns = [],
+  description,
+  emptyLabel = 'Chưa có mốc sự kiện nổi bật cho lát cắt này.',
+  events = [],
+  maxItems = 6,
+  title,
+}: {
+  campaigns?: CampaignRecord[]
+  description?: string
+  emptyLabel?: string
+  events?: EventRecord[]
+  maxItems?: number
+  title: string
+}) {
+  const records = [...events, ...campaigns]
+    .sort((left, right) => left.displayYear - right.displayYear)
+    .slice(0, maxItems)
+
+  return (
+    <section className="content-section">
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">Sự kiện lịch sử</p>
+          <h2>{title}</h2>
+          {description ? <p className="section-copy">{description}</p> : null}
+        </div>
+      </div>
+
+      {records.length === 0 ? (
+        <p className="empty-state">{emptyLabel}</p>
+      ) : (
+        <div className="historical-digest-grid">
+          {records.map((record) => (
+            <article className="historical-digest-card" key={record.id}>
+              <span className="record-kind">{kindLabel(record)}</span>
+              <h3>{record.title}</h3>
+              <p>{recordNarrative(record)}</p>
+              <div className="detail-meta">
+                <span>{record.displayYear}</span>
+                <span>{record.period.title}</span>
+                <span>{regionLabel(record.region)}</span>
+                {relatedPlaceLabels(record).map((label) => (
+                  <span key={`${record.id}:${label}`}>{label}</span>
+                ))}
+              </div>
+              <Link className="inline-link" href={hrefForRecord(record)}>
+                Mở hồ sơ chi tiết
+              </Link>
+            </article>
           ))}
         </div>
       )}
@@ -288,24 +401,28 @@ export function SourceList({
           {description ? <p className="section-copy">{description}</p> : null}
         </div>
       </div>
-      <ol className="source-list">
-        {sources.map((source) => (
-          <li key={source.id}>
-            <strong>{source.title}</strong>
-            <p>{source.bibliography}</p>
-            <small>
-              {source.author ? `${source.author}. ` : ''}
-              {source.publisher ? `${source.publisher}. ` : ''}
-              {source.year}. {source.license}.
-            </small>
-            {source.url ? (
-              <a className="inline-link" href={source.url} rel="noreferrer" target="_blank">
-                Mở liên kết nguồn
-              </a>
-            ) : null}
-          </li>
-        ))}
-      </ol>
+      {sources.length === 0 ? (
+        <p className="empty-state">Chưa có nguồn đối chiếu công khai cho phần này.</p>
+      ) : (
+        <ol className="source-list">
+          {sources.map((source) => (
+            <li key={source.id}>
+              <strong>{source.title}</strong>
+              <p>{source.bibliography}</p>
+              <small>
+                {source.author ? `${source.author}. ` : ''}
+                {source.publisher ? `${source.publisher}. ` : ''}
+                {source.year}. {source.license}.
+              </small>
+              {source.url ? (
+                <a className="inline-link" href={source.url} rel="noreferrer" target="_blank">
+                  Mở liên kết nguồn
+                </a>
+              ) : null}
+            </li>
+          ))}
+        </ol>
+      )}
     </section>
   )
 }
@@ -313,16 +430,18 @@ export function SourceList({
 export function PeriodHighlights({
   description,
   periods,
+  title = 'Những chặng lớn của lịch sử Đảng trên bản đồ Việt Nam',
 }: {
   description?: string
   periods: PeriodRecord[]
+  title?: string
 }) {
   return (
     <section className="content-section">
       <div className="section-heading">
         <div>
           <p className="eyebrow">Giai đoạn</p>
-          <h2>Những chặng lớn của lịch sử Đảng trên bản đồ Việt Nam</h2>
+          <h2>{title}</h2>
           {description ? <p className="section-copy">{description}</p> : null}
         </div>
       </div>
@@ -340,6 +459,7 @@ export function PeriodHighlights({
             <h3>{period.title}</h3>
             <p>{period.summary}</p>
             <div className="detail-meta">
+              {period.leadershipLabel ? <span>{period.leadershipLabel}</span> : null}
               {period.keyThemes.map((theme) => (
                 <span key={theme}>{theme}</span>
               ))}

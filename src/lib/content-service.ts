@@ -2,6 +2,7 @@ import type {
   CampaignRecord,
   EventRecord,
   ExplorerSnapshot,
+  LeaderRecord,
   PeriodRecord,
   PlaceRecord,
   QuizRecord,
@@ -15,6 +16,27 @@ type ExplorerDataResponse = {
 
 type PeriodDetailResponse = ExplorerSnapshot & {
   period?: PeriodRecord
+}
+
+export type LeaderDetailResponse = ExplorerSnapshot & {
+  featuredPeriods: PeriodRecord[]
+  leader?: LeaderRecord
+  officialPeriods: PeriodRecord[]
+}
+
+function emptySnapshot(): ExplorerSnapshot {
+  return {
+    adminUnits: [],
+    boundaryEpochs: [],
+    campaigns: [],
+    events: [],
+    leaders: [],
+    overlays: [],
+    periods: [],
+    places: [],
+    quizzes: [],
+    sources: [],
+  }
 }
 
 function resolveBackendUrl() {
@@ -104,7 +126,31 @@ export async function getPeriod(slug: string) {
     return await requestJson<PeriodDetailResponse>(`/api/public/periods/${slug}`)
   } catch (error) {
     if (error instanceof Error && error.message === 'NOT_FOUND') {
-      return { period: undefined } as PeriodDetailResponse
+      return {
+        ...emptySnapshot(),
+        period: undefined,
+      }
+    }
+
+    throw error
+  }
+}
+
+export async function getLeaders() {
+  return requestJson<LeaderRecord[]>('/api/public/leaders')
+}
+
+export async function getLeader(slug: string) {
+  try {
+    return await requestJson<LeaderDetailResponse>(`/api/public/leaders/${slug}`)
+  } catch (error) {
+    if (error instanceof Error && error.message === 'NOT_FOUND') {
+      return {
+        ...emptySnapshot(),
+        featuredPeriods: [],
+        leader: undefined,
+        officialPeriods: [],
+      }
     }
 
     throw error

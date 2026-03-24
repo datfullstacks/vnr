@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 
-import { NarrativeFocus, PeriodHighlights, RecordGrid } from '@/components/content-blocks'
+import { HistoricalNarrativeDigest, NarrativeFocus, PeriodHighlights, RecordGrid } from '@/components/content-blocks'
+import { PeriodLeaderSummary, RecordsByYear } from '@/components/leader-blocks'
 import { SiteShell } from '@/components/site-shell'
 import { getPeriod } from '@/lib/content-service'
 
@@ -13,6 +14,10 @@ export default async function PeriodPage({ params }: { params: Promise<{ slug: s
   if (!data.period) {
     notFound()
   }
+
+  const orderedPeriods = [...data.periods].sort((left, right) => left.displayOrder - right.displayOrder)
+  const currentIndex = orderedPeriods.findIndex((period) => period.slug === data.period?.slug)
+  const surroundingPeriods = orderedPeriods.slice(Math.max(0, currentIndex - 1), currentIndex + 2)
 
   return (
     <SiteShell>
@@ -27,29 +32,27 @@ export default async function PeriodPage({ params }: { params: Promise<{ slug: s
             <strong>
               {data.period.startYear} - {data.period.endYear}
             </strong>
-            <span>{data.period.keyThemes.join(' · ')}</span>
+            <span>{data.period.leadershipLabel ?? data.period.keyThemes.join(' · ')}</span>
           </div>
         </section>
 
         <NarrativeFocus period={data.period} year={data.period.startYear} />
-        <RecordGrid
-          description="Các sự kiện dưới đây cho thấy nhịp chuyển chính trị, quân sự và xã hội của toàn giai đoạn."
-          records={data.events}
-          title="Những sự kiện tiêu biểu trong giai đoạn"
+        <PeriodLeaderSummary leaders={data.leaders} period={data.period} />
+        <HistoricalNarrativeDigest
+          campaigns={data.campaigns}
+          description="Khối này giữ lại các sự kiện và chiến dịch tạo nên nhịp điệu thực sự của giai đoạn, để người đọc không chỉ thấy tên period mà còn thấy các bước ngoặt cụ thể."
+          events={data.events}
+          title="Những bước ngoặt lịch sử của giai đoạn"
         />
-        <RecordGrid
-          description="Những chiến dịch và phong trào này thể hiện cách đường lối cách mạng đi vào thực tiễn và làm thay đổi cục diện."
-          records={data.campaigns}
-          title="Chiến dịch, phong trào và các đợt cao điểm"
-        />
+        <RecordsByYear campaigns={data.campaigns} events={data.events} />
         <RecordGrid
           description="Mỗi địa danh là một điểm tựa để đọc lại căn cứ địa, chiến trường, nơi ra quyết định hay không gian ký ức của giai đoạn."
           records={data.places}
           title="Địa danh, căn cứ và không gian lịch sử"
         />
         <PeriodHighlights
-          description="Trang này đặt giai đoạn đang xem vào toàn bộ dòng chảy lớn hơn của lịch sử Đảng và cách mạng Việt Nam."
-          periods={[data.period]}
+          description="Giai đoạn này được đặt vào chuỗi lớn hơn để người đọc không mất mạch trước và sau nó."
+          periods={surroundingPeriods}
         />
       </div>
     </SiteShell>

@@ -942,7 +942,7 @@ export function AtlasMap({
       setLayerVisibility(activeMap, 'historical-overlays-point', showHistorical)
       setLayerVisibility(activeMap, 'record-points-layer', showRecords)
 
-      const nextAutoFitKey = boundaryEpoch?.slug ?? 'none'
+      const nextAutoFitKey = `${boundaryEpoch?.slug ?? 'none'}:${activeYear}`
 
       if (autoFitEpochKeyRef.current !== nextAutoFitKey) {
         autoFitEpochKeyRef.current = nextAutoFitKey
@@ -1043,7 +1043,7 @@ export function AtlasMap({
       map.off('click', handleClick)
       map.getCanvasContainer().removeEventListener('mouseleave', handleMouseLeave)
     }
-  }, [boundaryEpoch, campaigns, events, layer, overlays, places])
+  }, [activeYear, boundaryEpoch, campaigns, events, layer, overlays, places])
 
   function clearSelection() {
     const map = mapRef.current

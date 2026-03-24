@@ -1,7 +1,7 @@
 'use client'
 
-import { startTransition, useState } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 import type { PeriodRecord } from '@/lib/content-types'
 import type { SearchState } from '@/lib/search-state'
@@ -21,14 +21,34 @@ export function TimelineController({
   periods: PeriodRecord[]
   variant?: 'compact' | 'full'
 }) {
-  const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const [year, setYear] = useState(filters.year ?? filters.to ?? maxYear)
+  const currentYear = filters.year ?? filters.to ?? maxYear
+  const [year, setYear] = useState(currentYear)
   const visiblePeriod =
     (filters.period ? periods.find((period) => period.slug === filters.period) : null) ??
     resolvePeriodForYear(periods, year)
+
+  useEffect(() => {
+    setYear(currentYear)
+  }, [currentYear])
+
+  function resolveCompatiblePeriodSlug(nextYear: number) {
+    if (!filters.period) {
+      return ''
+    }
+
+    const selectedPeriod = periods.find((period) => period.slug === filters.period)
+
+    if (!selectedPeriod) {
+      return ''
+    }
+
+    return nextYear >= selectedPeriod.startYear && nextYear <= selectedPeriod.endYear
+      ? selectedPeriod.slug
+      : ''
+  }
 
   function pushState(next: { period?: string; year?: number }) {
     const params = new URLSearchParams(searchParams.toString())
@@ -51,8 +71,14 @@ export function TimelineController({
       }
     }
 
-    startTransition(() => {
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+    const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname
+    window.location.assign(nextUrl)
+  }
+
+  function commitYear(nextYear: number) {
+    pushState({
+      period: resolveCompatiblePeriodSlug(nextYear),
+      year: nextYear,
     })
   }
 
@@ -62,7 +88,7 @@ export function TimelineController({
         <p className="eyebrow">Lát cắt đang xem</p>
         <h2>Năm {year}</h2>
         <p className="timeline-copy">
-          {visiblePeriod ? visiblePeriod.title : 'Chọn một năm để mở lát cắt kể chuyện tương ứng.'}
+          {visiblePeriod ? visiblePeriod.title : 'Chọn một năm để mở lát cắt tương ứng.'}
         </p>
 
         <div className="timeline-range-grid timeline-range-grid-compact">
@@ -72,6 +98,9 @@ export function TimelineController({
               max={maxYear}
               min={minYear}
               onChange={(event) => setYear(Number(event.target.value))}
+              onKeyUp={(event) => commitYear(Number(event.currentTarget.value))}
+              onMouseUp={(event) => commitYear(Number(event.currentTarget.value))}
+              onTouchEnd={(event) => commitYear(Number(event.currentTarget.value))}
               type="range"
               value={year}
             />
@@ -86,7 +115,7 @@ export function TimelineController({
             className="ghost-button"
             onClick={() => {
               setYear(maxYear)
-              pushState({ period: '', year: maxYear })
+              commitYear(maxYear)
             }}
             type="button"
           >
@@ -94,7 +123,7 @@ export function TimelineController({
           </button>
           <button
             className="ghost-button timeline-apply-button"
-            onClick={() => pushState({ period: '', year })}
+            onClick={() => commitYear(year)}
             type="button"
           >
             Chuyển sang năm {year}
@@ -109,23 +138,21 @@ export function TimelineController({
       <div className="timeline-header">
         <div>
           <p className="eyebrow">Mốc năm và giai đoạn</p>
-          <h2>Điều chỉnh trục thời gian của atlas</h2>
-          <p className="timeline-copy">
-            Kéo theo năm hoặc chọn nhanh một giai đoạn để đồng bộ lớp nền lịch sử, bản đồ và danh sách bản ghi.
-          </p>
+          <h2>Chọn mốc năm của atlas</h2>
+          <p className="timeline-copy">Kéo theo năm hoặc chạm nhanh vào một giai đoạn.</p>
         </div>
         <div className="timeline-actions">
           <button
             className="ghost-button"
             onClick={() => {
               setYear(maxYear)
-              pushState({ period: '', year: maxYear })
+              commitYear(maxYear)
             }}
             type="button"
           >
             Năm mới nhất
           </button>
-          <button className="primary-button" onClick={() => pushState({ year })} type="button">
+          <button className="primary-button" onClick={() => commitYear(year)} type="button">
             Xem năm {year}
           </button>
         </div>
@@ -140,6 +167,9 @@ export function TimelineController({
             max={maxYear}
             min={minYear}
             onChange={(event) => setYear(Number(event.target.value))}
+            onKeyUp={(event) => commitYear(Number(event.currentTarget.value))}
+            onMouseUp={(event) => commitYear(Number(event.currentTarget.value))}
+            onTouchEnd={(event) => commitYear(Number(event.currentTarget.value))}
             type="range"
             value={year}
           />

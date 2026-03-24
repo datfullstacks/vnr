@@ -8,11 +8,13 @@ import { AtlasMapShell } from '@/components/atlas-map-shell'
 import {
   buildTimeSliceHref,
   listForType,
+  resolveActiveLeader,
   resolveActivePeriod,
   resolveActiveYear,
   resolveTimelineBounds,
 } from '@/components/explorer-helpers'
 import { RecordGrid } from '@/components/content-blocks'
+import { LeaderContextCard } from '@/components/leader-blocks'
 import { TimelineController } from '@/components/timeline-controller'
 
 function buildAtlasResetHref(year: number, periodSlug?: string) {
@@ -62,17 +64,6 @@ function layerLabel(layer: LayerType) {
   }
 }
 
-function deepFilterCount(filters: SearchState) {
-  let count = 0
-
-  if (filters.type !== 'all') count += 1
-  if (filters.region) count += 1
-  if (filters.layer !== 'all') count += 1
-  if (filters.q) count += 1
-
-  return count
-}
-
 export function AtlasExplorerPage({
   filters,
   snapshot,
@@ -82,12 +73,13 @@ export function AtlasExplorerPage({
 }) {
   const activeYear = resolveActiveYear(snapshot, filters)
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
+  const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
   const visibleRecords = listForType(snapshot, filters.type)
   const { maxYear, minYear } = resolveTimelineBounds(snapshot)
   const activeThemes = activePeriod?.keyThemes.slice(0, 3) ?? []
-  const appliedFilters = deepFilterCount(filters)
   const drawerKey = [
     activeYear,
+    filters.leader ?? '',
     filters.period ?? '',
     filters.q ?? '',
     filters.type,
@@ -95,11 +87,25 @@ export function AtlasExplorerPage({
     filters.layer,
   ].join(':')
   const from = filters.from ?? ''
-  const homeHref = buildTimeSliceHref('/', activeYear, filters.period)
-  const resetHref = buildAtlasResetHref(activeYear, filters.period)
+  const homeParams = new URLSearchParams({
+    from: String(activeYear),
+    to: String(activeYear),
+    year: String(activeYear),
+  })
+
+  if (filters.period) {
+    homeParams.set('period', filters.period)
+  }
+
+  if (filters.leader) {
+    homeParams.set('leader', filters.leader)
+  }
+
+  const homeHref = `/?${homeParams.toString()}`
+  const resetHref = buildAtlasResetHref(activeYear)
   const toggleSummary = activePeriod
-    ? `${activePeriod.title} · ${appliedFilters > 0 ? `${appliedFilters} lọc sâu` : 'chưa bật lọc sâu'}`
-    : `Năm ${activeYear} · ${appliedFilters > 0 ? `${appliedFilters} lọc sâu` : 'chưa bật lọc sâu'}`
+    ? `${activePeriod.title} · ${visibleRecords.length} bản ghi`
+    : `Năm ${activeYear} · ${visibleRecords.length} bản ghi`
   const to = filters.to ?? ''
   const year = filters.year ?? activeYear
 
@@ -107,10 +113,22 @@ export function AtlasExplorerPage({
     <div className="page-stack atlas-page-stack">
       <section className="hero-panel atlas-hero">
         <div className="atlas-hero-copy">
-          <p className="eyebrow">Atlas nhiều lớp</p>
-          <h1>Bản đồ lịch sử nhiều lớp</h1>
-          <p>Không gian thao tác sâu để chọn năm, khóa giai đoạn và đối chiếu trực tiếp các lớp hiển thị.</p>
-          {activePeriod ? (
+          <p className="eyebrow">Atlas lãnh đạo và giai đoạn</p>
+          <h1>Bản đồ nhiều lớp của cách mạng Việt Nam</h1>
+          <p>Chọn lãnh đạo, mốc năm và loại hồ sơ, rồi đọc biến chuyển lịch sử trực tiếp trên bản đồ.</p>
+          {activeLeader ? (
+            <p className="hero-context">
+              Lát cắt hiện tại đang đặt vào <strong>{activeLeader.name}</strong>
+              {activePeriod ? (
+                <>
+                  {' '}
+                  trong <strong>{activePeriod.title}</strong>.
+                </>
+              ) : (
+                '.'
+              )}
+            </p>
+          ) : activePeriod ? (
             <p className="hero-context">
               Năm <strong>{activeYear}</strong> đang nằm trong <strong>{activePeriod.title}</strong>.
             </p>
@@ -118,26 +136,31 @@ export function AtlasExplorerPage({
         </div>
 
         <div className="hero-stats">
-          <span className="hero-stat-label">Đang hiển thị</span>
+          <span className="hero-stat-label">Lát cắt hiện tại</span>
           <strong>{activeYear}</strong>
           <span>{visibleRecords.length} bản ghi theo bộ lọc hiện tại</span>
-          <small>{activeThemes.length > 0 ? activeThemes.join(' · ') : 'Ưu tiên bản đồ và điều khiển thao tác sâu.'}</small>
+          <small>
+            {activeLeader
+              ? `${activeLeader.name} · ${activeLeader.officeLabel}`
+              : activeThemes.length > 0
+                ? activeThemes.join(' · ')
+                : `${typeLabel(filters.type)} · ${layerLabel(filters.layer)}`}
+          </small>
         </div>
       </section>
 
       <section className="content-section atlas-workspace">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">Điều khiển atlas</p>
-            <h2>Điều khiển thời gian, lớp hiển thị và bộ lọc trong cùng một workspace</h2>
+            <p className="eyebrow">Điều hướng bản đồ</p>
+            <h2>Chọn lãnh đạo, mốc năm và lớp tư liệu trước khi đọc bản đồ</h2>
             <p className="section-copy">
-              Chỉnh lát cắt thời gian trước, rồi tinh tiếp bằng loại bản ghi, vùng và lớp hiển thị ngay cạnh bản
-              đồ.
+              Trật tự ưu tiên của atlas là lãnh đạo, rồi đến năm, loại hồ sơ, vùng và lớp hiển thị.
             </p>
           </div>
 
           <Link className="ghost-button" href={homeHref}>
-            Xem lát cắt kể chuyện
+            Về lát cắt kể chuyện
           </Link>
         </div>
 
@@ -152,6 +175,18 @@ export function AtlasExplorerPage({
             />
 
             <form className="filters-card atlas-filters-card" method="get">
+              <label>
+                <span>Lãnh đạo</span>
+                <select defaultValue={filters.leader ?? ''} name="leader">
+                  <option value="">Tất cả thời kỳ lãnh đạo</option>
+                  {snapshot.leaders.map((leader) => (
+                    <option key={leader.id} value={leader.slug}>
+                      {leader.name} · {leader.officeLabel}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
               <label className="filters-card-search">
                 <span>Tìm kiếm</span>
                 <input defaultValue={filters.q} name="q" placeholder="Sự kiện, chiến dịch, địa danh..." />
@@ -190,17 +225,12 @@ export function AtlasExplorerPage({
               </label>
 
               <div className="filters-summary">
-                <p className="eyebrow">Ngữ cảnh hiện tại</p>
                 <strong>
                   Năm {activeYear}
                   {activePeriod ? ` · ${activePeriod.title}` : ''}
                 </strong>
-                <p>
-                  {activeThemes.length > 0
-                    ? activeThemes.join(' · ')
-                    : 'Giữ mốc năm hiện tại, rồi tinh tiếp bằng bộ lọc sâu bên cạnh.'}
-                </p>
                 <div className="detail-meta">
+                  {activeLeader ? <span>{activeLeader.name}</span> : null}
                   <span>{typeLabel(filters.type)}</span>
                   {filters.region ? <span>{regionLabel(filters.region)}</span> : null}
                   <span>{layerLabel(filters.layer)}</span>
@@ -209,10 +239,10 @@ export function AtlasExplorerPage({
 
               <div className="filters-actions">
                 <Link className="ghost-button" href={resetHref}>
-                  Xóa lọc sâu
+                  Xóa bộ lọc
                 </Link>
                 <button className="primary-button" type="submit">
-                  Cập nhật atlas
+                  Áp dụng
                 </button>
               </div>
 
@@ -224,24 +254,6 @@ export function AtlasExplorerPage({
           </div>
         </AtlasControlsDrawer>
 
-        <div className="atlas-map-intro">
-          <div>
-            <p className="eyebrow">Không gian lịch sử</p>
-            <h2>Bản đồ đang hiển thị gì ở năm {activeYear}?</h2>
-            {snapshot.activeBoundaryEpoch ? (
-              <p className="section-copy">
-                {snapshot.activeBoundaryEpoch.title}. {snapshot.activeBoundaryEpoch.summary}
-              </p>
-            ) : activePeriod ? (
-              <p className="section-copy">
-                Bản đồ đang đặt các lớp lịch sử vào bối cảnh của {activePeriod.title}.
-              </p>
-            ) : (
-              <p className="section-copy">Chưa có lớp nền lịch sử phù hợp cho năm đang chọn.</p>
-            )}
-          </div>
-        </div>
-
         <AtlasMapShell
           activeYear={activeYear}
           boundaryEpoch={snapshot.activeBoundaryEpoch ?? null}
@@ -251,11 +263,14 @@ export function AtlasExplorerPage({
           overlays={snapshot.overlays}
           places={snapshot.places}
         />
+
+        <LeaderContextCard leader={activeLeader} periods={snapshot.periods} />
       </section>
 
       <RecordGrid
-        description="Danh sách này bám theo bộ lọc atlas hiện tại để người đọc chuyển từ bản đồ sang từng hồ sơ chi tiết."
-        records={visibleRecords.slice(0, 12)}
+        description="Từ bản đồ, đi tiếp sang những hồ sơ đang khớp với lát cắt theo lãnh đạo, năm và bộ lọc hiện tại."
+        maxItems={8}
+        records={visibleRecords}
         title={`Bản ghi theo lát cắt và bộ lọc của năm ${activeYear}`}
       />
     </div>

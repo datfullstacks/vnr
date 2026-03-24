@@ -15,12 +15,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [
       { url: `${siteUrl}/` },
       { url: `${siteUrl}/atlas` },
+      { url: `${siteUrl}/lanh-dao` },
     ]
   }
 
   return [
     { url: `${siteUrl}/` },
     { url: `${siteUrl}/atlas` },
+    { url: `${siteUrl}/lanh-dao` },
+    ...snapshot.leaders.map((leader) => ({
+      url: `${siteUrl}/lanh-dao/${leader.slug}`,
+    })),
     ...snapshot.periods.map((period) => ({
       url: `${siteUrl}/giai-doan/${period.slug}`,
     })),

@@ -18,11 +18,11 @@ const serif = Literata({
 
 export const metadata: Metadata = {
   description:
-    'Website ưu tiên dòng thời gian cho bản đồ lịch sử cách mạng Việt Nam: giai đoạn, sự kiện, chiến dịch, địa danh, trích nguồn và câu hỏi ôn tập.',
+    'Bản đồ cách mạng Việt Nam theo trục giai đoạn, lãnh đạo, sự kiện, chiến dịch, địa danh và nguồn đối chiếu.',
   metadataBase: new URL(process.env.SITE_URL?.trim() || 'http://localhost:3000'),
   title: {
-    default: 'VNR Atlas',
-    template: '%s | VNR Atlas',
+    default: 'Bản đồ cách mạng Việt Nam',
+    template: '%s | Bản đồ cách mạng Việt Nam',
   },
 }
 
