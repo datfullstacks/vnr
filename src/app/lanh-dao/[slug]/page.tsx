@@ -1,11 +1,18 @@
 import { notFound } from 'next/navigation'
 
 import { AtlasMapShell } from '@/components/atlas-map-shell'
-import { HistoricalNarrativeDigest, PeriodHighlights, RecordGrid, SourceList } from '@/components/content-blocks'
+import {
+  HistoricalNarrativeDigest,
+  NarrativeFocus,
+  PeriodHighlights,
+  QuizHighlights,
+  RecordGrid,
+  SourceList,
+} from '@/components/content-blocks'
 import { LeaderContextCard, LeaderPortrait, LeaderQuickFacts, RecordsByYear } from '@/components/leader-blocks'
 import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
-import { getLeader } from '@/lib/content-service'
+import { getLeader, getPeriod } from '@/lib/content-service'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,21 +39,43 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
     notFound()
   }
 
+  const leader = data.leader
+
+  const contextPeriod =
+    [...data.featuredPeriods, ...data.officialPeriods].find(
+      (period) => period.startYear <= leader.endYear && period.endYear >= leader.startYear,
+    ) ??
+    data.featuredPeriods[0] ??
+    data.officialPeriods[0] ??
+    null
+
+  let periodContext:
+    | Awaited<ReturnType<typeof getPeriod>>
+    | null = null
+
+  if (contextPeriod) {
+    try {
+      periodContext = await getPeriod(contextPeriod.slug)
+    } catch {
+      periodContext = null
+    }
+  }
+
   return (
     <SiteShell>
       <div className="page-stack detail-hero">
         <section className="hero-panel detail-hero-panel">
           <div>
             <p className="eyebrow">Lãnh đạo</p>
-            <h1 className="detail-title">{data.leader.name}</h1>
-            <p className="detail-lead">{data.leader.summary}</p>
+            <h1 className="detail-title">{leader.name}</h1>
+            <p className="detail-lead">{leader.summary}</p>
           </div>
           <div className="leader-hero-aside">
-            <LeaderPortrait leader={data.leader} variant="hero" />
+            <LeaderPortrait leader={leader} variant="hero" />
             <div className="hero-stats">
-              <strong>{data.leader.officeLabel}</strong>
+              <strong>{leader.officeLabel}</strong>
               <span>
-                {data.leader.startYear} - {data.leader.endYear >= new Date().getFullYear() ? 'nay' : data.leader.endYear}
+                {leader.startYear} - {leader.endYear >= new Date().getFullYear() ? 'nay' : leader.endYear}
               </span>
             </div>
           </div>
@@ -63,21 +92,21 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
               </p>
             </div>
           </div>
-          <div className="detail-copy">{data.leader.overview}</div>
+          <div className="detail-copy">{leader.overview}</div>
         </section>
 
         <LeaderQuickFacts
           campaigns={data.campaigns}
           events={data.events}
           featuredPeriods={data.featuredPeriods}
-          leader={data.leader}
+          leader={leader}
           officialPeriods={data.officialPeriods}
           places={data.places}
         />
 
         <section className="content-section">
           <LeaderContextCard
-            leader={data.leader}
+            leader={leader}
             periods={[...data.featuredPeriods, ...data.officialPeriods]}
             title="Lãnh đạo đang xem"
           />
@@ -111,7 +140,7 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
           </div>
 
           <AtlasMapShell
-            activeYear={data.activeYear ?? data.leader.endYear}
+            activeYear={data.activeYear ?? leader.endYear}
             boundaryEpoch={data.activeBoundaryEpoch ?? null}
             campaigns={data.campaigns}
             events={data.events}
@@ -123,22 +152,60 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
 
         <HistoricalNarrativeDigest
           campaigns={data.campaigns}
-          description="Khối này gom các sự kiện và chiến dịch then chốt để người xem thấy được chuyển động lịch sử cụ thể trong nhiệm kỳ đang xem."
+          description="Đây là những sự kiện và chiến dịch gắn trực tiếp với hồ sơ lãnh đạo đang xem."
           events={data.events}
-          title="Những bước ngoặt lịch sử gắn với giai đoạn này"
+          title="Những hồ sơ lịch sử gắn trực tiếp với chân dung này"
         />
 
-        <RecordsByYear campaigns={data.campaigns} events={data.events} title="Những mốc năm nổi bật trong nhiệm kỳ" />
+        <RecordsByYear
+          campaigns={data.campaigns}
+          events={data.events}
+          title="Những mốc năm trực tiếp quanh nhiệm kỳ"
+        />
 
         <RecordGrid
-          description="Các địa danh dưới đây là những không gian cần đối chiếu khi đọc lại giai đoạn gắn với lãnh đạo này."
+          description="Các địa danh dưới đây là những không gian gắn trực tiếp với hồ sơ lãnh đạo đang xem."
           records={data.places}
-          title="Địa danh và không gian lịch sử liên quan"
+          title="Địa danh liên hệ trực tiếp với hồ sơ lãnh đạo"
         />
+
+        <QuizHighlights
+          description="Các bộ câu hỏi dưới đây bám vào những mốc và hồ sơ liên hệ trực tiếp với lãnh đạo đang xem."
+          quizzes={data.quizzes}
+          title="Ôn tập nhanh theo hồ sơ lãnh đạo"
+        />
+
+        {periodContext?.period ? (
+          <>
+            <NarrativeFocus period={periodContext.period} year={data.activeYear ?? leader.endYear} />
+
+
+            <HistoricalNarrativeDigest
+              campaigns={periodContext.campaigns}
+              description="Khối này mở rộng sang bối cảnh chung của giai đoạn để người xem không bị giới hạn ở các hồ sơ trực tiếp của riêng lãnh đạo."
+              events={periodContext.events}
+              maxItems={8}
+              title={`Bối cảnh rộng hơn của ${periodContext.period.title}`}
+            />
+
+            <RecordGrid
+              description="Những địa danh tiêu biểu của giai đoạn giúp đọc rộng hơn bối cảnh không gian quanh chân dung lãnh đạo."
+              maxItems={6}
+              records={periodContext.places}
+              title="Địa danh tiêu biểu của giai đoạn"
+            />
+
+            <QuizHighlights
+              description="Nếu giai đoạn có bộ câu hỏi ôn tập, chúng sẽ xuất hiện ở đây như phần nối từ chân dung cá nhân sang bối cảnh lớn hơn."
+              quizzes={periodContext.quizzes}
+              title="Ôn tập theo giai đoạn"
+            />
+          </>
+        ) : null}
 
         <SourceList
           description="Nguồn chính thức và nguồn đối chiếu dùng để xác nhận chức danh, nhiệm kỳ và bối cảnh của chân dung lãnh đạo."
-          sources={data.leader.sources}
+          sources={leader.sources}
           title="Nguồn đối chiếu cho hồ sơ lãnh đạo"
         />
       </div>
