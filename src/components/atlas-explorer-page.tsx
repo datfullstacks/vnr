@@ -122,7 +122,7 @@ export function AtlasExplorerPage({
   const recordSectionDescription =
     filters.type === 'all'
       ? `Khối này đang hiển thị toàn bộ hồ sơ khớp với bộ lọc hiện tại: ${snapshot.events.length} sự kiện, ${snapshot.campaigns.length} chiến dịch và ${snapshot.places.length} địa danh${activePeriod ? ` trong ${activePeriod.title}` : ''}.`
-      : `Khối này đang hiển thị toàn bộ ${visibleRecords.length} ${typeLabelLower(filters.type)} khớp với bộ lọc hiện tại${activePeriod ? ` trong ${activePeriod.title}` : ''}${activeLeader ? `, theo trục ${activeLeader.name}` : ''}.`
+      : `Khối này đang hiển thị toàn bộ ${visibleRecords.length} ${typeLabelLower(filters.type)} khớp với bộ lọc hiện tại${activePeriod ? ` trong ${activePeriod.title}` : ''}${activeLeader ? `, theo trục ${activeLeader.displayName ?? activeLeader.name}` : ''}.`
   const recordSectionTitle =
     filters.type === 'all'
       ? `Hồ sơ lịch sử trong lát cắt năm ${activeYear}`
@@ -139,7 +139,7 @@ export function AtlasExplorerPage({
           <p>Chọn lãnh đạo, mốc năm và lớp tư liệu để trình bày chuyển động lịch sử trực tiếp trên bản đồ.</p>
           {activeLeader ? (
             <p className="hero-context">
-              Lát cắt hiện tại đang đặt vào <strong>{activeLeader.name}</strong>
+              Lát cắt hiện tại đang đặt vào <strong>{activeLeader.displayName ?? activeLeader.name}</strong>
               {activePeriod ? (
                 <>
                   {' '}
@@ -162,7 +162,7 @@ export function AtlasExplorerPage({
           <span>{visibleRecords.length} bản ghi theo bộ lọc hiện tại</span>
           <small>
             {activeLeader
-              ? `${activeLeader.name} · ${activeLeader.officeLabel}`
+              ? `${activeLeader.displayName ?? activeLeader.name} · ${activeLeader.officeLabel}`
               : activeThemes.length > 0
                 ? activeThemes.join(' · ')
                 : `${typeLabel(filters.type)} · ${layerLabel(filters.layer)}`}
@@ -202,7 +202,7 @@ export function AtlasExplorerPage({
                   <option value="">Tất cả thời kỳ lãnh đạo</option>
                   {snapshot.leaders.map((leader) => (
                     <option key={leader.id} value={leader.slug}>
-                      {leader.name} · {leader.officeLabel}
+                      {leader.displayName ?? leader.name} · {leader.officeLabel}
                     </option>
                   ))}
                 </select>
@@ -251,7 +251,7 @@ export function AtlasExplorerPage({
                   {activePeriod ? ` · ${activePeriod.title}` : ''}
                 </strong>
                 <div className="detail-meta">
-                  {activeLeader ? <span>{activeLeader.name}</span> : null}
+                  {activeLeader ? <span>{activeLeader.displayName ?? activeLeader.name}</span> : null}
                   <span>{typeLabel(filters.type)}</span>
                   {filters.region ? <span>{regionLabel(filters.region)}</span> : null}
                   <span>{layerLabel(filters.layer)}</span>

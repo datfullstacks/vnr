@@ -914,6 +914,11 @@ textarea {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.leader-grid-featured {
+  grid-template-columns: minmax(0, 1fr);
+  margin-bottom: 20px;
+}
+
 .leader-grid-compact {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -1003,6 +1008,7 @@ textarea {
   margin: 0;
   color: var(--accent-deep);
   font-weight: 600;
+  line-height: 1.6;
 }
 
 .leader-hero-aside {

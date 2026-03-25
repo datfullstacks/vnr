@@ -32,14 +32,26 @@ const formationChapters: FormationChapter[] = [
   },
 ]
 
+function leaderDisplayName(leader: LeaderRecord) {
+  return leader.displayName ?? leader.name
+}
+
 function formatLeaderYears(leader: LeaderRecord) {
-  return `${leader.startYear} - ${leader.endYear >= new Date().getFullYear() ? 'nay' : leader.endYear}`
+  return leader.tenureLabel ?? `${leader.startYear} - ${leader.endYear >= new Date().getFullYear() ? 'nay' : leader.endYear}`
+}
+
+function latestLeaderYear(leader: LeaderRecord) {
+  if (!leader.terms?.length) {
+    return leader.endYear
+  }
+
+  return leader.terms.reduce((maxYear, term) => Math.max(maxYear, term.endYear), leader.endYear)
 }
 
 function leaderAtlasHref(leader: LeaderRecord) {
   const params = new URLSearchParams({
     leader: leader.slug,
-    year: String(leader.endYear),
+    year: String(latestLeaderYear(leader)),
   })
 
   return `/atlas?${params.toString()}`
@@ -114,7 +126,7 @@ export function LeaderPortrait({
     <div className={className}>
       {leader.portraitUrl ? (
         <Image
-          alt={`Chân dung ${leader.name}`}
+          alt={`Chân dung ${leaderDisplayName(leader)}`}
           className="leader-portrait-image"
           fill
           loading={variant === 'hero' ? 'eager' : 'lazy'}
@@ -219,7 +231,7 @@ function renderLeaderGrid(
         >
           <LeaderPortrait leader={leader} />
           <span className="record-kind">{titleLabel}</span>
-          <h3>{leader.name}</h3>
+          <h3>{leaderDisplayName(leader)}</h3>
           <p className="leader-years">
             {leader.officeLabel} · {formatLeaderYears(leader)}
           </p>
@@ -301,6 +313,9 @@ export function LeaderTimelineSection({
   periods?: PeriodRecord[]
   title?: string
 }) {
+  const featuredLeaders = leaders.filter((leader) => leader.isFeaturedChairmanHighlight)
+  const timelineLeaders = leaders.filter((leader) => !leader.isFeaturedChairmanHighlight)
+
   return (
     <section className="content-section">
       <div className="section-heading">
@@ -317,8 +332,44 @@ export function LeaderTimelineSection({
         </Link>
       </div>
 
-      <div className="leader-grid">
-        {leaders.map((leader) => {
+      {featuredLeaders.length > 0 ? (
+        <div className="leader-grid leader-grid-featured">
+          {featuredLeaders.map((leader) => {
+            const relatedPeriods = periodsForLeader(periods, leader)
+
+            return (
+            <article
+              className={leader.isFeaturedChairmanHighlight ? 'leader-card leader-card-featured' : 'leader-card'}
+              key={leader.id}
+            >
+              <LeaderPortrait leader={leader} />
+              <div className="leader-card-header">
+                <span className="record-kind">{leader.officeLabel}</span>
+                <span className="leader-badge">Hồ Chí Minh</span>
+              </div>
+              <h3>{leaderDisplayName(leader)}</h3>
+              <p className="leader-years">{formatLeaderYears(leader)}</p>
+              <p>{leader.summary}</p>
+              <div className="detail-meta">
+                <span>Điểm nhấn đặc biệt</span>
+                <span>{summarizePeriods(relatedPeriods)}</span>
+              </div>
+              <div className="leader-actions">
+                <Link className="ghost-button" href={`/lanh-dao/${leader.slug}`}>
+                  Hồ sơ lãnh đạo
+                </Link>
+                <Link className="inline-link" href={leaderAtlasHref(leader)}>
+                  Mở lát cắt trên bản đồ
+                </Link>
+              </div>
+            </article>
+            )
+          })}
+        </div>
+      ) : null}
+
+      <div className="leader-grid leader-grid-compact">
+        {timelineLeaders.map((leader) => {
           const relatedPeriods = periodsForLeader(periods, leader)
 
           return (
@@ -331,12 +382,12 @@ export function LeaderTimelineSection({
               <span className="record-kind">{leader.officeLabel}</span>
               {leader.isFeaturedChairmanHighlight ? <span className="leader-badge">Chủ tịch Đảng</span> : null}
             </div>
-            <h3>{leader.name}</h3>
+            <h3>{leaderDisplayName(leader)}</h3>
             <p className="leader-years">{formatLeaderYears(leader)}</p>
             <p>{leader.summary}</p>
             <div className="detail-meta">
               <span>{leader.officeType === 'party-chairman' ? 'Điểm nhấn đặc biệt' : 'Trục Tổng Bí thư'}</span>
-              <span>{leader.startYear}</span>
+              <span>{leader.terms?.length && leader.terms.length > 1 ? `${leader.terms.length} nhiệm kỳ` : leader.startYear}</span>
               <span>{summarizePeriods(relatedPeriods)}</span>
             </div>
             <div className="leader-actions">
@@ -379,7 +430,7 @@ export function LeaderContextCard({
         <span className="record-kind">{title}</span>
         {leader.isFeaturedChairmanHighlight ? <span className="leader-badge">Chủ tịch Đảng</span> : null}
       </div>
-      <h3>{leader.name}</h3>
+      <h3>{leaderDisplayName(leader)}</h3>
       <p className="leader-years">
         {leader.officeLabel} · {formatLeaderYears(leader)}
       </p>

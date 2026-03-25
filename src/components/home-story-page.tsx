@@ -56,7 +56,7 @@ export function HomeStoryPage({
             <strong>{activeYear}</strong>
             <p className="hero-context">
               {activeLeader
-                ? `${activeLeader.name}${activePeriod ? ` trong ${activePeriod.title}` : ''}.`
+                ? `${activeLeader.displayName ?? activeLeader.name}${activePeriod ? ` trong ${activePeriod.title}` : ''}.`
                 : activePeriod
                   ? activePeriod.title
                   : 'Chọn một năm để mở bối cảnh tương ứng.'}

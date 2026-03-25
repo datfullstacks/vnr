@@ -40,10 +40,15 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
   }
 
   const leader = data.leader
+  const leaderTerms =
+    leader.terms?.length
+      ? leader.terms
+      : [{ endYear: leader.endYear, label: leader.tenureLabel ?? leader.officeLabel, startYear: leader.startYear }]
+  const latestLeaderYear = leaderTerms.reduce((maxYear, term) => Math.max(maxYear, term.endYear), leader.endYear)
 
   const contextPeriod =
     [...data.featuredPeriods, ...data.officialPeriods].find(
-      (period) => period.startYear <= leader.endYear && period.endYear >= leader.startYear,
+      (period) => leaderTerms.some((term) => period.startYear <= term.endYear && period.endYear >= term.startYear),
     ) ??
     data.featuredPeriods[0] ??
     data.officialPeriods[0] ??
@@ -67,7 +72,7 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
         <section className="hero-panel detail-hero-panel">
           <div>
             <p className="eyebrow">Lãnh đạo</p>
-            <h1 className="detail-title">{leader.name}</h1>
+            <h1 className="detail-title">{leader.displayName ?? leader.name}</h1>
             <p className="detail-lead">{leader.summary}</p>
           </div>
           <div className="leader-hero-aside">
@@ -75,7 +80,7 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
             <div className="hero-stats">
               <strong>{leader.officeLabel}</strong>
               <span>
-                {leader.startYear} - {leader.endYear >= new Date().getFullYear() ? 'nay' : leader.endYear}
+                {leader.tenureLabel ?? `${leader.startYear} - ${leader.endYear >= new Date().getFullYear() ? 'nay' : leader.endYear}`}
               </span>
             </div>
           </div>
@@ -140,7 +145,7 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
           </div>
 
           <AtlasMapShell
-            activeYear={data.activeYear ?? leader.endYear}
+            activeYear={data.activeYear ?? latestLeaderYear}
             boundaryEpoch={data.activeBoundaryEpoch ?? null}
             campaigns={data.campaigns}
             events={data.events}
@@ -177,7 +182,7 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
 
         {periodContext?.period ? (
           <>
-            <NarrativeFocus period={periodContext.period} year={data.activeYear ?? leader.endYear} />
+            <NarrativeFocus period={periodContext.period} year={data.activeYear ?? latestLeaderYear} />
 
 
             <HistoricalNarrativeDigest
