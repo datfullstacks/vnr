@@ -22,6 +22,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
 }
 
 body {
@@ -65,7 +66,7 @@ textarea {
 .site-frame {
   width: min(1240px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 28px 0 72px;
+  padding: 28px 0 0;
 }
 
 .site-header,
@@ -83,7 +84,7 @@ textarea {
 .site-header,
 .site-footer,
 .page-heading {
-  border-radius: 24px;
+  border-radius: 0;
   padding: 20px 22px;
 }
 
@@ -92,6 +93,11 @@ textarea {
   justify-content: space-between;
   gap: 20px;
   align-items: flex-start;
+  scroll-snap-align: start;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
 }
 
 .brand-mark {
@@ -163,8 +169,8 @@ textarea {
 .site-main,
 .page-stack {
   display: grid;
-  gap: 32px;
-  margin-top: 28px;
+  gap: 0;
+  margin-top: 0;
 }
 
 .page-heading h1,
@@ -185,11 +191,14 @@ textarea {
 }
 
 .hero-panel {
-  border-radius: 28px;
+  border-radius: 0;
   padding: 28px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 240px;
   gap: 24px;
+  min-height: 100dvh;
+  align-content: center;
+  scroll-snap-align: start;
 }
 
 .story-hero,
@@ -388,8 +397,12 @@ textarea {
 .timeline-card,
 .content-section,
 .quiz-card {
-  border-radius: 24px;
-  padding: 22px;
+  border-radius: 0;
+  padding: 32px 22px;
+  min-height: 100dvh;
+  display: grid;
+  align-content: center;
+  scroll-snap-align: start;
 }
 
 .timeline-header,
@@ -890,9 +903,12 @@ textarea {
 }
 
 .site-footer {
-  display: block;
-  margin-top: 24px;
+  display: grid;
+  place-items: center;
+  margin-top: 0;
   text-align: center;
+  min-height: 30dvh;
+  scroll-snap-align: end;
 }
 
 .formation-grid,
@@ -917,6 +933,16 @@ textarea {
 .leader-grid-featured {
   grid-template-columns: minmax(0, 1fr);
   margin-bottom: 20px;
+}
+
+.leader-grid-featured .leader-card {
+  grid-template-columns: 280px minmax(0, 1fr);
+  align-items: start;
+}
+
+.leader-grid-featured .leader-portrait {
+  max-width: 280px;
+  aspect-ratio: 3 / 4;
 }
 
 .leader-grid-compact {
