@@ -1,3 +1,4 @@
+import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { LeaderTimelineSection } from '@/components/leader-blocks'
 import { getExplorerSnapshot } from '@/lib/content-service'
@@ -5,7 +6,22 @@ import { getExplorerSnapshot } from '@/lib/content-service'
 export const dynamic = 'force-dynamic'
 
 export default async function LeadersPage() {
-  const snapshot = await getExplorerSnapshot()
+  let snapshot: Awaited<ReturnType<typeof getExplorerSnapshot>>
+
+  try {
+    snapshot = await getExplorerSnapshot()
+  } catch (error) {
+    return (
+      <SiteShell>
+        <PublicDataErrorState
+          context="Trang lãnh đạo cần snapshot công khai để dựng đầy đủ chuỗi Tổng Bí thư và các giai đoạn tương ứng."
+          error={error}
+          title="Không thể tải hồ sơ lãnh đạo"
+        />
+      </SiteShell>
+    )
+  }
+
   const leaders = snapshot.leaders
 
   return (

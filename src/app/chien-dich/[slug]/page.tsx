@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { DetailMeta, RelatedLinks, SourceList } from '@/components/content-blocks'
+import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { getCampaign } from '@/lib/content-service'
 
@@ -8,7 +9,22 @@ export const dynamic = 'force-dynamic'
 
 export default async function CampaignPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const campaign = await getCampaign(slug)
+
+  let campaign: Awaited<ReturnType<typeof getCampaign>>
+
+  try {
+    campaign = await getCampaign(slug)
+  } catch (error) {
+    return (
+      <SiteShell>
+        <PublicDataErrorState
+          context="Trang chiến dịch cần hồ sơ từ vnr-be để dựng diễn biến, kết quả và các liên hệ không gian lịch sử."
+          error={error}
+          title="Không thể tải chiến dịch này"
+        />
+      </SiteShell>
+    )
+  }
 
   if (!campaign) {
     notFound()

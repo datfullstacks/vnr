@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { HistoricalNarrativeDigest, NarrativeFocus, PeriodHighlights, RecordGrid } from '@/components/content-blocks'
 import { PeriodLeaderSummary, RecordsByYear } from '@/components/leader-blocks'
+import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { getPeriod } from '@/lib/content-service'
 
@@ -9,7 +10,22 @@ export const dynamic = 'force-dynamic'
 
 export default async function PeriodPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const data = await getPeriod(slug)
+
+  let data: Awaited<ReturnType<typeof getPeriod>>
+
+  try {
+    data = await getPeriod(slug)
+  } catch (error) {
+    return (
+      <SiteShell>
+        <PublicDataErrorState
+          context="Trang giai đoạn cần dữ liệu chi tiết từ vnr-be để dựng bối cảnh, lãnh đạo và các bước ngoặt lịch sử."
+          error={error}
+          title="Không thể tải hồ sơ giai đoạn này"
+        />
+      </SiteShell>
+    )
+  }
 
   if (!data.period) {
     notFound()

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { DetailMeta, RelatedLinks, SourceList } from '@/components/content-blocks'
+import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { getEvent } from '@/lib/content-service'
 
@@ -8,7 +9,22 @@ export const dynamic = 'force-dynamic'
 
 export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const event = await getEvent(slug)
+
+  let event: Awaited<ReturnType<typeof getEvent>>
+
+  try {
+    event = await getEvent(slug)
+  } catch (error) {
+    return (
+      <SiteShell>
+        <PublicDataErrorState
+          context="Trang sự kiện cần hồ sơ từ vnr-be để dựng diễn biến, nguồn và các liên kết lịch sử liên quan."
+          error={error}
+          title="Không thể tải sự kiện này"
+        />
+      </SiteShell>
+    )
+  }
 
   if (!event) {
     notFound()

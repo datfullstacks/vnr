@@ -39,14 +39,26 @@ function emptySnapshot(): ExplorerSnapshot {
   }
 }
 
-function resolveBackendUrl() {
-  const configured = process.env.VNR_BE_URL?.trim()
+export function resolveBackendUrl() {
+  const configured =
+    process.env.VNR_BE_URL?.trim() ||
+    process.env.CONTENT_API_BASE_URL?.trim() ||
+    process.env.NEXT_PUBLIC_VNR_BE_URL?.trim() ||
+    process.env.NEXT_PUBLIC_CONTENT_API_BASE_URL?.trim()
 
   if (configured) {
     return configured.replace(/\/+$/, '')
   }
 
   return 'http://localhost:3001'
+}
+
+export function describePublicDataError(error: unknown) {
+  if (error instanceof Error && error.message.trim()) {
+    return error.message
+  }
+
+  return `Không tải được dữ liệu công khai từ ${resolveBackendUrl()}.`
 }
 
 function toQueryString(searchParams: Record<string, string | string[] | undefined>) {
@@ -84,7 +96,7 @@ async function requestJson<T>(path: string): Promise<T> {
     })
   } catch {
     throw new Error(
-      `Khong ket noi duoc vnr-be tai ${resolveBackendUrl()}. Hay khoi dong backend hoac kiem tra VNR_BE_URL.`,
+      `Khong ket noi duoc vnr-be tai ${resolveBackendUrl()}. Hay khoi dong backend hoac kiem tra VNR_BE_URL/CONTENT_API_BASE_URL.`,
     )
   }
 

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { AtlasMapShell } from '@/components/atlas-map-shell'
 import { HistoricalNarrativeDigest, PeriodHighlights, RecordGrid, SourceList } from '@/components/content-blocks'
 import { LeaderContextCard, LeaderPortrait, LeaderQuickFacts, RecordsByYear } from '@/components/leader-blocks'
+import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { getLeader } from '@/lib/content-service'
 
@@ -10,7 +11,22 @@ export const dynamic = 'force-dynamic'
 
 export default async function LeaderPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const data = await getLeader(slug)
+
+  let data: Awaited<ReturnType<typeof getLeader>>
+
+  try {
+    data = await getLeader(slug)
+  } catch (error) {
+    return (
+      <SiteShell>
+        <PublicDataErrorState
+          context="Trang hồ sơ lãnh đạo cần dữ liệu chi tiết từ vnr-be để dựng chân dung, giai đoạn và lát cắt atlas."
+          error={error}
+          title="Không thể tải hồ sơ lãnh đạo này"
+        />
+      </SiteShell>
+    )
+  }
 
   if (!data.leader) {
     notFound()

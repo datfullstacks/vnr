@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 
 import { DetailMeta, SourceList } from '@/components/content-blocks'
+import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { getPlace } from '@/lib/content-service'
 
@@ -8,7 +9,22 @@ export const dynamic = 'force-dynamic'
 
 export default async function PlacePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const place = await getPlace(slug)
+
+  let place: Awaited<ReturnType<typeof getPlace>>
+
+  try {
+    place = await getPlace(slug)
+  } catch (error) {
+    return (
+      <SiteShell>
+        <PublicDataErrorState
+          context="Trang địa danh cần hồ sơ từ vnr-be để dựng không gian lịch sử và nguồn đối chiếu."
+          error={error}
+          title="Không thể tải địa danh này"
+        />
+      </SiteShell>
+    )
+  }
 
   if (!place) {
     notFound()
