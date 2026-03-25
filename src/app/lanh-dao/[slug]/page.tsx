@@ -56,10 +56,10 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
           <div className="section-heading">
             <div>
               <p className="eyebrow">Hồ sơ lãnh đạo</p>
-              <h2>Bối cảnh lịch sử và luận điểm chủ đạo</h2>
+              <h2>Bối cảnh lịch sử và luận điểm chính</h2>
               <p className="section-copy">
-                Phần này đặt chân dung lãnh đạo vào đúng bối cảnh chiến lược, thay vì tách khỏi các giai
-                đoạn, mốc năm và không gian cách mạng.
+                Phần này đặt chân dung lãnh đạo vào đúng bối cảnh chiến lược, gắn với giai đoạn, mốc năm
+                và không gian lịch sử liên quan.
               </p>
             </div>
           </div>
@@ -105,7 +105,7 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
               <p className="eyebrow">Lát cắt bản đồ</p>
               <h2>Bản đồ và hồ sơ liên quan trong thời kỳ này</h2>
               <p className="section-copy">
-                Atlas ở đây đã được thu hẹp theo thời gian và các hồ sơ lịch sử liên quan tới lãnh đạo đang xem.
+                Atlas ở đây đã được thu hẹp theo thời gian và các hồ sơ liên quan tới lãnh đạo đang xem.
               </p>
             </div>
           </div>
@@ -123,7 +123,7 @@ export default async function LeaderPage({ params }: { params: Promise<{ slug: s
 
         <HistoricalNarrativeDigest
           campaigns={data.campaigns}
-          description="Thay vì chỉ nhìn tên năm, khối này gom các sự kiện và chiến dịch then chốt để người đọc thấy được chuyển động lịch sử cụ thể trong nhiệm kỳ đang xem."
+          description="Khối này gom các sự kiện và chiến dịch then chốt để người xem thấy được chuyển động lịch sử cụ thể trong nhiệm kỳ đang xem."
           events={data.events}
           title="Những bước ngoặt lịch sử gắn với giai đoạn này"
         />

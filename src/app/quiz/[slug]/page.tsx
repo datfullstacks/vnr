@@ -48,7 +48,7 @@ export default async function QuizPage({ params }: { params: Promise<{ slug: str
 
         <QuizPlayer quiz={quiz} />
         <SourceList
-          description="Phần ôn tập được dựng từ cùng hệ nguồn với atlas để người học có thể kiểm tra lại kiến thức theo trục thời gian và bản đồ."
+          description="Phần ôn tập được dựng từ cùng hệ nguồn với atlas để người học kiểm tra lại kiến thức theo trục thời gian và bản đồ."
           sources={quiz.sources}
         />
       </div>

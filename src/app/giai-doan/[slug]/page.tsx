@@ -56,7 +56,7 @@ export default async function PeriodPage({ params }: { params: Promise<{ slug: s
         <PeriodLeaderSummary leaders={data.leaders} period={data.period} />
         <HistoricalNarrativeDigest
           campaigns={data.campaigns}
-          description="Khối này giữ lại các sự kiện và chiến dịch tạo nên nhịp điệu thực sự của giai đoạn, để người đọc không chỉ thấy tên period mà còn thấy các bước ngoặt cụ thể."
+          description="Khối này giữ lại các sự kiện và chiến dịch tạo nên nhịp điệu thực sự của giai đoạn, để người xem không chỉ thấy tên period mà còn thấy các bước ngoặt cụ thể."
           events={data.events}
           title="Những bước ngoặt lịch sử của giai đoạn"
         />
@@ -67,7 +67,7 @@ export default async function PeriodPage({ params }: { params: Promise<{ slug: s
           title="Địa danh, căn cứ và không gian lịch sử"
         />
         <PeriodHighlights
-          description="Giai đoạn này được đặt vào chuỗi lớn hơn để người đọc không mất mạch trước và sau nó."
+          description="Giai đoạn này được đặt vào chuỗi lớn hơn để người xem không mất mạch trước và sau nó."
           periods={surroundingPeriods}
         />
       </div>

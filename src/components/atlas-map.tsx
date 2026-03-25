@@ -28,6 +28,17 @@ type SelectedFeature = {
   title: string
 }
 
+const MAP_COLORS = {
+  campaign: '#9d6b33',
+  hoverLine: '#74513a',
+  ink: '#1f1712',
+  parchment: '#efe2c6',
+  place: '#6a3824',
+  red: '#8f1f1b',
+  sea: '#1f4f73',
+  stroke: '#f8edd8',
+} as const
+
 const VIETNAM_BOUNDS = [
   [99.6, 6.2],
   [115.8, 24.6],
@@ -50,7 +61,7 @@ const archipelagoFeatures: FeatureCollection = {
         type: 'Point',
       },
       properties: {
-        color: '#315f8c',
+        color: MAP_COLORS.sea,
         kind: 'archipelago',
         regionLabel: 'Biển Đông',
         summary:
@@ -65,7 +76,7 @@ const archipelagoFeatures: FeatureCollection = {
         type: 'Point',
       },
       properties: {
-        color: '#315f8c',
+        color: MAP_COLORS.sea,
         kind: 'archipelago',
         regionLabel: 'Biển Đông',
         summary:
@@ -83,7 +94,7 @@ const blankStyle: StyleSpecification = {
     {
       id: 'background',
       paint: {
-        'background-color': '#efe4cf',
+        'background-color': MAP_COLORS.parchment,
       },
       type: 'background',
     },
@@ -160,7 +171,8 @@ function recordFeature(
         type: 'Point',
       },
       properties: {
-        color: kind === 'event' ? '#004d61' : kind === 'campaign' ? '#b0551f' : '#6b3f84',
+        color:
+          kind === 'event' ? MAP_COLORS.sea : kind === 'campaign' ? MAP_COLORS.campaign : MAP_COLORS.place,
         displayYear: 'displayYear' in record ? record.displayYear : undefined,
         href: `${hrefBase}/${record.slug}`,
         kind,
@@ -546,7 +558,7 @@ function ensureInteractionLayers(map: Map, sourceId: string, prefix: string, mod
       filter: ['==', ['geometry-type'], 'Polygon'],
       id: `${prefix}-fill`,
       paint: {
-        'fill-color': ['coalesce', ['get', 'color'], '#ab2f24'],
+        'fill-color': ['coalesce', ['get', 'color'], MAP_COLORS.red],
         'fill-opacity': mode === 'selected' ? 0.18 : 0.1,
       },
       source: sourceId,
@@ -559,7 +571,7 @@ function ensureInteractionLayers(map: Map, sourceId: string, prefix: string, mod
       filter: ['!=', ['geometry-type'], 'Point'],
       id: `${prefix}-line`,
       paint: {
-        'line-color': mode === 'selected' ? '#20130c' : '#5d4331',
+        'line-color': mode === 'selected' ? MAP_COLORS.ink : MAP_COLORS.hoverLine,
         'line-opacity': mode === 'selected' ? 0.95 : 0.75,
         'line-width': mode === 'selected' ? 3 : 2,
       },
@@ -573,9 +585,9 @@ function ensureInteractionLayers(map: Map, sourceId: string, prefix: string, mod
       filter: ['==', ['geometry-type'], 'Point'],
       id: `${prefix}-point`,
       paint: {
-        'circle-color': ['coalesce', ['get', 'color'], '#ab2f24'],
+        'circle-color': ['coalesce', ['get', 'color'], MAP_COLORS.red],
         'circle-radius': mode === 'selected' ? 10 : 8,
-        'circle-stroke-color': '#fff7ea',
+        'circle-stroke-color': MAP_COLORS.stroke,
         'circle-stroke-width': mode === 'selected' ? 3 : 2,
       },
       source: sourceId,
@@ -588,7 +600,7 @@ function buildSelectedFeature(feature: Feature<Geometry, GeoJsonProperties>): Se
   const properties = feature.properties ?? {}
 
   return {
-    accentColor: typeof properties.color === 'string' ? properties.color : '#ab2f24',
+    accentColor: typeof properties.color === 'string' ? properties.color : MAP_COLORS.red,
     feature,
     href: typeof properties.href === 'string' ? properties.href : undefined,
     kindLabel: featureKindLabel(properties.kind),
@@ -819,9 +831,9 @@ export function AtlasMap({
         activeMap.addLayer({
           id: 'archipelago-points-layer',
           paint: {
-            'circle-color': '#315f8c',
+            'circle-color': MAP_COLORS.sea,
             'circle-radius': 7,
-            'circle-stroke-color': '#fff7ea',
+            'circle-stroke-color': MAP_COLORS.stroke,
             'circle-stroke-width': 2,
           },
           source: 'archipelago-reference',
@@ -841,7 +853,7 @@ export function AtlasMap({
         activeMap.addLayer({
           id: 'historical-admin-fill',
           paint: {
-            'fill-color': ['coalesce', ['get', 'color'], '#ab2f24'],
+            'fill-color': ['coalesce', ['get', 'color'], MAP_COLORS.red],
             'fill-opacity': 0.28,
           },
           source: 'historical-admin-boundaries',
@@ -857,7 +869,7 @@ export function AtlasMap({
           filter: ['==', ['geometry-type'], 'Polygon'],
           id: 'historical-overlays-fill',
           paint: {
-            'fill-color': ['coalesce', ['get', 'color'], '#ab2f24'],
+            'fill-color': ['coalesce', ['get', 'color'], MAP_COLORS.red],
             'fill-opacity': ['coalesce', ['get', 'opacity'], 0.22],
           },
           source: 'historical-overlays',
@@ -867,7 +879,7 @@ export function AtlasMap({
           filter: ['==', ['geometry-type'], 'LineString'],
           id: 'historical-overlays-line',
           paint: {
-            'line-color': ['coalesce', ['get', 'color'], '#ab2f24'],
+            'line-color': ['coalesce', ['get', 'color'], MAP_COLORS.red],
             'line-width': 3,
           },
           source: 'historical-overlays',
@@ -877,9 +889,9 @@ export function AtlasMap({
           filter: ['==', ['geometry-type'], 'Point'],
           id: 'historical-overlays-point',
           paint: {
-            'circle-color': ['coalesce', ['get', 'color'], '#ab2f24'],
+            'circle-color': ['coalesce', ['get', 'color'], MAP_COLORS.red],
             'circle-radius': 7,
-            'circle-stroke-color': '#fef7ec',
+            'circle-stroke-color': MAP_COLORS.stroke,
             'circle-stroke-width': 2,
           },
           source: 'historical-overlays',
@@ -898,13 +910,13 @@ export function AtlasMap({
               'match',
               ['get', 'kind'],
               'event',
-              '#004d61',
+              MAP_COLORS.sea,
               'campaign',
-              '#b0551f',
-              '#6b3f84',
+              MAP_COLORS.campaign,
+              MAP_COLORS.place,
             ],
             'circle-radius': 6,
-            'circle-stroke-color': '#fff7ea',
+            'circle-stroke-color': MAP_COLORS.stroke,
             'circle-stroke-width': 2,
           },
           source: 'record-points',
@@ -1072,25 +1084,35 @@ export function AtlasMap({
         <div className="map-canvas" ref={containerRef} />
       </div>
       <aside className="map-aside">
-        <p className="eyebrow">Chú giải bản đồ</p>
-        <ul className="legend-list">
-          <li>
-            <span className="legend-swatch historical" />
-            Lớp nền lịch sử năm {activeYear}
-          </li>
-          <li>
-            <span className="legend-swatch archipelago" />
-            Mốc tham chiếu Hoàng Sa, Trường Sa
-          </li>
-          <li>
-            <span className="legend-swatch events" />
-            Sự kiện / chiến dịch / địa danh
-          </li>
-        </ul>
+        <section className="map-panel">
+          <p className="eyebrow">Chú giải bản đồ</p>
+          <ul className="legend-list">
+            <li>
+              <span className="legend-swatch historical" />
+              Địa giới và lớp lịch sử năm {activeYear}
+            </li>
+            <li>
+              <span className="legend-swatch event" />
+              Sự kiện lịch sử
+            </li>
+            <li>
+              <span className="legend-swatch campaign" />
+              Chiến dịch
+            </li>
+            <li>
+              <span className="legend-swatch place" />
+              Địa danh
+            </li>
+            <li>
+              <span className="legend-swatch archipelago" />
+              Hoàng Sa, Trường Sa và tham chiếu biển đảo
+            </li>
+          </ul>
+        </section>
 
         <div className="map-actions">
           <button className="ghost-button" onClick={resetView} type="button">
-            Khung mặc định
+            Về khung mặc định
           </button>
           {selected ? (
             <button className="ghost-button" onClick={clearSelection} type="button">
@@ -1100,11 +1122,11 @@ export function AtlasMap({
         </div>
 
         {selected ? (
-          <div
+          <section
             className="map-selection map-selection-active"
             style={{ '--selection-accent': selected.accentColor } as React.CSSProperties}
           >
-            <p className="eyebrow">Đang chọn</p>
+            <p className="eyebrow">Hồ sơ đang chọn</p>
             <h3>{selected.title}</h3>
             <strong className="map-selection-kind">{selected.kindLabel}</strong>
             {selected.meta ? <small>{selected.meta}</small> : null}
@@ -1114,12 +1136,15 @@ export function AtlasMap({
                 Mở hồ sơ chi tiết
               </a>
             ) : null}
-          </div>
+          </section>
         ) : (
-          <p className="map-hint">
-            Rê chuột để xem highlight, nhấp vào một đơn vị hành chính, lớp lịch sử hoặc bản ghi điểm để
-            tập trung khung nhìn và xem mô tả ngắn.
-          </p>
+          <section className="map-selection map-selection-idle">
+            <p className="eyebrow">Tương tác nhanh</p>
+            <p className="map-hint">
+              Rê chuột để xem highlight, nhấp vào một đơn vị hành chính, lớp lịch sử hoặc bản ghi điểm
+              để tập trung khung nhìn và đọc mô tả ngắn.
+            </p>
+          </section>
         )}
       </aside>
     </div>

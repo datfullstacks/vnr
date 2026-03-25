@@ -430,7 +430,7 @@ export function SourceList({
 export function PeriodHighlights({
   description,
   periods,
-  title = 'Những chặng lớn của lịch sử Đảng trên bản đồ Việt Nam',
+  title = 'Những chặng lớn của lịch sử Đảng trên bản đồ cách mạng Việt Nam',
 }: {
   description?: string
   periods: PeriodRecord[]

@@ -11,22 +11,22 @@ type FormationChapter = {
 
 const formationChapters: FormationChapter[] = [
   {
-    summary: 'Thực dân Pháp mở đầu quá trình xâm lược, kéo theo các cuộc kháng chiến buổi đầu và sự đổ vỡ của trật tự cũ.',
+    summary: 'Thực dân Pháp mở đầu quá trình xâm lược, kéo theo các cuộc kháng chiến buổi đầu và biến động lớn trong trật tự cũ.',
     timeLabel: '1858-1884',
     title: 'Xâm lược và kháng chiến buổi đầu',
   },
   {
-    summary: 'Phong trào Cần Vương, khởi nghĩa văn thân và các xu hướng cứu nước cuối thế kỷ XIX làm rõ nhu cầu tìm một con đường mới.',
+    summary: 'Phong trào Cần Vương và các xu hướng cứu nước cuối thế kỷ XIX cho thấy nhu cầu tìm một con đường mới.',
     timeLabel: '1885-1918',
     title: 'Khủng hoảng quốc gia và các xu hướng cứu nước',
   },
   {
-    summary: 'Sau Chiến tranh thế giới thứ nhất, phong trào công nhân và các tổ chức chính trị mới phát triển nhanh, tạo ra nền xã hội mới cho cách mạng.',
+    summary: 'Sau Chiến tranh thế giới thứ nhất, lực lượng xã hội và các tổ chức chính trị mới phát triển nhanh, tạo nền cho cách mạng.',
     timeLabel: '1919-1925',
     title: 'Chuyển biến xã hội và lực lượng mới',
   },
   {
-    summary: 'Nguyễn Ái Quốc, Hội Việt Nam Cách mạng Thanh niên và các tổ chức cộng sản tiền thân chuẩn bị cho mốc thành lập Đảng năm 1930.',
+    summary: 'Nguyễn Ái Quốc cùng các tổ chức tiền thân chuẩn bị trực tiếp cho mốc thành lập Đảng năm 1930.',
     timeLabel: '1925-1930',
     title: 'Từ tổ chức tiền thân đến thành lập Đảng',
   },
@@ -172,7 +172,7 @@ export function LeaderQuickFacts({
           <p className="eyebrow">Hồ sơ nhanh</p>
           <h2>Thông tin cốt lõi của chân dung này</h2>
           <p className="section-copy">
-            Khối này gom các dữ kiện nền để người đọc nắm nhanh vị trí lịch sử của lãnh đạo trước khi đi vào bản đồ, sự kiện và tư liệu.
+            Khối này gom các dữ kiện cốt lõi để người xem nắm nhanh vị trí lịch sử của lãnh đạo trước khi đi vào bản đồ và hồ sơ liên quan.
           </p>
         </div>
       </div>
@@ -254,8 +254,8 @@ export function FormationOverview({
           <p className="eyebrow">Tiền đề hình thành Đảng</p>
           <h2>1858-1930: Từ khủng hoảng quốc gia đến sự ra đời của Đảng Cộng sản Việt Nam</h2>
           <p className="section-copy">
-            Đây là lớp nhập đề của site: chưa đặt dưới trục Tổng Bí thư, mà đi theo tiến trình lịch sử
-            tạo nên tiền đề tư tưởng, tổ chức và xã hội cho Đảng.
+            Đây là lớp nhập đề của site, đi theo tiến trình tạo nên tiền đề tư tưởng, tổ chức và xã hội
+            cho sự ra đời của Đảng.
           </p>
         </div>
       </div>
@@ -489,8 +489,8 @@ export function RecordsByYear({
           <p className="eyebrow">Mốc năm tiêu biểu</p>
           <h2>{title}</h2>
           <p className="section-copy">
-            Thay vì một danh sách dài, phần này gom sự kiện và chiến dịch theo từng năm để người đọc bám
-            theo nhịp chuyển lịch sử của giai đoạn.
+            Thay vì một danh sách dài, phần này gom sự kiện và chiến dịch theo từng năm để người xem bám
+            nhanh nhịp chuyển của giai đoạn.
           </p>
         </div>
       </div>

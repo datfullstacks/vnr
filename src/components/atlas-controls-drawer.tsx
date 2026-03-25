@@ -44,7 +44,7 @@ export function AtlasControlsDrawer({
         onClick={() => setOpen(true)}
         type="button"
       >
-        <span className="atlas-controls-toggle-label">Bộ điều khiển atlas</span>
+        <span className="atlas-controls-toggle-label">Bàn điều khiển atlas</span>
         <strong>{title}</strong>
         <small>{summary}</small>
       </button>
@@ -60,7 +60,7 @@ export function AtlasControlsDrawer({
       <div className="atlas-controls-panel" id="atlas-controls-panel">
         <div className="atlas-controls-mobile-header">
           <div>
-            <p className="eyebrow">Điều khiển atlas</p>
+            <p className="eyebrow">Bàn điều khiển atlas</p>
             <h2>{title}</h2>
             <p className="timeline-copy">{summary}</p>
           </div>

@@ -88,7 +88,7 @@ export function TimelineController({
         <p className="eyebrow">Lát cắt đang xem</p>
         <h2>Năm {year}</h2>
         <p className="timeline-copy">
-          {visiblePeriod ? visiblePeriod.title : 'Chọn một năm để mở lát cắt tương ứng.'}
+          {visiblePeriod ? visiblePeriod.title : 'Chọn một năm để mở đúng bối cảnh lịch sử tương ứng.'}
         </p>
 
         <div className="timeline-range-grid timeline-range-grid-compact">

@@ -113,9 +113,9 @@ export function AtlasExplorerPage({
     <div className="page-stack atlas-page-stack">
       <section className="hero-panel atlas-hero">
         <div className="atlas-hero-copy">
-          <p className="eyebrow">Atlas lãnh đạo và giai đoạn</p>
-          <h1>Bản đồ nhiều lớp của cách mạng Việt Nam</h1>
-          <p>Chọn lãnh đạo, mốc năm và loại hồ sơ, rồi đọc biến chuyển lịch sử trực tiếp trên bản đồ.</p>
+          <p className="eyebrow">Atlas trình chiếu</p>
+          <h1>Atlas nhiều lớp của lịch sử cách mạng Việt Nam</h1>
+          <p>Chọn lãnh đạo, mốc năm và lớp tư liệu để trình bày chuyển động lịch sử trực tiếp trên bản đồ.</p>
           {activeLeader ? (
             <p className="hero-context">
               Lát cắt hiện tại đang đặt vào <strong>{activeLeader.name}</strong>
@@ -155,7 +155,7 @@ export function AtlasExplorerPage({
             <p className="eyebrow">Điều hướng bản đồ</p>
             <h2>Chọn lãnh đạo, mốc năm và lớp tư liệu trước khi đọc bản đồ</h2>
             <p className="section-copy">
-              Trật tự ưu tiên của atlas là lãnh đạo, rồi đến năm, loại hồ sơ, vùng và lớp hiển thị.
+              Atlas ưu tiên theo thứ tự: lãnh đạo, năm, loại bản ghi, vùng và lớp hiển thị.
             </p>
           </div>
 
@@ -268,10 +268,10 @@ export function AtlasExplorerPage({
       </section>
 
       <RecordGrid
-        description="Từ bản đồ, đi tiếp sang những hồ sơ đang khớp với lát cắt theo lãnh đạo, năm và bộ lọc hiện tại."
+        description="Từ bản đồ, đi tiếp sang những hồ sơ khớp với lát cắt hiện tại để giữ mạch thuyết trình ngắn và rõ."
         maxItems={8}
         records={visibleRecords}
-        title={`Bản ghi theo lát cắt và bộ lọc của năm ${activeYear}`}
+        title={`Bản ghi theo lát cắt của năm ${activeYear}`}
       />
     </div>
   )

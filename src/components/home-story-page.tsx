@@ -45,42 +45,30 @@ export function HomeStoryPage({
     <div className="page-stack">
       <section className="hero-panel story-hero">
         <div className="story-hero-copy">
-          <p className="eyebrow">Bản đồ cách mạng Việt Nam</p>
-          <h1>Theo dấu các giai đoạn và thời kỳ lãnh đạo trên bản đồ Việt Nam</h1>
+          <p className="eyebrow">Không gian trình bày</p>
+          <h1>Bản đồ cách mạng Việt Nam trên cùng một trục thời gian và không gian</h1>
           <p>
-            Màn hình này mở ra hai lối đọc chính: tiến trình hình thành Đảng từ 1858 đến 1930, và các
-            thời kỳ lãnh đạo từ 1930 đến nay.
+            Màn hình mở đầu này gom hai trục cốt lõi của sản phẩm: tiến trình hình thành Đảng và chuỗi
+            thời kỳ lãnh đạo trên nền bản đồ Việt Nam.
           </p>
-          <p className="hero-context">
-            Năm <strong>{activeYear}</strong>
-            {activeLeader ? (
-              <>
-                {' đang đặt vào '}
-                <strong>{activeLeader.name}</strong>
-                {activePeriod ? (
-                  <>
-                    {' '}
-                    trong <strong>{activePeriod.title}</strong>.
-                  </>
-                ) : (
-                  '.'
-                )}
-              </>
-            ) : (
-              activePeriod ? (
-                <>
-                  {' đang nằm trong '}
-                  <strong>{activePeriod.title}</strong>.
-                </>
-              ) : (
-                '.'
-              )
-            )}
-          </p>
+          <div className="story-focus-card">
+            <span className="hero-stat-label">Lát cắt hiện tại</span>
+            <strong>{activeYear}</strong>
+            <p className="hero-context">
+              {activeLeader
+                ? `${activeLeader.name}${activePeriod ? ` trong ${activePeriod.title}` : ''}.`
+                : activePeriod
+                  ? activePeriod.title
+                  : 'Chọn một năm để mở bối cảnh tương ứng.'}
+            </p>
+          </div>
 
           <div className="hero-actions">
             <Link className="primary-button" href={atlasHref}>
               Mở atlas theo lát cắt này
+            </Link>
+            <Link className="ghost-button" href="/lanh-dao">
+              Xem trục lãnh đạo
             </Link>
           </div>
         </div>
@@ -135,10 +123,10 @@ export function HomeStoryPage({
       </section>
 
       <RecordGrid
-        description="Một vài hồ sơ tiêu biểu của lát cắt đang xem, giữ trang chủ như một cửa vào thay vì biến thành danh mục tư liệu quá dài."
+        description="Một vài hồ sơ tiêu biểu của lát cắt đang xem, đủ để dẫn người xem đi tiếp mà không làm trang chủ trở nên quá dày."
         maxItems={3}
         records={visibleRecords}
-        title={`Những bản ghi nổi bật quanh năm ${activeYear}`}
+        title={`Những hồ sơ nổi bật quanh năm ${activeYear}`}
       />
     </div>
   )

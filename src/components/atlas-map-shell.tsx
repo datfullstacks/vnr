@@ -19,13 +19,13 @@ const AtlasMapClient = dynamic(
         <div className="map-stage">
           <div className="map-loading">
             <div className="map-loading-bar" />
-            <p>Đang nạp bản đồ lịch sử...</p>
+            <p>Đang chuẩn bị bản đồ trình chiếu...</p>
           </div>
         </div>
         <aside className="map-aside">
           <p className="eyebrow">Chú giải bản đồ</p>
           <div className="map-loading-copy">
-            Bản đồ sẽ được tải sau khi phần giao diện chính sẵn sàng để người đọc vào thao tác nhanh hơn.
+            Bản đồ sẽ xuất hiện ngay khi phần điều hướng sẵn sàng, để người xem thao tác nhanh trong lúc trình bày.
           </div>
         </aside>
       </div>

@@ -32,14 +32,14 @@ export default async function LeadersPage() {
             <p className="eyebrow">Lãnh đạo</p>
             <h1>Các thời kỳ lãnh đạo của Đảng từ 1930 đến nay</h1>
             <p>
-              Trang này gom toàn bộ các đồng chí Tổng Bí thư theo trục thời gian, đồng thời nhấn riêng Hồ
-              Chí Minh với chức danh Chủ tịch Đảng để giữ đúng cấu trúc lịch sử của site.
+              Trang này gom toàn bộ các đồng chí giữ vai trò lãnh đạo trung tâm của Đảng trên một trục
+              thời gian liền mạch, phù hợp để trình bày nhanh trong buổi demo.
             </p>
           </div>
           <div className="hero-stats">
             <span className="hero-stat-label">Tổng số chân dung</span>
             <strong>{leaders.length}</strong>
-            <span>Đầy đủ trục công khai của site ở thời điểm dữ liệu hiện tại.</span>
+            <span>Toàn bộ chân dung công khai đang có trên site ở thời điểm dữ liệu hiện tại.</span>
           </div>
         </section>
 
