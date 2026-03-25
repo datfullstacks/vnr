@@ -6,6 +6,7 @@ import type {
   ExplorerRecord,
   PeriodRecord,
   PlaceRecord,
+  QuizRecord,
   SourceRecord,
 } from '@/lib/content-types'
 
@@ -50,6 +51,28 @@ function yearLabel(record: ExplorerRecord) {
   }
 
   return undefined
+}
+
+function normalizeExcerpt(raw: string, fallback: string, maxLength = 220) {
+  const normalized = raw.replace(/\s+/g, ' ').trim()
+
+  if (!normalized) {
+    return fallback
+  }
+
+  return normalized.length > maxLength ? `${normalized.slice(0, maxLength - 3).trimEnd()}...` : normalized
+}
+
+function recordExcerpt(record: ExplorerRecord) {
+  if ('content' in record) {
+    return normalizeExcerpt(record.content, record.summary)
+  }
+
+  if ('outcome' in record) {
+    return normalizeExcerpt(record.body, record.summary)
+  }
+
+  return normalizeExcerpt(record.body, record.summary, 200)
 }
 
 function recordNarrative(record: CampaignRecord | EventRecord) {
@@ -312,7 +335,7 @@ export function RecordGrid({
             <Link className="record-card" href={hrefForRecord(record)} key={record.id}>
               <span className="record-kind">{kindLabel(record)}</span>
               <h3>{record.title}</h3>
-              <p>{record.summary}</p>
+              <p>{recordExcerpt(record)}</p>
               <div className="record-meta">
                 {yearLabel(record) ? <span>{yearLabel(record)}</span> : null}
                 <span>{record.period.title}</span>
@@ -423,6 +446,50 @@ export function SourceList({
           ))}
         </ol>
       )}
+    </section>
+  )
+}
+
+export function QuizHighlights({
+  description,
+  quizzes,
+  title = 'Ôn tập và câu hỏi gợi mở',
+}: {
+  description?: string
+  quizzes: QuizRecord[]
+  title?: string
+}) {
+  if (quizzes.length === 0) {
+    return null
+  }
+
+  return (
+    <section className="content-section">
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">Ôn tập</p>
+          <h2>{title}</h2>
+          {description ? <p className="section-copy">{description}</p> : null}
+        </div>
+      </div>
+
+      <div className="record-grid">
+        {quizzes.map((quiz) => (
+          <Link className="record-card" href={`/quiz/${quiz.slug}`} key={quiz.id}>
+            <span className="record-kind">Bộ câu hỏi</span>
+            <h3>{quiz.title}</h3>
+            <p>{quiz.summary}</p>
+            <div className="record-meta">
+              <span>{quiz.period.title}</span>
+              <span>{quiz.questions.length} câu hỏi</span>
+              {quiz.relatedEvents.length > 0 ? <span>{quiz.relatedEvents.length} sự kiện liên quan</span> : null}
+              {quiz.relatedCampaigns.length > 0 ? (
+                <span>{quiz.relatedCampaigns.length} chiến dịch liên quan</span>
+              ) : null}
+            </div>
+          </Link>
+        ))}
+      </div>
     </section>
   )
 }

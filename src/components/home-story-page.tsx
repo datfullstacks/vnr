@@ -4,6 +4,7 @@ import type { ExplorerSnapshot } from '@/lib/content-types'
 import type { SearchState } from '@/lib/search-state'
 
 import { AtlasMapShell } from '@/components/atlas-map-shell'
+import { HistoricalNarrativeDigest, NarrativeFocus, QuizHighlights, RecordGrid } from '@/components/content-blocks'
 import {
   listForType,
   resolveActiveLeader,
@@ -11,7 +12,6 @@ import {
   resolveActiveYear,
   resolveTimelineBounds,
 } from '@/components/explorer-helpers'
-import { RecordGrid } from '@/components/content-blocks'
 import { FormationOverview, LeaderContextCard, LeaderTimelineSection } from '@/components/leader-blocks'
 import { TimelineController } from '@/components/timeline-controller'
 
@@ -82,6 +82,7 @@ export function HomeStoryPage({
         />
       </section>
 
+      <NarrativeFocus period={activePeriod} variant="compact" year={activeYear} />
       <FormationOverview periods={snapshot.periods} />
       <LeaderTimelineSection leaders={snapshot.leaders} periods={snapshot.periods} />
 
@@ -122,11 +123,25 @@ export function HomeStoryPage({
         <LeaderContextCard leader={activeLeader} periods={snapshot.periods} title="Lãnh đạo của lát cắt này" />
       </section>
 
+      <HistoricalNarrativeDigest
+        campaigns={snapshot.campaigns}
+        description="Những sự kiện và chiến dịch nổi bật nhất của lát cắt đang xem, giúp đi từ bản đồ sang mạch diễn biến cụ thể."
+        events={snapshot.events}
+        maxItems={8}
+        title={`Những bước ngoặt nổi bật quanh năm ${activeYear}`}
+      />
+
+      <QuizHighlights
+        description="Các bộ câu hỏi ngắn gắn với đúng giai đoạn hoặc hồ sơ đang hiện trên lát cắt."
+        quizzes={snapshot.quizzes}
+        title="Ôn tập nhanh theo lát cắt"
+      />
+
       <RecordGrid
-        description="Một vài hồ sơ tiêu biểu của lát cắt đang xem, đủ để dẫn người xem đi tiếp mà không làm trang chủ trở nên quá dày."
-        maxItems={3}
+        description="Nhóm hồ sơ tiêu biểu để đi từ lát cắt bản đồ sang các sự kiện, chiến dịch và địa danh đáng chú ý."
+        maxItems={6}
         records={visibleRecords}
-        title={`Những hồ sơ nổi bật quanh năm ${activeYear}`}
+        title={`Những hồ sơ tiêu biểu trong lát cắt năm ${activeYear}`}
       />
     </div>
   )

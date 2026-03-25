@@ -13,7 +13,7 @@ import {
   resolveActiveYear,
   resolveTimelineBounds,
 } from '@/components/explorer-helpers'
-import { RecordGrid } from '@/components/content-blocks'
+import { HistoricalNarrativeDigest, NarrativeFocus, QuizHighlights, RecordGrid } from '@/components/content-blocks'
 import { LeaderContextCard } from '@/components/leader-blocks'
 import { TimelineController } from '@/components/timeline-controller'
 
@@ -31,6 +31,19 @@ function typeLabel(type: SearchState['type']) {
       return 'Địa danh'
     default:
       return 'Tất cả bản ghi'
+  }
+}
+
+function typeLabelLower(type: SearchState['type']) {
+  switch (type) {
+    case 'events':
+      return 'sự kiện'
+    case 'campaigns':
+      return 'chiến dịch'
+    case 'places':
+      return 'địa danh'
+    default:
+      return 'hồ sơ lịch sử'
   }
 }
 
@@ -106,6 +119,14 @@ export function AtlasExplorerPage({
   const toggleSummary = activePeriod
     ? `${activePeriod.title} · ${visibleRecords.length} bản ghi`
     : `Năm ${activeYear} · ${visibleRecords.length} bản ghi`
+  const recordSectionDescription =
+    filters.type === 'all'
+      ? `Khối này đang hiển thị toàn bộ hồ sơ khớp với bộ lọc hiện tại: ${snapshot.events.length} sự kiện, ${snapshot.campaigns.length} chiến dịch và ${snapshot.places.length} địa danh${activePeriod ? ` trong ${activePeriod.title}` : ''}.`
+      : `Khối này đang hiển thị toàn bộ ${visibleRecords.length} ${typeLabelLower(filters.type)} khớp với bộ lọc hiện tại${activePeriod ? ` trong ${activePeriod.title}` : ''}${activeLeader ? `, theo trục ${activeLeader.name}` : ''}.`
+  const recordSectionTitle =
+    filters.type === 'all'
+      ? `Hồ sơ lịch sử trong lát cắt năm ${activeYear}`
+      : `Các ${typeLabelLower(filters.type)} trong lát cắt năm ${activeYear}`
   const to = filters.to ?? ''
   const year = filters.year ?? activeYear
 
@@ -267,11 +288,26 @@ export function AtlasExplorerPage({
         <LeaderContextCard leader={activeLeader} periods={snapshot.periods} />
       </section>
 
+      <NarrativeFocus period={activePeriod} variant="compact" year={activeYear} />
+
+      <HistoricalNarrativeDigest
+        campaigns={snapshot.campaigns}
+        description="Các sự kiện và chiến dịch dưới đây là phần diễn biến then chốt đang khớp trực tiếp với bộ lọc atlas."
+        events={snapshot.events}
+        maxItems={10}
+        title={`Diễn biến lịch sử trong lát cắt năm ${activeYear}`}
+      />
+
+      <QuizHighlights
+        description="Nếu lát cắt hiện tại có bộ câu hỏi liên quan, chúng sẽ xuất hiện ở đây để người xem chuyển nhanh từ trình bày sang ôn tập."
+        quizzes={snapshot.quizzes}
+        title="Câu hỏi ôn tập theo lát cắt"
+      />
+
       <RecordGrid
-        description="Từ bản đồ, đi tiếp sang những hồ sơ khớp với lát cắt hiện tại để giữ mạch thuyết trình ngắn và rõ."
-        maxItems={8}
+        description={recordSectionDescription}
         records={visibleRecords}
-        title={`Bản ghi theo lát cắt của năm ${activeYear}`}
+        title={recordSectionTitle}
       />
     </div>
   )
