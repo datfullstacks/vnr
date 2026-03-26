@@ -118,9 +118,14 @@ export function LeaderPortrait({
   variant = 'card',
 }: {
   leader: LeaderRecord
-  variant?: 'card' | 'hero'
+  variant?: 'card' | 'context' | 'hero'
 }) {
-  const className = variant === 'hero' ? 'leader-portrait leader-portrait-hero' : 'leader-portrait'
+  const className =
+    variant === 'hero'
+      ? 'leader-portrait leader-portrait-hero'
+      : variant === 'context'
+        ? 'leader-portrait leader-portrait-context'
+        : 'leader-portrait'
 
   return (
     <div className={className}>
@@ -130,7 +135,13 @@ export function LeaderPortrait({
           className="leader-portrait-image"
           fill
           loading={variant === 'hero' ? 'eager' : 'lazy'}
-          sizes={variant === 'hero' ? '(max-width: 1024px) 220px, 260px' : '(max-width: 720px) 100vw, (max-width: 1024px) 50vw, 280px'}
+          sizes={
+            variant === 'hero'
+              ? '(max-width: 1024px) 220px, 260px'
+              : variant === 'context'
+                ? '(max-width: 720px) 160px, 180px'
+                : '(max-width: 720px) 100vw, (max-width: 1024px) 50vw, 280px'
+          }
           src={leader.portraitUrl}
           unoptimized={leader.portraitUrl.endsWith('.gif')}
         />
@@ -436,7 +447,7 @@ export function LeaderContextCard({
 
   return (
     <article className={leader.isFeaturedChairmanHighlight ? 'leader-card leader-card-featured' : 'leader-card'}>
-      <LeaderPortrait leader={leader} />
+      <LeaderPortrait leader={leader} variant="context" />
       <div className="leader-card-header">
         <span className="record-kind">{title}</span>
         {leader.isFeaturedChairmanHighlight ? <span className="leader-badge">Chủ tịch Đảng</span> : null}

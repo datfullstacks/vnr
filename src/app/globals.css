@@ -1019,6 +1019,11 @@ textarea {
   justify-self: center;
 }
 
+.leader-portrait-context {
+  max-width: 180px;
+  justify-self: start;
+}
+
 .leader-portrait-image,
 .leader-portrait-fallback {
   width: 100%;
@@ -1810,6 +1815,10 @@ body::after {
 
 .leader-portrait-hero {
   max-width: 280px;
+}
+
+.leader-portrait-context {
+  max-width: 170px;
 }
 
 .fact-card strong {
