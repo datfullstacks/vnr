@@ -89,6 +89,7 @@ export function AtlasExplorerPage({
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
   const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
   const availableLeaders = leadersForTimeSlice(snapshot.leaders, activeYear, activePeriod)
+  const hasLeadershipGap = activePeriod?.periodType !== 'formation' && availableLeaders.length === 0
   const leaderSelectLabel =
     activePeriod?.periodType === 'formation' ? 'Lãnh đạo' : 'Lãnh đạo theo giai đoạn'
   const leaderPlaceholder =
@@ -96,7 +97,9 @@ export function AtlasExplorerPage({
       ? activePeriod
         ? `Tất cả lãnh đạo của ${activePeriod.title}`
         : 'Tất cả thời kỳ lãnh đạo'
-      : 'Giai đoạn này Đảng chưa được thành lập'
+      : activePeriod?.periodType === 'formation'
+        ? 'Giai đoạn này Đảng chưa được thành lập'
+        : `Năm ${activeYear} đang là khoảng trống lãnh đạo`
   const visibleRecords = listForType(snapshot, filters.type)
   const mapEvents = filters.type === 'all' || filters.type === 'events' ? snapshot.events : []
   const mapCampaigns = filters.type === 'all' || filters.type === 'campaigns' ? snapshot.campaigns : []

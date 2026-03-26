@@ -33,6 +33,8 @@ export function HomeStoryPage({
     typeof filters.to === 'number' ||
     Boolean(filters.period) ||
     Boolean(filters.leader)
+  const isFormationSlice = activePeriod?.periodType === 'formation'
+  const hasLeadershipGap = !isFormationSlice && sliceLeaders.length === 0
   const { maxYear, minYear } = resolveTimelineBounds(snapshot)
   const visibleRecords = listForType(snapshot, 'all')
   const atlasParams = new URLSearchParams({
@@ -96,18 +98,28 @@ export function HomeStoryPage({
       <NarrativeFocus period={activePeriod} variant="compact" year={activeYear} />
       <LeaderTimelineSection
         description={
-          activePeriod?.periodType === 'formation'
-            ? `Lát cắt năm ${activeYear} vẫn nằm trước thời điểm Đảng Cộng sản Việt Nam ra đời, nên trục lãnh đạo của Đảng chưa bắt đầu trên mốc này.`
+          isFormationSlice
+            ? `Giai đoạn này vẫn nằm trước thời điểm Đảng Cộng sản Việt Nam ra đời, nên chưa có trục lãnh đạo của Đảng để hiển thị trên lát cắt này.`
+            : hasLeadershipGap
+              ? `Lát cắt năm ${activeYear} đang rơi vào khoảng trống lãnh đạo sau đợt đàn áp, nên chưa có Tổng Bí thư phù hợp để gắn trực tiếp với năm này.`
             : activePeriod
               ? `Khối này chỉ hiển thị các lãnh đạo gắn với ${activePeriod.title}, thay vì hiển thị toàn bộ trục từ 1930 đến nay.`
               : `Khối này chỉ hiển thị các lãnh đạo gắn trực tiếp với lát cắt năm ${activeYear}.`
         }
-        emptyLabel={`Năm ${activeYear} chưa nằm trong trục lãnh đạo của Đảng. Xem /lanh-dao để mở toàn bộ chuỗi từ 1930 đến nay.`}
+        emptyLabel={
+          isFormationSlice
+            ? 'Giai đoạn này Đảng chưa được thành lập. Xem /lanh-dao để mở toàn bộ chuỗi từ 1930 đến nay.'
+            : hasLeadershipGap
+              ? `Năm ${activeYear} đang là khoảng trống lãnh đạo sau đàn áp. Xem /lanh-dao để mở toàn bộ chuỗi từ 1930 đến nay.`
+              : `Năm ${activeYear} chưa nằm trong trục lãnh đạo của Đảng. Xem /lanh-dao để mở toàn bộ chuỗi từ 1930 đến nay.`
+        }
         leaders={sliceLeaders}
         periods={snapshot.periods}
         title={
-          activePeriod?.periodType === 'formation'
-            ? 'Trục lãnh đạo của Đảng bắt đầu từ năm 1930'
+          isFormationSlice
+            ? 'Giai đoạn này Đảng chưa được thành lập'
+            : hasLeadershipGap
+              ? `Khoảng trống lãnh đạo trong năm ${activeYear}`
             : activePeriod
               ? `Lãnh đạo gắn với ${activePeriod.title}`
               : `Lãnh đạo gắn với lát cắt năm ${activeYear}`

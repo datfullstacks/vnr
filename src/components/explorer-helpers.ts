@@ -69,9 +69,15 @@ export function leadersForTimeSlice(
       .filter((leader, index, items) => items.findIndex((item) => item.slug === leader.slug) === index)
       .sort((left, right) => left.startYear - right.startYear)
 
-    if (periodLeaders.length > 0) {
-      return periodLeaders
+    const coveringPeriodLeaders = periodLeaders.filter((leader) =>
+      leaderTerms(leader).some((term) => activeYear >= term.startYear && activeYear <= term.endYear),
+    )
+
+    if (coveringPeriodLeaders.length > 0) {
+      return coveringPeriodLeaders
     }
+
+    return []
   }
 
   return leaders
@@ -105,7 +111,7 @@ export function resolveActiveLeader(
       .filter((leader): leader is LeaderRecord => Boolean(leader))
       .sort((left, right) => right.startYear - left.startYear)
 
-    return periodLeaders.find((leader) => activeYear >= leader.startYear && activeYear <= leader.endYear) ?? periodLeaders[0] ?? null
+    return periodLeaders.find((leader) => activeYear >= leader.startYear && activeYear <= leader.endYear) ?? null
   }
 
   if (activePeriod?.periodType === 'formation') {
