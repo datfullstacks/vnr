@@ -88,6 +88,9 @@ export function AtlasExplorerPage({
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
   const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
   const visibleRecords = listForType(snapshot, filters.type)
+  const mapEvents = filters.type === 'all' || filters.type === 'events' ? snapshot.events : []
+  const mapCampaigns = filters.type === 'all' || filters.type === 'campaigns' ? snapshot.campaigns : []
+  const mapPlaces = filters.type === 'all' || filters.type === 'places' ? snapshot.places : []
   const hasExplicitSlice =
     typeof filters.year === 'number' ||
     typeof filters.from === 'number' ||
@@ -288,11 +291,11 @@ export function AtlasExplorerPage({
         <AtlasMapShell
           activeYear={activeYear}
           boundaryEpoch={snapshot.activeBoundaryEpoch ?? null}
-          campaigns={snapshot.campaigns}
-          events={snapshot.events}
+          campaigns={mapCampaigns}
+          events={mapEvents}
           layer={filters.layer}
           overlays={snapshot.overlays}
-          places={snapshot.places}
+          places={mapPlaces}
         />
 
         <LeaderContextCard leader={activeLeader} periods={snapshot.periods} />

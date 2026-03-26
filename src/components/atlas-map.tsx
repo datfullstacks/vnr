@@ -189,13 +189,12 @@ function recordFeature(
   hrefBase: string,
   record: CampaignRecord | EventRecord | PlaceRecord,
 ): Feature<Geometry, GeoJsonProperties> | null {
-  if (
-    typeof record.modernLocation?.longitude === 'number' &&
-    typeof record.modernLocation?.latitude === 'number'
-  ) {
+  const coordinates = recordCoordinates(record)
+
+  if (coordinates) {
     return {
       geometry: {
-        coordinates: [record.modernLocation.longitude, record.modernLocation.latitude],
+        coordinates,
         type: 'Point',
       },
       properties: {
@@ -205,7 +204,7 @@ function recordFeature(
         href: `${hrefBase}/${record.slug}`,
         kind,
         periodTitle: record.period.title,
-        province: record.modernLocation?.province,
+        province: recordProvince(record),
         summary: record.summary,
         title: record.title,
       },
@@ -214,6 +213,87 @@ function recordFeature(
   }
 
   return null
+}
+
+function modernLocationCoordinates(location?: PlaceRecord['modernLocation']) {
+  if (typeof location?.longitude === 'number' && typeof location?.latitude === 'number') {
+    return [location.longitude, location.latitude] as [number, number]
+  }
+
+  return null
+}
+
+function linkedPlaces(record: CampaignRecord | EventRecord | PlaceRecord) {
+  if ('places' in record) {
+    return record.places
+  }
+
+  if ('relatedPlaces' in record) {
+    return record.relatedPlaces
+  }
+
+  return []
+}
+
+function collectGeometryPositions(coordinates: unknown): Position[] {
+  if (
+    Array.isArray(coordinates) &&
+    coordinates.length >= 2 &&
+    typeof coordinates[0] === 'number' &&
+    typeof coordinates[1] === 'number'
+  ) {
+    return [[coordinates[0], coordinates[1]]]
+  }
+
+  if (!Array.isArray(coordinates)) {
+    return []
+  }
+
+  return coordinates.flatMap((value) => collectGeometryPositions(value))
+}
+
+function geometryCoordinates(geometry?: Record<string, unknown>) {
+  const positions = collectGeometryPositions(geometry?.coordinates)
+
+  if (positions.length === 0) {
+    return null
+  }
+
+  const total = positions.reduce(
+    (accumulator, [longitude, latitude]) => ({
+      latitude: accumulator.latitude + latitude,
+      longitude: accumulator.longitude + longitude,
+    }),
+    { latitude: 0, longitude: 0 },
+  )
+
+  return [total.longitude / positions.length, total.latitude / positions.length] as [number, number]
+}
+
+function recordCoordinates(record: CampaignRecord | EventRecord | PlaceRecord) {
+  const directCoordinates = modernLocationCoordinates(record.modernLocation)
+
+  if (directCoordinates) {
+    return directCoordinates
+  }
+
+  const linkedCoordinates = linkedPlaces(record)
+    .map((place) => modernLocationCoordinates(place.modernLocation))
+    .find((coordinates): coordinates is [number, number] => Boolean(coordinates))
+
+  if (linkedCoordinates) {
+    return linkedCoordinates
+  }
+
+  return geometryCoordinates(record.historicalGeometry)
+}
+
+function recordProvince(record: CampaignRecord | EventRecord | PlaceRecord) {
+  if (record.modernLocation?.province) {
+    return record.modernLocation.province
+  }
+
+  return linkedPlaces(record).find((place) => place.modernLocation?.province)?.modernLocation?.province
 }
 
 function emptyFeatureCollection(): FeatureCollection {
