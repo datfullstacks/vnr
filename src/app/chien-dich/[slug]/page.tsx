@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { DetailMeta, RelatedLinks, SourceList } from '@/components/content-blocks'
+import { DetailMediaGallery, DetailMeta, RelatedLinks, SourceList } from '@/components/content-blocks'
 import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { getCampaign } from '@/lib/content-service'
@@ -63,6 +63,12 @@ export default async function CampaignPage({ params }: { params: Promise<{ slug:
           </div>
           <div className="detail-copy">{campaign.body}</div>
         </section>
+
+        <DetailMediaGallery
+          description="Nếu hồ sơ chiến dịch đã có ảnh tư liệu trong dữ liệu công khai, chúng sẽ được hiển thị tại đây để tăng lớp trực quan cho phần trình bày."
+          record={campaign}
+          title="Ảnh tư liệu của chiến dịch"
+        />
 
         <RelatedLinks
           campaigns={[]}

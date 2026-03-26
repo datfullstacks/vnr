@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { DetailMeta, RelatedLinks, SourceList } from '@/components/content-blocks'
+import { DetailMediaGallery, DetailMeta, RelatedLinks, SourceList } from '@/components/content-blocks'
 import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { getEvent } from '@/lib/content-service'
@@ -59,6 +59,12 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           </div>
           <div className="detail-copy">{event.content}</div>
         </section>
+
+        <DetailMediaGallery
+          description="Nếu hồ sơ sự kiện đã có ảnh tư liệu trong dữ liệu công khai, chúng sẽ được hiển thị tại đây để bổ sung lớp trực quan cho phần trình bày."
+          record={event}
+          title="Ảnh tư liệu của sự kiện"
+        />
 
         <RelatedLinks
           description="Những địa danh và hồ sơ liên quan giúp mở rộng bối cảnh của sự kiện theo không gian và thời gian."

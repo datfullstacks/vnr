@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 
-import { DetailMeta, SourceList } from '@/components/content-blocks'
+import { DetailMediaGallery, DetailMeta, SourceList } from '@/components/content-blocks'
 import { PublicDataErrorState } from '@/components/public-data-error-state'
 import { SiteShell } from '@/components/site-shell'
 import { getPlace } from '@/lib/content-service'
@@ -59,6 +59,12 @@ export default async function PlacePage({ params }: { params: Promise<{ slug: st
           </div>
           <div className="detail-copy">{place.body}</div>
         </section>
+
+        <DetailMediaGallery
+          description="Nếu địa danh đã có ảnh minh họa hoặc tư liệu trong dữ liệu công khai, chúng sẽ xuất hiện tại đây để hỗ trợ phần trình bày không gian lịch sử."
+          record={place}
+          title="Hình ảnh của địa danh"
+        />
 
         <SourceList
           description="Những nguồn dưới đây giúp đối chiếu ký ức địa danh với tư liệu lịch sử và nghiên cứu chuyên khảo."

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link'
 
 import type {
@@ -9,6 +10,38 @@ import type {
   QuizRecord,
   SourceRecord,
 } from '@/lib/content-types'
+
+function recordVisualUrls(record: CampaignRecord | EventRecord | PlaceRecord) {
+  if ('featuredMediaUrl' in record) {
+    return record.featuredMediaUrl ? [record.featuredMediaUrl] : []
+  }
+
+  if ('mediaUrls' in record) {
+    return record.mediaUrls.filter(Boolean)
+  }
+
+  return []
+}
+
+function primaryVisualUrl(record: ExplorerRecord) {
+  return recordVisualUrls(record)[0]
+}
+
+function RecordVisual({
+  alt,
+  compact = false,
+  src,
+}: {
+  alt: string
+  compact?: boolean
+  src: string
+}) {
+  return (
+    <div className={compact ? 'record-visual record-visual-compact' : 'record-visual'}>
+      <img alt={alt} className="record-visual-image" decoding="async" loading="lazy" src={src} />
+    </div>
+  )
+}
 
 function hrefForRecord(record: ExplorerRecord) {
   if ('content' in record) {
@@ -333,6 +366,9 @@ export function RecordGrid({
         <div className="record-grid">
           {visibleRecords.map((record) => (
             <Link className="record-card" href={hrefForRecord(record)} key={record.id}>
+              {primaryVisualUrl(record) ? (
+                <RecordVisual alt={record.title} compact src={primaryVisualUrl(record)!} />
+              ) : null}
               <span className="record-kind">{kindLabel(record)}</span>
               <h3>{record.title}</h3>
               <p>{recordExcerpt(record)}</p>
@@ -384,6 +420,9 @@ export function HistoricalNarrativeDigest({
         <div className="historical-digest-grid">
           {records.map((record) => (
             <article className="historical-digest-card" key={record.id}>
+              {primaryVisualUrl(record) ? (
+                <RecordVisual alt={record.title} compact src={primaryVisualUrl(record)!} />
+              ) : null}
               <span className="record-kind">{kindLabel(record)}</span>
               <h3>{record.title}</h3>
               <p>{recordNarrative(record)}</p>
@@ -402,6 +441,57 @@ export function HistoricalNarrativeDigest({
           ))}
         </div>
       )}
+    </section>
+  )
+}
+
+export function DetailMediaGallery({
+  description,
+  record,
+  title = 'Hình ảnh liên quan',
+}: {
+  description?: string
+  record: CampaignRecord | EventRecord | PlaceRecord
+  title?: string
+}) {
+  const media = recordVisualUrls(record)
+
+  if (media.length === 0) {
+    return null
+  }
+
+  const [primary, ...rest] = media
+
+  return (
+    <section className="content-section">
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">Hình ảnh</p>
+          <h2>{title}</h2>
+          {description ? <p className="section-copy">{description}</p> : null}
+        </div>
+      </div>
+
+      <div className="detail-media-gallery">
+        <div className="detail-media-primary">
+          <img alt={record.title} className="detail-media-image" decoding="async" loading="lazy" src={primary} />
+        </div>
+        {rest.length > 0 ? (
+          <div className="detail-media-grid">
+            {rest.map((src, index) => (
+              <div className="detail-media-thumb" key={`${record.id}:${index}`}>
+                <img
+                  alt={`${record.title} ${index + 2}`}
+                  className="detail-media-image"
+                  decoding="async"
+                  loading="lazy"
+                  src={src}
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
     </section>
   )
 }
