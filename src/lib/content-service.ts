@@ -7,6 +7,7 @@ import type {
   PlaceRecord,
   QuizRecord,
 } from '@/lib/content-types'
+import type { PartyGamePayload } from '@/lib/game-types'
 import type { SearchState } from '@/lib/search-state'
 
 type ExplorerDataResponse = {
@@ -215,4 +216,8 @@ export async function getQuiz(slug: string) {
 
     throw error
   }
+}
+
+export async function getPartyHistoryGame() {
+  return requestJson<PartyGamePayload>('/api/public/games/party-history-rush')
 }
