@@ -6,6 +6,7 @@ import type { SearchState } from '@/lib/search-state'
 import { AtlasMapShell } from '@/components/atlas-map-shell'
 import { HistoricalNarrativeDigest, NarrativeFocus, QuizHighlights, RecordGrid } from '@/components/content-blocks'
 import {
+  isFormationTimeSlice,
   leadersForTimeSlice,
   listForType,
   resolveActiveLeader,
@@ -33,7 +34,7 @@ export function HomeStoryPage({
     typeof filters.to === 'number' ||
     Boolean(filters.period) ||
     Boolean(filters.leader)
-  const isFormationSlice = activePeriod?.periodType === 'formation'
+  const isFormationSlice = isFormationTimeSlice(activeYear, activePeriod)
   const hasLeadershipGap = !isFormationSlice && sliceLeaders.length === 0
   const { maxYear, minYear } = resolveTimelineBounds(snapshot)
   const visibleRecords = listForType(snapshot, 'all')

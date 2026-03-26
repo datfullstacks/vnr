@@ -47,12 +47,16 @@ export function resolvePeriodForYear(periods: PeriodRecord[], year: number) {
   return periods.find((period) => period.startYear <= year && period.endYear >= year) ?? null
 }
 
+export function isFormationTimeSlice(activeYear: number, activePeriod?: PeriodRecord | null) {
+  return activeYear < 1930 || activePeriod?.periodType === 'formation'
+}
+
 export function leadersForTimeSlice(
   leaders: LeaderRecord[],
   activeYear: number,
   activePeriod: PeriodRecord | null,
 ) {
-  if (activePeriod?.periodType === 'formation' || activeYear < 1930) {
+  if (isFormationTimeSlice(activeYear, activePeriod)) {
     return []
   }
 
@@ -101,6 +105,10 @@ export function resolveActiveLeader(
     return snapshot.activeLeader
   }
 
+  if (isFormationTimeSlice(activeYear, activePeriod)) {
+    return null
+  }
+
   if (activePeriod?.featuredLeaderSlug) {
     return snapshot.leaders.find((leader) => leader.slug === activePeriod.featuredLeaderSlug) ?? null
   }
@@ -112,10 +120,6 @@ export function resolveActiveLeader(
       .sort((left, right) => right.startYear - left.startYear)
 
     return periodLeaders.find((leader) => activeYear >= leader.startYear && activeYear <= leader.endYear) ?? null
-  }
-
-  if (activePeriod?.periodType === 'formation') {
-    return null
   }
 
   const matchingLeaders = snapshot.leaders

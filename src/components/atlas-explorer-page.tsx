@@ -7,6 +7,7 @@ import { AtlasControlsDrawer } from '@/components/atlas-controls-drawer'
 import { AtlasMapShell } from '@/components/atlas-map-shell'
 import {
   buildTimeSliceHref,
+  isFormationTimeSlice,
   leadersForTimeSlice,
   listForType,
   resolveActiveLeader,
@@ -89,15 +90,15 @@ export function AtlasExplorerPage({
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
   const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
   const availableLeaders = leadersForTimeSlice(snapshot.leaders, activeYear, activePeriod)
-  const hasLeadershipGap = activePeriod?.periodType !== 'formation' && availableLeaders.length === 0
-  const leaderSelectLabel =
-    activePeriod?.periodType === 'formation' ? 'Lãnh đạo' : 'Lãnh đạo theo giai đoạn'
+  const isFormationSlice = isFormationTimeSlice(activeYear, activePeriod)
+  const hasLeadershipGap = !isFormationSlice && availableLeaders.length === 0
+  const leaderSelectLabel = isFormationSlice ? 'Lãnh đạo' : 'Lãnh đạo theo giai đoạn'
   const leaderPlaceholder =
     availableLeaders.length > 0
       ? activePeriod
         ? `Tất cả lãnh đạo của ${activePeriod.title}`
         : 'Tất cả thời kỳ lãnh đạo'
-      : activePeriod?.periodType === 'formation'
+      : isFormationSlice
         ? 'Giai đoạn này Đảng chưa được thành lập'
         : `Năm ${activeYear} đang là khoảng trống lãnh đạo`
   const visibleRecords = listForType(snapshot, filters.type)
