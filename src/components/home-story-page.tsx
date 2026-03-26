@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import type { ExplorerSnapshot } from '@/lib/content-types'
+import type { ExplorerSnapshot, LeaderRecord, PeriodRecord } from '@/lib/content-types'
 import type { SearchState } from '@/lib/search-state'
 
 import { AtlasMapShell } from '@/components/atlas-map-shell'
@@ -15,6 +15,42 @@ import {
 import { FormationOverview, LeaderContextCard, LeaderTimelineSection } from '@/components/leader-blocks'
 import { TimelineController } from '@/components/timeline-controller'
 
+function leaderTerms(leader: LeaderRecord) {
+  return leader.terms?.length
+    ? leader.terms
+    : [{ endYear: leader.endYear, startYear: leader.startYear }]
+}
+
+function leadersForTimeSlice(leaders: LeaderRecord[], activeYear: number, activePeriod: PeriodRecord | null) {
+  if (activePeriod?.periodType === 'formation' || activeYear < 1930) {
+    return []
+  }
+
+  if (activePeriod) {
+    const leaderBySlug = new Map(leaders.map((leader) => [leader.slug, leader]))
+    const periodLeaderSlugs = [
+      ...(activePeriod.featuredLeaderSlug ? [activePeriod.featuredLeaderSlug] : []),
+      ...activePeriod.officialLeaderSlugs,
+    ]
+
+    const periodLeaders = periodLeaderSlugs
+      .map((slug) => leaderBySlug.get(slug))
+      .filter((leader): leader is LeaderRecord => Boolean(leader))
+      .filter((leader, index, items) => items.findIndex((item) => item.slug === leader.slug) === index)
+      .sort((left, right) => left.startYear - right.startYear)
+
+    if (periodLeaders.length > 0) {
+      return periodLeaders
+    }
+  }
+
+  return leaders
+    .filter((leader) =>
+      leaderTerms(leader).some((term) => activeYear >= term.startYear && activeYear <= term.endYear),
+    )
+    .sort((left, right) => left.startYear - right.startYear)
+}
+
 export function HomeStoryPage({
   filters,
   snapshot,
@@ -25,6 +61,7 @@ export function HomeStoryPage({
   const activeYear = resolveActiveYear(snapshot, filters)
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
   const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
+  const sliceLeaders = leadersForTimeSlice(snapshot.leaders, activeYear, activePeriod)
   const { maxYear, minYear } = resolveTimelineBounds(snapshot)
   const visibleRecords = listForType(snapshot, 'all')
   const atlasParams = new URLSearchParams({
@@ -84,7 +121,25 @@ export function HomeStoryPage({
 
       <NarrativeFocus period={activePeriod} variant="compact" year={activeYear} />
       <FormationOverview periods={snapshot.periods} />
-      <LeaderTimelineSection leaders={snapshot.leaders} periods={snapshot.periods} />
+      <LeaderTimelineSection
+        description={
+          activePeriod?.periodType === 'formation'
+            ? `Lát cắt năm ${activeYear} vẫn nằm trước thời điểm Đảng Cộng sản Việt Nam ra đời, nên trục lãnh đạo của Đảng chưa bắt đầu trên mốc này.`
+            : activePeriod
+              ? `Khối này chỉ hiển thị các lãnh đạo gắn với ${activePeriod.title}, thay vì hiển thị toàn bộ trục từ 1930 đến nay.`
+              : `Khối này chỉ hiển thị các lãnh đạo gắn trực tiếp với lát cắt năm ${activeYear}.`
+        }
+        emptyLabel={`Năm ${activeYear} chưa nằm trong trục lãnh đạo của Đảng. Xem /lanh-dao để mở toàn bộ chuỗi từ 1930 đến nay.`}
+        leaders={sliceLeaders}
+        periods={snapshot.periods}
+        title={
+          activePeriod?.periodType === 'formation'
+            ? 'Trục lãnh đạo của Đảng bắt đầu từ năm 1930'
+            : activePeriod
+              ? `Lãnh đạo gắn với ${activePeriod.title}`
+              : `Lãnh đạo gắn với lát cắt năm ${activeYear}`
+        }
+      />
 
       <section className="content-section story-map-section">
         <div className="section-heading">

@@ -304,17 +304,20 @@ export function FormationOverview({
 
 export function LeaderTimelineSection({
   description,
+  emptyLabel,
   leaders,
   periods = [],
   title = 'Các thời kỳ lãnh đạo từ 1930 đến nay',
 }: {
   description?: string
+  emptyLabel?: string
   leaders: LeaderRecord[]
   periods?: PeriodRecord[]
   title?: string
 }) {
   const featuredLeaders = leaders.filter((leader) => leader.isFeaturedChairmanHighlight)
   const timelineLeaders = leaders.filter((leader) => !leader.isFeaturedChairmanHighlight)
+  const totalLeaders = featuredLeaders.length + timelineLeaders.length
 
   return (
     <section className="content-section">
@@ -331,6 +334,12 @@ export function LeaderTimelineSection({
           Xem toàn bộ lãnh đạo
         </Link>
       </div>
+
+      {totalLeaders === 0 ? (
+        <p className="empty-state">
+          {emptyLabel ?? 'Chưa có chân dung lãnh đạo phù hợp với lát cắt đang xem.'}
+        </p>
+      ) : null}
 
       {featuredLeaders.length > 0 ? (
         <div className="leader-grid leader-grid-featured">
@@ -368,40 +377,42 @@ export function LeaderTimelineSection({
         </div>
       ) : null}
 
-      <div className="leader-grid leader-grid-compact">
-        {timelineLeaders.map((leader) => {
-          const relatedPeriods = periodsForLeader(periods, leader)
+      {timelineLeaders.length > 0 ? (
+        <div className="leader-grid leader-grid-compact">
+          {timelineLeaders.map((leader) => {
+            const relatedPeriods = periodsForLeader(periods, leader)
 
-          return (
-          <article
-            className={leader.isFeaturedChairmanHighlight ? 'leader-card leader-card-featured' : 'leader-card'}
-            key={leader.id}
-          >
-            <LeaderPortrait leader={leader} />
-            <div className="leader-card-header">
-              <span className="record-kind">{leader.officeLabel}</span>
-              {leader.isFeaturedChairmanHighlight ? <span className="leader-badge">Chủ tịch Đảng</span> : null}
-            </div>
-            <h3>{leaderDisplayName(leader)}</h3>
-            <p className="leader-years">{formatLeaderYears(leader)}</p>
-            <p>{leader.summary}</p>
-            <div className="detail-meta">
-              <span>{leader.officeType === 'party-chairman' ? 'Điểm nhấn đặc biệt' : 'Trục Tổng Bí thư'}</span>
-              <span>{leader.terms?.length && leader.terms.length > 1 ? `${leader.terms.length} nhiệm kỳ` : leader.startYear}</span>
-              <span>{summarizePeriods(relatedPeriods)}</span>
-            </div>
-            <div className="leader-actions">
-              <Link className="ghost-button" href={`/lanh-dao/${leader.slug}`}>
-                Hồ sơ lãnh đạo
-              </Link>
-              <Link className="inline-link" href={leaderAtlasHref(leader)}>
-                Mở lát cắt trên bản đồ
-              </Link>
-            </div>
-          </article>
-          )
-        })}
-      </div>
+            return (
+            <article
+              className={leader.isFeaturedChairmanHighlight ? 'leader-card leader-card-featured' : 'leader-card'}
+              key={leader.id}
+            >
+              <LeaderPortrait leader={leader} />
+              <div className="leader-card-header">
+                <span className="record-kind">{leader.officeLabel}</span>
+                {leader.isFeaturedChairmanHighlight ? <span className="leader-badge">Chủ tịch Đảng</span> : null}
+              </div>
+              <h3>{leaderDisplayName(leader)}</h3>
+              <p className="leader-years">{formatLeaderYears(leader)}</p>
+              <p>{leader.summary}</p>
+              <div className="detail-meta">
+                <span>{leader.officeType === 'party-chairman' ? 'Điểm nhấn đặc biệt' : 'Trục Tổng Bí thư'}</span>
+                <span>{leader.terms?.length && leader.terms.length > 1 ? `${leader.terms.length} nhiệm kỳ` : leader.startYear}</span>
+                <span>{summarizePeriods(relatedPeriods)}</span>
+              </div>
+              <div className="leader-actions">
+                <Link className="ghost-button" href={`/lanh-dao/${leader.slug}`}>
+                  Hồ sơ lãnh đạo
+                </Link>
+                <Link className="inline-link" href={leaderAtlasHref(leader)}>
+                  Mở lát cắt trên bản đồ
+                </Link>
+              </div>
+            </article>
+            )
+          })}
+        </div>
+      ) : null}
     </section>
   )
 }
