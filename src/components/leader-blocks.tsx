@@ -40,6 +40,14 @@ function formatLeaderYears(leader: LeaderRecord) {
   return leader.tenureLabel ?? `${leader.startYear} - ${leader.endYear >= new Date().getFullYear() ? 'nay' : leader.endYear}`
 }
 
+function formatLeaderRoleCount(leader: LeaderRecord) {
+  if (leader.terms?.length && leader.terms.length > 1) {
+    return `${leader.terms.length} lần giữ vai trò ${leader.officeLabel}`
+  }
+
+  return String(leader.startYear)
+}
+
 function latestLeaderYear(leader: LeaderRecord) {
   if (!leader.terms?.length) {
     return leader.endYear
@@ -408,7 +416,7 @@ export function LeaderTimelineSection({
               <p>{leader.summary}</p>
               <div className="detail-meta">
                 <span>{leader.officeType === 'party-chairman' ? 'Điểm nhấn đặc biệt' : 'Trục Tổng Bí thư'}</span>
-                <span>{leader.terms?.length && leader.terms.length > 1 ? `${leader.terms.length} nhiệm kỳ` : leader.startYear}</span>
+                <span>{formatLeaderRoleCount(leader)}</span>
                 <span>{summarizePeriods(relatedPeriods)}</span>
               </div>
               <div className="leader-actions">
