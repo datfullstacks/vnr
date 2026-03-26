@@ -60,6 +60,15 @@ function rotateRunQuestions(questions: PartyGamePayload['questions'], seed: stri
   return next
 }
 
+function buildRunSeed(username: string) {
+  const randomPart =
+    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random()}`
+
+  return `${username}:${randomPart}`
+}
+
 function formatDuration(durationMs: number) {
   const totalSeconds = Math.max(1, Math.round(durationMs / 1000))
   const minutes = Math.floor(totalSeconds / 60)
@@ -115,6 +124,10 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
       window.localStorage.setItem(usernameStorageKey, username.trim())
     }
   }, [username, usernameStorageKey])
+
+  useEffect(() => {
+    setRunQuestions(rotateRunQuestions(game.questions, buildRunSeed('preview')))
+  }, [game.questions])
 
   useEffect(() => {
     const source = new EventSource('/api/party-game/stream')
@@ -174,7 +187,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
     }
   }, [streamStatus])
 
-  const currentQuestion = runQuestions[currentIndex] ?? null
+  const currentQuestion = status === 'idle' ? null : runQuestions[currentIndex] ?? null
   const score = answers.reduce((total, answer, index) => {
     const question = runQuestions[index]
     return question && answer === question.correctIndex ? total + 1 : total
@@ -234,7 +247,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
       return
     }
 
-    const nextQuestions = rotateRunQuestions(game.questions, `${username.trim()}:${Date.now()}`)
+    const nextQuestions = rotateRunQuestions(game.questions, buildRunSeed(username.trim()))
     setRunQuestions(nextQuestions)
     setAnswers([])
     setCurrentIndex(0)
@@ -247,7 +260,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
   }
 
   function chooseAnswer(optionIndex: number) {
-    if (!currentQuestion || answers[currentIndex] !== undefined) {
+    if (status !== 'playing' || !currentQuestion || answers[currentIndex] !== undefined) {
       return
     }
 
@@ -366,7 +379,20 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
             </div>
           </article>
 
-          {currentQuestion ? (
+          {status === 'idle' ? (
+            <article className="game-card game-question-card">
+              <div className="section-heading">
+                <div>
+                  <p className="eyebrow">Sẵn sàng vào game</p>
+                  <h2>Bấm bắt đầu để nhận bộ đáp án đã được đảo ngẫu nhiên</h2>
+                  <p className="section-copy">
+                    Mỗi lượt chơi sẽ xáo trộn lại thứ tự câu hỏi và vị trí đáp án đúng, nên không còn cố định theo A, B,
+                    C hoặc D.
+                  </p>
+                </div>
+              </div>
+            </article>
+          ) : currentQuestion ? (
             <article className="game-card game-question-card">
               <div className="game-question-head">
                 <div>
