@@ -12,10 +12,21 @@ export default async function HomePage({
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const resolvedSearchParams = await searchParams
+  const restrictedSearchParams = restrictHomeSearchParams(resolvedSearchParams)
+  const hasExplicitSlice = Object.keys(restrictedSearchParams).length > 0
   let data: Awaited<ReturnType<typeof getExplorerData>>
 
   try {
-    data = await getExplorerData(restrictHomeSearchParams(resolvedSearchParams))
+    data = await getExplorerData(restrictedSearchParams)
+
+    if (!hasExplicitSlice && typeof data.snapshot.activeYear === 'number') {
+      const activeYear = String(data.snapshot.activeYear)
+      data = await getExplorerData({
+        from: activeYear,
+        to: activeYear,
+        year: activeYear,
+      })
+    }
   } catch (error) {
     return (
       <SiteShell>
