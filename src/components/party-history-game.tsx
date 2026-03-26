@@ -9,6 +9,57 @@ import type {
   PartyGameSubmitResponse,
 } from '@/lib/game-types'
 
+function hashSeed(value: string) {
+  let hash = 2166136261
+
+  for (const char of value) {
+    hash ^= char.charCodeAt(0)
+    hash = Math.imul(hash, 16777619)
+  }
+
+  return hash >>> 0
+}
+
+function createSeededRandom(seed: string) {
+  let state = hashSeed(seed) || 1
+
+  return () => {
+    state += 0x6d2b79f5
+    let value = state
+    value = Math.imul(value ^ (value >>> 15), value | 1)
+    value ^= value + Math.imul(value ^ (value >>> 7), value | 61)
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function rotateRunQuestions(questions: PartyGamePayload['questions'], seed: string) {
+  const random = createSeededRandom(seed)
+  const next = [...questions].map((question) => {
+    const options = question.options.map((option, index) => ({
+      index,
+      option,
+    }))
+
+    for (let optionIndex = options.length - 1; optionIndex > 0; optionIndex -= 1) {
+      const swapIndex = Math.floor(random() * (optionIndex + 1))
+      ;[options[optionIndex], options[swapIndex]] = [options[swapIndex], options[optionIndex]]
+    }
+
+    return {
+      ...question,
+      correctIndex: options.findIndex((item) => item.index === question.correctIndex),
+      options: options.map((item) => item.option),
+    }
+  })
+
+  for (let index = next.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1))
+    ;[next[index], next[swapIndex]] = [next[swapIndex], next[index]]
+  }
+
+  return next
+}
+
 function formatDuration(durationMs: number) {
   const totalSeconds = Math.max(1, Math.round(durationMs / 1000))
   const minutes = Math.floor(totalSeconds / 60)
@@ -34,6 +85,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
   const [leaderboard, setLeaderboard] = useState<PartyGameLeaderboardEntry[]>(game.leaderboard)
   const [onlineCount, setOnlineCount] = useState(game.onlineCount)
   const [updatedAt, setUpdatedAt] = useState(game.updatedAt)
+  const [runQuestions, setRunQuestions] = useState(game.questions)
   const [answers, setAnswers] = useState<number[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [startedAt, setStartedAt] = useState<number | null>(null)
@@ -122,9 +174,9 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
     }
   }, [streamStatus])
 
-  const currentQuestion = game.questions[currentIndex] ?? null
+  const currentQuestion = runQuestions[currentIndex] ?? null
   const score = answers.reduce((total, answer, index) => {
-    const question = game.questions[index]
+    const question = runQuestions[index]
     return question && answer === question.correctIndex ? total + 1 : total
   }, 0)
   const canStart = username.trim().length >= 2 && game.questionCount > 0
@@ -182,6 +234,8 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
       return
     }
 
+    const nextQuestions = rotateRunQuestions(game.questions, `${username.trim()}:${Date.now()}`)
+    setRunQuestions(nextQuestions)
     setAnswers([])
     setCurrentIndex(0)
     setStartedAt(Date.now())
@@ -216,7 +270,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
 
     const durationMs = Math.max(1_000, Date.now() - (startedAt ?? Date.now()))
     const finalScore = answers.reduce((total, answer, index) => {
-      const question = game.questions[index]
+      const question = runQuestions[index]
       return question && answer === question.correctIndex ? total + 1 : total
     }, 0)
 
@@ -295,7 +349,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
 
             <div aria-hidden="true" className="game-track">
               <div className="game-track-progress" style={{ width: `${progressPercent}%` }} />
-              {game.questions.map((question, index) => {
+              {runQuestions.map((question, index) => {
                 const state =
                   index < currentIndex || status === 'finished'
                     ? 'done'
