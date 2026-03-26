@@ -16,6 +16,7 @@
   --line-strong: rgba(84, 44, 24, 0.14);
   --shadow: 0 12px 32px rgba(31, 23, 18, 0.06);
   --shadow-lg: 0 20px 48px rgba(31, 23, 18, 0.09);
+  --section-vertical-gap: 5dvh;
 }
 
 * {
@@ -180,7 +181,7 @@ textarea {
 .site-main,
 .page-stack {
   display: grid;
-  gap: 0;
+  gap: var(--section-vertical-gap);
   margin-top: 0;
 }
 
@@ -208,7 +209,7 @@ textarea {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 280px;
   gap: 32px;
-  min-height: 100dvh;
+  min-height: calc(100dvh - (var(--section-vertical-gap) * 2));
   align-content: center;
   scroll-snap-align: start;
   background: linear-gradient(180deg, var(--card) 0%, var(--card-strong) 100%);
@@ -426,7 +427,7 @@ textarea {
 .quiz-card {
   border-radius: 0;
   padding: 48px 28px;
-  min-height: 100dvh;
+  min-height: calc(100dvh - (var(--section-vertical-gap) * 2));
   display: grid;
   align-content: center;
   scroll-snap-align: start;
@@ -1295,7 +1296,7 @@ body::after {
 
 .site-frame {
   width: min(1360px, calc(100% - 48px));
-  padding: 24px 0 88px;
+  padding: max(24px, var(--section-vertical-gap)) 0 88px;
 }
 
 .site-header,
@@ -2029,6 +2030,7 @@ body::after {
   .timeline-card,
   .quiz-card {
     padding: 24px;
+    min-height: calc(100dvh - 48px);
   }
 
   .map-stage,
@@ -2046,6 +2048,10 @@ body::after {
   .site-frame {
     width: min(100% - 16px, 1360px);
     padding-top: 12px;
+  }
+
+  :root {
+    --section-vertical-gap: 24px;
   }
 
   .site-header,
