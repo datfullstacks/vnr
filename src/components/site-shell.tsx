@@ -5,6 +5,7 @@ const nav = [
   { href: '/', label: 'Dòng thời gian' },
   { href: '/atlas', label: 'Atlas bản đồ' },
   { href: '/lanh-dao', label: 'Trục lãnh đạo' },
+  { href: '/ai-usage', label: 'AI Usage' },
 ]
 
 export function SiteShell({
@@ -37,13 +38,6 @@ export function SiteShell({
             ))}
           </nav>
           <p className="site-header-note">Trục đọc chính: giai đoạn, lãnh đạo, sự kiện, chiến dịch và địa danh.</p>
-          <div className="site-usage">
-            <span className="site-usage-label">AI Usage</span>
-            <p>
-              AI hỗ trợ tổng hợp, cấu trúc hóa và trình bày dữ liệu lịch sử; các mốc, bản đồ và hồ sơ vẫn
-              được đối chiếu với nguồn chính thức.
-            </p>
-          </div>
         </div>
       </header>
 

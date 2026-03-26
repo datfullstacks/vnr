@@ -86,6 +86,8 @@ export function HomeStoryPage({
 
   return (
     <div className="page-stack">
+      <FormationOverview periods={snapshot.periods} />
+
       <section className="hero-panel story-hero">
         <div className="story-hero-copy">
           <p className="eyebrow">Không gian trình bày</p>
@@ -126,7 +128,6 @@ export function HomeStoryPage({
       </section>
 
       <NarrativeFocus period={activePeriod} variant="compact" year={activeYear} />
-      <FormationOverview periods={snapshot.periods} />
       <LeaderTimelineSection
         description={
           activePeriod?.periodType === 'formation'

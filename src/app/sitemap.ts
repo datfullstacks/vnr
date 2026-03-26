@@ -16,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       { url: `${siteUrl}/` },
       { url: `${siteUrl}/atlas` },
       { url: `${siteUrl}/lanh-dao` },
+      { url: `${siteUrl}/ai-usage` },
     ]
   }
 
@@ -23,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/` },
     { url: `${siteUrl}/atlas` },
     { url: `${siteUrl}/lanh-dao` },
+    { url: `${siteUrl}/ai-usage` },
     ...snapshot.leaders.map((leader) => ({
       url: `${siteUrl}/lanh-dao/${leader.slug}`,
     })),
