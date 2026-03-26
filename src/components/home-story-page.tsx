@@ -62,6 +62,12 @@ export function HomeStoryPage({
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
   const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
   const sliceLeaders = leadersForTimeSlice(snapshot.leaders, activeYear, activePeriod)
+  const hasExplicitSlice =
+    typeof filters.year === 'number' ||
+    typeof filters.from === 'number' ||
+    typeof filters.to === 'number' ||
+    Boolean(filters.period) ||
+    Boolean(filters.leader)
   const { maxYear, minYear } = resolveTimelineBounds(snapshot)
   const visibleRecords = listForType(snapshot, 'all')
   const atlasParams = new URLSearchParams({
@@ -180,23 +186,43 @@ export function HomeStoryPage({
 
       <HistoricalNarrativeDigest
         campaigns={snapshot.campaigns}
-        description="Những sự kiện và chiến dịch nổi bật nhất của lát cắt đang xem, giúp đi từ bản đồ sang mạch diễn biến cụ thể."
+        description={
+          hasExplicitSlice
+            ? 'Những sự kiện và chiến dịch nổi bật nhất của lát cắt đang xem, giúp đi từ bản đồ sang mạch diễn biến cụ thể.'
+            : 'Đây là nhóm diễn biến nổi bật trên toàn bộ dataset hiện có, dùng để giới thiệu nhanh nhịp vận động lịch sử trước khi đi sâu vào một lát cắt cụ thể.'
+        }
         events={snapshot.events}
         maxItems={8}
-        title={`Những bước ngoặt nổi bật quanh năm ${activeYear}`}
+        title={
+          hasExplicitSlice
+            ? `Những bước ngoặt nổi bật quanh năm ${activeYear}`
+            : 'Những bước ngoặt nổi bật trên toàn bộ trục lịch sử'
+        }
       />
 
       <QuizHighlights
-        description="Các bộ câu hỏi ngắn gắn với đúng giai đoạn hoặc hồ sơ đang hiện trên lát cắt."
+        description={
+          hasExplicitSlice
+            ? 'Các bộ câu hỏi ngắn gắn với đúng giai đoạn hoặc hồ sơ đang hiện trên lát cắt.'
+            : 'Ở chế độ tổng quan, khối này chỉ giữ các bộ câu hỏi thật sự liên quan tới phần dữ liệu đang được hiển thị.'
+        }
         quizzes={snapshot.quizzes}
-        title="Ôn tập nhanh theo lát cắt"
+        title={hasExplicitSlice ? 'Ôn tập nhanh theo lát cắt' : 'Ôn tập từ các hồ sơ đang hiển thị'}
       />
 
       <RecordGrid
-        description="Nhóm hồ sơ tiêu biểu để đi từ lát cắt bản đồ sang các sự kiện, chiến dịch và địa danh đáng chú ý."
+        description={
+          hasExplicitSlice
+            ? 'Nhóm hồ sơ tiêu biểu để đi từ lát cắt bản đồ sang các sự kiện, chiến dịch và địa danh đáng chú ý.'
+            : 'Đây là nhóm hồ sơ tiêu biểu rút ra từ toàn bộ dữ liệu hiện có, dùng như một màn giới thiệu trước khi khóa vào một mốc năm hoặc giai đoạn cụ thể.'
+        }
         maxItems={6}
         records={visibleRecords}
-        title={`Những hồ sơ tiêu biểu trong lát cắt năm ${activeYear}`}
+        title={
+          hasExplicitSlice
+            ? `Những hồ sơ tiêu biểu trong lát cắt năm ${activeYear}`
+            : 'Những hồ sơ tiêu biểu trên toàn bộ trục lịch sử'
+        }
       />
     </div>
   )

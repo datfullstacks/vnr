@@ -88,6 +88,12 @@ export function AtlasExplorerPage({
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
   const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
   const visibleRecords = listForType(snapshot, filters.type)
+  const hasExplicitSlice =
+    typeof filters.year === 'number' ||
+    typeof filters.from === 'number' ||
+    typeof filters.to === 'number' ||
+    Boolean(filters.period) ||
+    Boolean(filters.leader)
   const { maxYear, minYear } = resolveTimelineBounds(snapshot)
   const activeThemes = activePeriod?.keyThemes.slice(0, 3) ?? []
   const drawerKey = [
@@ -120,11 +126,15 @@ export function AtlasExplorerPage({
     ? `${activePeriod.title} · ${visibleRecords.length} bản ghi`
     : `Năm ${activeYear} · ${visibleRecords.length} bản ghi`
   const recordSectionDescription =
-    filters.type === 'all'
+    !hasExplicitSlice && filters.type === 'all'
+      ? `Khối này đang hiển thị nhóm hồ sơ tổng quan từ toàn bộ dataset hiện có: ${snapshot.events.length} sự kiện, ${snapshot.campaigns.length} chiến dịch và ${snapshot.places.length} địa danh. Hãy khóa theo năm, giai đoạn hoặc lãnh đạo để đọc đúng một lát cắt cụ thể.`
+      : filters.type === 'all'
       ? `Khối này đang hiển thị toàn bộ hồ sơ khớp với bộ lọc hiện tại: ${snapshot.events.length} sự kiện, ${snapshot.campaigns.length} chiến dịch và ${snapshot.places.length} địa danh${activePeriod ? ` trong ${activePeriod.title}` : ''}.`
       : `Khối này đang hiển thị toàn bộ ${visibleRecords.length} ${typeLabelLower(filters.type)} khớp với bộ lọc hiện tại${activePeriod ? ` trong ${activePeriod.title}` : ''}${activeLeader ? `, theo trục ${activeLeader.displayName ?? activeLeader.name}` : ''}.`
   const recordSectionTitle =
-    filters.type === 'all'
+    !hasExplicitSlice && filters.type === 'all'
+      ? 'Hồ sơ tiêu biểu trên toàn bộ atlas hiện có'
+      : filters.type === 'all'
       ? `Hồ sơ lịch sử trong lát cắt năm ${activeYear}`
       : `Các ${typeLabelLower(filters.type)} trong lát cắt năm ${activeYear}`
   const to = filters.to ?? ''
@@ -292,16 +302,28 @@ export function AtlasExplorerPage({
 
       <HistoricalNarrativeDigest
         campaigns={snapshot.campaigns}
-        description="Các sự kiện và chiến dịch dưới đây là phần diễn biến then chốt đang khớp trực tiếp với bộ lọc atlas."
+        description={
+          hasExplicitSlice
+            ? 'Các sự kiện và chiến dịch dưới đây là phần diễn biến then chốt đang khớp trực tiếp với bộ lọc atlas.'
+            : 'Đây là lớp diễn biến tổng quan trên toàn bộ atlas hiện có. Muốn đọc đúng một lát cắt, hãy khóa theo năm, giai đoạn hoặc lãnh đạo.'
+        }
         events={snapshot.events}
         maxItems={10}
-        title={`Diễn biến lịch sử trong lát cắt năm ${activeYear}`}
+        title={
+          hasExplicitSlice
+            ? `Diễn biến lịch sử trong lát cắt năm ${activeYear}`
+            : 'Diễn biến lịch sử trên toàn bộ atlas hiện có'
+        }
       />
 
       <QuizHighlights
-        description="Nếu lát cắt hiện tại có bộ câu hỏi liên quan, chúng sẽ xuất hiện ở đây để người xem chuyển nhanh từ trình bày sang ôn tập."
+        description={
+          hasExplicitSlice
+            ? 'Nếu lát cắt hiện tại có bộ câu hỏi liên quan, chúng sẽ xuất hiện ở đây để người xem chuyển nhanh từ trình bày sang ôn tập.'
+            : 'Ở chế độ tổng quan, khối này chỉ giữ các bộ câu hỏi thực sự bám vào phần dữ liệu đang hiển thị.'
+        }
         quizzes={snapshot.quizzes}
-        title="Câu hỏi ôn tập theo lát cắt"
+        title={hasExplicitSlice ? 'Câu hỏi ôn tập theo lát cắt' : 'Câu hỏi ôn tập từ dữ liệu đang hiển thị'}
       />
 
       <RecordGrid
