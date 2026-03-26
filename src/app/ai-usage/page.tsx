@@ -1,5 +1,32 @@
 import { SiteShell } from '@/components/site-shell'
 
+const promptExamples = [
+  {
+    prompt:
+      'Từ các nguồn dưới đây, hãy tóm tắt giai đoạn 1919-1930 thành 3 phần: bối cảnh, lực lượng xã hội mới, và điều kiện trực tiếp dẫn tới việc thành lập Đảng. Chỉ dùng thông tin có trong nguồn, không thêm suy đoán, và đánh dấu chỗ nào cần kiểm chứng thêm.',
+    purpose: 'Dùng để dựng phần mở đầu cho giai đoạn tiền đề hình thành Đảng.',
+    title: 'Tóm tắt giai đoạn hình thành',
+  },
+  {
+    prompt:
+      'Hãy chuyển các ghi chú lịch sử sau thành một hồ sơ sự kiện cho atlas với các trường: title, summary, startDate, displayYear, region, relatedPlaces, keyTopics. Nếu dữ kiện nào chưa đủ chắc chắn thì ghi rõ cần bổ sung nguồn thay vì tự điền.',
+    purpose: 'Dùng để chuẩn hóa dữ liệu trước khi nhập vào hệ thống bản đồ và timeline.',
+    title: 'Chuẩn hóa hồ sơ sự kiện',
+  },
+  {
+    prompt:
+      'Viết một đoạn giới thiệu ngắn cho lát cắt năm 1954 trên atlas. Đoạn viết phải nêu được bối cảnh lịch sử, gợi ý người xem nên chú ý những sự kiện hoặc chiến dịch nào trên bản đồ, và giữ văn phong trung tính, không phóng đại.',
+    purpose: 'Dùng để hỗ trợ viết copy trình bày cho các lát cắt theo năm trên trang chủ hoặc atlas.',
+    title: 'Viết copy cho lát cắt bản đồ',
+  },
+  {
+    prompt:
+      'Đọc đoạn nội dung lịch sử sau và chỉ ra các câu có nguy cơ khẳng định quá mức, mơ hồ về nguồn hoặc sai mốc thời gian. Trả về theo dạng danh sách gồm: câu gốc, vấn đề, gợi ý sửa và loại nguồn nên kiểm tra lại.',
+    purpose: 'Dùng để rà soát biên tập trước khi xuất bản nội dung công khai.',
+    title: 'Rà soát rủi ro biên tập',
+  },
+]
+
 export default function AIUsagePage() {
   return (
     <SiteShell>
@@ -13,6 +40,35 @@ export default function AIUsagePage() {
               người xem vẫn có một nơi rõ ràng để kiểm tra cách dữ liệu được tổng hợp, cấu trúc hóa và trình bày.
             </p>
           </div>
+        </section>
+
+        <section className="content-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Mẫu prompt</p>
+              <h2>Một số prompt minh chứng cho cách AI được sử dụng</h2>
+              <p className="section-copy">
+                Đây là các mẫu prompt theo đúng workflow của dự án, dùng để minh họa cách AI hỗ trợ ở lớp
+                tổng hợp, chuẩn hóa và rà soát nội dung lịch sử.
+              </p>
+            </div>
+          </div>
+
+          <div className="record-grid">
+            {promptExamples.map((item) => (
+              <article className="record-card prompt-card" key={item.title}>
+                <span className="record-kind">Prompt mẫu</span>
+                <h3>{item.title}</h3>
+                <p>{item.purpose}</p>
+                <pre>{item.prompt}</pre>
+              </article>
+            ))}
+          </div>
+
+          <p className="section-copy prompt-note">
+            Các prompt này chỉ là công cụ hỗ trợ biên tập. Nội dung tạo ra từ AI vẫn cần được kiểm tra lại
+            theo nguồn trước khi đưa lên site.
+          </p>
         </section>
 
         <section className="content-section">
