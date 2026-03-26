@@ -21,7 +21,6 @@ export function SiteShell({
     <div className="site-frame">
       <header className="site-header">
         <div className="site-header-copy">
-          <p className="site-kicker">Sản phẩm trình bày lịch sử</p>
           <Link className="brand-mark" href="/">
             Bản đồ cách mạng Việt Nam
           </Link>
