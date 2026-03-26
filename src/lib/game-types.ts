@@ -29,6 +29,7 @@ export type PartyGamePayload = PartyGameLeaderboardPayload & {
   questionCount: number
   questions: PartyGameQuestion[]
   summary: string
+  timePerQuestionSeconds: number
   title: string
 }
 

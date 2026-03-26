@@ -88,6 +88,7 @@ function formatTimestamp(value: string) {
 
 export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
   const usernameStorageKey = `party-game:${game.gameId}:username`
+  const questionTimeLimitMs = game.timePerQuestionSeconds * 1000
   const [username, setUsername] = useState('')
   const [status, setStatus] = useState<'idle' | 'playing' | 'finished'>('idle')
   const [streamStatus, setStreamStatus] = useState<'connecting' | 'live' | 'offline'>('connecting')
@@ -98,10 +99,13 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
   const [answers, setAnswers] = useState<number[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [startedAt, setStartedAt] = useState<number | null>(null)
+  const [questionStartedAt, setQuestionStartedAt] = useState<number | null>(null)
   const [finishedDurationMs, setFinishedDurationMs] = useState<number | null>(null)
   const [submitState, setSubmitState] = useState<'idle' | 'submitting' | 'submitted' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState<string | null>(null)
   const [playerRank, setPlayerRank] = useState<PartyGameLeaderboardEntry | null>(null)
+  const [timedOutQuestions, setTimedOutQuestions] = useState<Record<number, true>>({})
+  const [timerNow, setTimerNow] = useState(() => Date.now())
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -194,11 +198,50 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
   }, 0)
   const canStart = username.trim().length >= 2 && game.questionCount > 0
   const answeredCurrent = currentQuestion ? answers[currentIndex] !== undefined : false
+  const timedOutCurrent = Boolean(timedOutQuestions[currentIndex])
+  const lockedCurrent = answeredCurrent || timedOutCurrent
+  const remainingMs =
+    status === 'playing' && currentQuestion && questionStartedAt
+      ? Math.max(0, questionStartedAt + questionTimeLimitMs - timerNow)
+      : questionTimeLimitMs
+  const remainingSeconds = Math.ceil(remainingMs / 1000)
   const progressPercent =
     game.questionCount > 0
       ? ((Math.min(currentIndex + (status === 'finished' ? 1 : 0), game.questionCount) || 0) / game.questionCount) *
         100
       : 0
+
+  useEffect(() => {
+    if (status !== 'playing' || !currentQuestion || lockedCurrent) {
+      return
+    }
+
+    setTimerNow(Date.now())
+    const timer = window.setInterval(() => {
+      setTimerNow(Date.now())
+    }, 250)
+
+    return () => {
+      window.clearInterval(timer)
+    }
+  }, [currentQuestion, lockedCurrent, status])
+
+  useEffect(() => {
+    if (status !== 'playing' || !currentQuestion || lockedCurrent || remainingMs > 0) {
+      return
+    }
+
+    setTimedOutQuestions((current) => {
+      if (current[currentIndex]) {
+        return current
+      }
+
+      return {
+        ...current,
+        [currentIndex]: true,
+      }
+    })
+  }, [currentIndex, currentQuestion, lockedCurrent, remainingMs, status])
 
   async function submitRun(durationMs: number, finalScore: number) {
     setSubmitState('submitting')
@@ -252,15 +295,18 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
     setAnswers([])
     setCurrentIndex(0)
     setStartedAt(Date.now())
+    setQuestionStartedAt(Date.now())
     setFinishedDurationMs(null)
     setPlayerRank(null)
     setSubmitMessage(null)
     setSubmitState('idle')
+    setTimedOutQuestions({})
+    setTimerNow(Date.now())
     setStatus('playing')
   }
 
   function chooseAnswer(optionIndex: number) {
-    if (status !== 'playing' || !currentQuestion || answers[currentIndex] !== undefined) {
+    if (status !== 'playing' || !currentQuestion || lockedCurrent) {
       return
     }
 
@@ -272,12 +318,14 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
   }
 
   function moveForward() {
-    if (!answeredCurrent) {
+    if (!lockedCurrent) {
       return
     }
 
     if (currentIndex < game.questionCount - 1) {
       setCurrentIndex((value) => value + 1)
+      setQuestionStartedAt(Date.now())
+      setTimerNow(Date.now())
       return
     }
 
@@ -288,6 +336,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
     }, 0)
 
     setFinishedDurationMs(durationMs)
+    setQuestionStartedAt(null)
     setStatus('finished')
     void submitRun(durationMs, finalScore)
   }
@@ -301,6 +350,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
           <p>{game.summary}</p>
           <div className="game-status-row">
             <span className="game-pill">#{game.questionCount} checkpoint</span>
+            <span className="game-pill">Mỗi câu {game.timePerQuestionSeconds}s</span>
             <span className={`game-pill ${streamStatus === 'live' ? 'is-live' : 'is-waiting'}`}>
               {streamStatus === 'live' ? 'Leaderboard live' : 'Leaderboard đồng bộ lại'}
             </span>
@@ -403,8 +453,11 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
                   </p>
                 </div>
                 <div className="game-question-meta">
-                  <strong>{currentIndex + 1}</strong>
-                  <span>/ {game.questionCount}</span>
+                  <strong>{remainingSeconds}</strong>
+                  <span>giây còn lại</span>
+                  <small>
+                    Câu {currentIndex + 1} / {game.questionCount}
+                  </small>
                 </div>
               </div>
 
@@ -415,7 +468,7 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
                   return (
                     <button
                       className={`game-option ${chosen ? 'is-active' : ''}`}
-                      disabled={answeredCurrent}
+                      disabled={lockedCurrent}
                       key={`${currentQuestion.id}:${optionIndex}`}
                       onClick={() => chooseAnswer(optionIndex)}
                       type="button"
@@ -427,10 +480,14 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
                 })}
               </div>
 
-              {answeredCurrent ? (
+              {lockedCurrent ? (
                 <div className="game-answer-feedback">
                   <strong>
-                    {answers[currentIndex] === currentQuestion.correctIndex ? 'Đúng checkpoint.' : 'Sai checkpoint.'}
+                    {timedOutCurrent
+                      ? 'Hết thời gian cho checkpoint này.'
+                      : answers[currentIndex] === currentQuestion.correctIndex
+                        ? 'Đúng checkpoint.'
+                        : 'Sai checkpoint.'}
                   </strong>
                   <p>{currentQuestion.explanation}</p>
                   <button className="primary-button" onClick={moveForward} type="button">
@@ -438,7 +495,9 @@ export function PartyHistoryGame({ game }: { game: PartyGamePayload }) {
                   </button>
                 </div>
               ) : (
-                <p className="section-copy">Chọn một đáp án để khóa checkpoint này.</p>
+                <p className="section-copy">
+                  Chọn một đáp án để khóa checkpoint này trước khi hết {game.timePerQuestionSeconds} giây.
+                </p>
               )}
             </article>
           ) : null}
