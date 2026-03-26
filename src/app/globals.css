@@ -1,19 +1,21 @@
 :root {
   --bg: #efe2c6;
   --bg-strong: #e3cfa0;
-  --card: rgba(255, 249, 238, 0.94);
-  --card-strong: rgba(255, 252, 245, 0.98);
+  --card: #fff8f0;
+  --card-strong: #fff2d9;
+  --surface-high: #f4e7cb;
+  --surface-highest: #eee1c5;
   --ink: #1f1712;
   --muted: #5f4b3a;
   --accent: #8f1f1b;
-  --accent-deep: #641612;
+  --accent-deep: #6e0307;
   --gold: #c5a45a;
   --gold-deep: #9d6b33;
   --sea: #1f4f73;
-  --line: rgba(84, 44, 24, 0.16);
-  --line-strong: rgba(84, 44, 24, 0.24);
-  --shadow: 0 18px 38px rgba(52, 32, 19, 0.1);
-  --shadow-lg: 0 24px 54px rgba(52, 32, 19, 0.14);
+  --line: rgba(84, 44, 24, 0.08);
+  --line-strong: rgba(84, 44, 24, 0.14);
+  --shadow: 0 12px 32px rgba(31, 23, 18, 0.06);
+  --shadow-lg: 0 20px 48px rgba(31, 23, 18, 0.09);
 }
 
 * {
@@ -76,8 +78,8 @@ textarea {
 .timeline-card,
 .content-section,
 .page-heading {
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
+  border: none;
+  box-shadow: none;
   background: var(--card);
 }
 
@@ -85,7 +87,7 @@ textarea {
 .site-footer,
 .page-heading {
   border-radius: 0;
-  padding: 20px 22px;
+  padding: 20px 28px;
 }
 
 .site-header {
@@ -97,17 +99,20 @@ textarea {
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  background: rgba(255, 248, 240, 0.82);
+  border-bottom: 1px solid var(--line);
 }
 
 .brand-mark {
   display: inline-flex;
   align-items: center;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: var(--accent);
+  padding: 8px 16px;
+  border-radius: 0;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
   color: #fff8ea;
   font-weight: 700;
+  font-family: var(--font-serif), serif;
   letter-spacing: 0.01em;
 }
 
@@ -156,14 +161,20 @@ textarea {
 .site-nav a,
 .ghost-button,
 .primary-button {
-  border-radius: 999px;
-  padding: 10px 14px;
+  border-radius: 0;
+  padding: 10px 18px;
 }
 
 .site-nav a,
 .ghost-button {
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.72);
+  border: none;
+  background: var(--surface-highest);
+}
+
+.site-nav a:hover,
+.ghost-button:hover {
+  background: var(--surface-high);
+  color: var(--accent);
 }
 
 .site-main,
@@ -182,23 +193,25 @@ textarea {
   margin: 0;
   font-family: var(--font-serif), serif;
   letter-spacing: -0.03em;
+  color: var(--accent-deep);
 }
 
 .page-heading h1,
 .hero-panel h1 {
-  font-size: clamp(2.4rem, 5vw, 4.8rem);
-  line-height: 0.95;
+  font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+  line-height: 0.92;
 }
 
 .hero-panel {
   border-radius: 0;
-  padding: 28px;
+  padding: 48px 28px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 240px;
-  gap: 24px;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 32px;
   min-height: 100dvh;
   align-content: center;
   scroll-snap-align: start;
+  background: linear-gradient(180deg, var(--card) 0%, var(--card-strong) 100%);
 }
 
 .story-hero,
@@ -359,22 +372,36 @@ textarea {
 .source-list li,
 .map-shell,
 .timeline-range-grid label {
-  border: 1px solid var(--line);
-  background: var(--card-strong);
+  border: none;
+  background: var(--surface-highest);
 }
 
 .filters-card input,
 .filters-card select {
   width: 100%;
-  padding: 11px 13px;
-  border-radius: 14px;
+  padding: 12px 14px;
+  border-radius: 0;
+  border-bottom: 2px solid var(--surface-highest);
+}
+
+.filters-card input:focus,
+.filters-card select:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
 }
 
 .primary-button {
   border: 0;
-  background: linear-gradient(135deg, var(--accent), #c26a2c);
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
   color: #fff8eb;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.88rem;
+}
+
+.primary-button:hover {
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
 }
 
 .ghost-button {
@@ -383,26 +410,30 @@ textarea {
 
 .eyebrow,
 .record-kind {
-  margin: 0 0 8px;
-  font-size: 0.78rem;
+  margin: 0 0 10px;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .eyebrow {
-  color: var(--accent);
+  color: var(--gold-deep);
 }
 
 .timeline-card,
 .content-section,
 .quiz-card {
   border-radius: 0;
-  padding: 32px 22px;
+  padding: 48px 28px;
   min-height: 100dvh;
   display: grid;
   align-content: center;
   scroll-snap-align: start;
+}
+
+.content-section:nth-child(even) {
+  background: var(--card-strong);
 }
 
 .timeline-header,
@@ -493,8 +524,8 @@ textarea {
 
 .period-chip,
 .period-panel {
-  border-radius: 18px;
-  padding: 14px;
+  border-radius: 0;
+  padding: 16px;
 }
 
 .period-chip {
@@ -590,8 +621,13 @@ textarea {
 }
 
 .record-card {
-  border-radius: 18px;
-  padding: 16px;
+  border-radius: 0;
+  padding: 18px;
+  transition: background 160ms ease;
+}
+
+.record-card:hover {
+  background: var(--surface-high);
 }
 
 .record-card p {
@@ -616,10 +652,12 @@ textarea {
 
 .record-meta span,
 .detail-meta span {
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: rgba(108, 82, 50, 0.05);
-  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 0;
+  background: var(--surface-highest);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
 }
 
 .map-shell {
@@ -951,12 +989,17 @@ textarea {
 
 .leader-card {
   display: grid;
-  gap: 10px;
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  background: rgba(255, 252, 246, 0.94);
-  box-shadow: var(--shadow);
+  gap: 12px;
+  padding: 20px;
+  border: none;
+  border-radius: 0;
+  background: var(--card-strong);
+  box-shadow: none;
+  transition: background 160ms ease;
+}
+
+.leader-card:hover {
+  background: var(--surface-high);
 }
 
 .leader-portrait {
@@ -964,11 +1007,10 @@ textarea {
   width: 100%;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  border: 1px solid rgba(87, 61, 36, 0.14);
-  border-radius: 18px;
+  border: none;
+  border-radius: 0;
   background:
-    radial-gradient(circle at top, rgba(171, 47, 36, 0.1), transparent 58%),
-    linear-gradient(180deg, rgba(250, 243, 231, 0.96), rgba(236, 223, 200, 0.96));
+    linear-gradient(180deg, var(--surface-high), var(--surface-highest));
 }
 
 .leader-portrait-hero {
