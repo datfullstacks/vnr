@@ -44,6 +44,34 @@ const VIETNAM_BOUNDS = [
   [115.8, 24.6],
 ] satisfies LngLatBoundsLike
 
+function normalizeBounds(bounds: LngLatBoundsLike): [[number, number], [number, number]] {
+  const [southWest, northEast] = bounds as [[number, number], [number, number]]
+
+  return [southWest, northEast]
+}
+
+function expandBounds(bounds: LngLatBoundsLike, lngPadding: number, latPadding: number): LngLatBoundsLike {
+  const [[minLng, minLat], [maxLng, maxLat]] = normalizeBounds(bounds)
+
+  return [
+    [minLng - lngPadding, minLat - latPadding],
+    [maxLng + lngPadding, maxLat + latPadding],
+  ]
+}
+
+function defaultViewPadding(map: Map) {
+  const container = map.getContainer()
+  const width = container.clientWidth || 0
+  const height = container.clientHeight || 0
+
+  return {
+    bottom: Math.max(92, Math.round(height * 0.16)),
+    left: Math.max(44, Math.round(width * 0.06)),
+    right: Math.max(44, Math.round(width * 0.06)),
+    top: Math.max(84, Math.round(height * 0.14)),
+  }
+}
+
 const INTERACTIVE_LAYER_IDS = [
   'archipelago-points-layer',
   'historical-admin-fill',
@@ -528,10 +556,10 @@ function focusFeature(map: Map, feature: Feature<Geometry, GeoJsonProperties>) {
 }
 
 function resetMapView(map: Map, bounds: LngLatBoundsLike = VIETNAM_BOUNDS, animated = true) {
-  map.fitBounds(bounds, {
+  map.fitBounds(expandBounds(bounds, 1.2, 1.45), {
     duration: animated ? 700 : 0,
-    maxZoom: 5.8,
-    padding: 48,
+    maxZoom: 4.95,
+    padding: defaultViewPadding(map),
   })
 }
 
@@ -665,8 +693,8 @@ export function AtlasMap({
       container: containerRef.current,
       fitBoundsOptions: { padding: 36 },
       maxBounds: [
-        [98.5, 4.5],
-        [118.5, 25.2],
+        [97.5, 3.4],
+        [119.2, 27.2],
       ] satisfies LngLatBoundsLike,
       style: blankStyle,
       zoom: 4.35,
