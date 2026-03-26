@@ -1,5 +1,62 @@
 import { SiteShell } from '@/components/site-shell'
 
+const aiTools = [
+  {
+    description:
+      'Được dùng để hỗ trợ sửa code, kiểm tra dữ liệu atlas, rà soát filter, tạo script audit và biên tập một phần nội dung mô tả trong quá trình phát triển.',
+    label: 'Phát triển',
+    title: 'Codex / GPT lớp trợ lý kỹ thuật',
+  },
+  {
+    description:
+      'Có thể được dùng để hỗ trợ viết prompt, tóm tắt tài liệu, gợi ý cấu trúc nội dung và viết lại các đoạn mô tả lịch sử theo nhiều mức độ chi tiết khác nhau.',
+    label: 'Biên tập',
+    title: 'ChatGPT',
+  },
+  {
+    description:
+      'Có thể được dùng như một nguồn tham khảo bổ sung để đối chiếu cách diễn giải, gợi ý câu hỏi rà soát và tạo thêm biến thể nội dung phục vụ bước biên tập nội bộ.',
+    label: 'Tham khảo',
+    title: 'Grok',
+  },
+  {
+    description:
+      'Được dùng ở workflow prompt để tóm tắt nguồn, chuẩn hóa hồ sơ sự kiện, gợi ý copy trình bày và rà soát rủi ro biên tập trước khi biên tập viên kiểm chứng lại.',
+    label: 'Biên tập',
+    title: 'Workflow prompt cho mô hình ngôn ngữ',
+  },
+  {
+    description:
+      'Có thể dùng ở bước số hóa tư liệu để trích xuất chữ từ ảnh scan, tài liệu lưu trữ hoặc phụ bản cũ trước khi biên tập viên làm sạch và đối chiếu lại.',
+    label: 'Tư liệu',
+    title: 'OCR hỗ trợ bóc tách văn bản',
+  },
+  {
+    description:
+      'Có thể dùng để chuẩn hóa nhãn chủ đề, phân loại sơ bộ sự kiện, chiến dịch, địa danh hoặc gợi ý metadata ban đầu cho từng hồ sơ lịch sử.',
+    label: 'Dữ liệu',
+    title: 'AI hỗ trợ gắn thẻ và phân loại',
+  },
+  {
+    description:
+      'Có thể dùng để rà soát nhanh lỗi diễn đạt, câu khẳng định quá mức, chỗ thiếu nguồn hoặc các điểm chưa nhất quán về mốc năm giữa các bản ghi.',
+    label: 'Kiểm tra',
+    title: 'AI hỗ trợ audit biên tập',
+  },
+  {
+    description:
+      'Có thể dùng khi cần viết lại tóm tắt ngắn, caption ảnh, intro cho lát cắt bản đồ hoặc chuyển cùng một nội dung sang các mức độ chi tiết khác nhau.',
+    label: 'Trình bày',
+    title: 'AI hỗ trợ viết lại và rút gọn nội dung',
+  },
+  {
+    description:
+      'Hiện chưa thấy SDK AI nào được tích hợp trực tiếp vào frontend hoặc backend public của dự án. Người xem không đang tương tác với một tính năng AI runtime trên site.',
+    label: 'Runtime',
+    title: 'AI tích hợp trực tiếp trên site: chưa có',
+  },
+]
+
 const promptExamples = [
   {
     prompt:
@@ -39,6 +96,29 @@ export default function AIUsagePage() {
               Trang này tách riêng phần giải thích về vai trò của AI trong hệ thống, để header giữ gọn và
               người xem vẫn có một nơi rõ ràng để kiểm tra cách dữ liệu được tổng hợp, cấu trúc hóa và trình bày.
             </p>
+          </div>
+        </section>
+
+        <section className="content-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">Công cụ AI</p>
+              <h2>Các công cụ AI đang được sử dụng</h2>
+              <p className="section-copy">
+                Phần này tách rõ công cụ AI dùng trong quá trình phát triển và biên tập với tình trạng AI
+                thực sự được tích hợp vào sản phẩm công khai.
+              </p>
+            </div>
+          </div>
+
+          <div className="record-grid">
+            {aiTools.map((tool) => (
+              <article className="record-card" key={tool.title}>
+                <span className="record-kind">{tool.label}</span>
+                <h3>{tool.title}</h3>
+                <p>{tool.description}</p>
+              </article>
+            ))}
           </div>
         </section>
 

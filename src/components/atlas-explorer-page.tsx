@@ -7,6 +7,7 @@ import { AtlasControlsDrawer } from '@/components/atlas-controls-drawer'
 import { AtlasMapShell } from '@/components/atlas-map-shell'
 import {
   buildTimeSliceHref,
+  leadersForTimeSlice,
   listForType,
   resolveActiveLeader,
   resolveActivePeriod,
@@ -87,6 +88,15 @@ export function AtlasExplorerPage({
   const activeYear = resolveActiveYear(snapshot, filters)
   const activePeriod = resolveActivePeriod(snapshot, filters, activeYear)
   const activeLeader = resolveActiveLeader(snapshot, filters, activeYear, activePeriod)
+  const availableLeaders = leadersForTimeSlice(snapshot.leaders, activeYear, activePeriod)
+  const leaderSelectLabel =
+    activePeriod?.periodType === 'formation' ? 'Lãnh đạo' : 'Lãnh đạo theo giai đoạn'
+  const leaderPlaceholder =
+    availableLeaders.length > 0
+      ? activePeriod
+        ? `Tất cả lãnh đạo của ${activePeriod.title}`
+        : 'Tất cả thời kỳ lãnh đạo'
+      : 'Giai đoạn này Đảng chưa được thành lập'
   const visibleRecords = listForType(snapshot, filters.type)
   const mapEvents = filters.type === 'all' || filters.type === 'events' ? snapshot.events : []
   const mapCampaigns = filters.type === 'all' || filters.type === 'campaigns' ? snapshot.campaigns : []
@@ -202,6 +212,7 @@ export function AtlasExplorerPage({
           <div className="atlas-control-deck">
             <TimelineController
               filters={filters}
+              leaders={snapshot.leaders}
               maxYear={maxYear}
               minYear={minYear}
               periods={snapshot.periods}
@@ -210,10 +221,14 @@ export function AtlasExplorerPage({
 
             <form className="filters-card atlas-filters-card" method="get">
               <label>
-                <span>Lãnh đạo</span>
-                <select defaultValue={filters.leader ?? ''} name="leader">
-                  <option value="">Tất cả thời kỳ lãnh đạo</option>
-                  {snapshot.leaders.map((leader) => (
+                <span>{leaderSelectLabel}</span>
+                <select
+                  defaultValue={filters.leader ?? ''}
+                  disabled={availableLeaders.length === 0}
+                  name="leader"
+                >
+                  <option value="">{leaderPlaceholder}</option>
+                  {availableLeaders.map((leader) => (
                     <option key={leader.id} value={leader.slug}>
                       {leader.displayName ?? leader.name} · {leader.officeLabel}
                     </option>

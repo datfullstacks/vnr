@@ -1,11 +1,12 @@
 import Link from 'next/link'
 
-import type { ExplorerSnapshot, LeaderRecord, PeriodRecord } from '@/lib/content-types'
+import type { ExplorerSnapshot } from '@/lib/content-types'
 import type { SearchState } from '@/lib/search-state'
 
 import { AtlasMapShell } from '@/components/atlas-map-shell'
 import { HistoricalNarrativeDigest, NarrativeFocus, QuizHighlights, RecordGrid } from '@/components/content-blocks'
 import {
+  leadersForTimeSlice,
   listForType,
   resolveActiveLeader,
   resolveActivePeriod,
@@ -14,42 +15,6 @@ import {
 } from '@/components/explorer-helpers'
 import { FormationOverview, LeaderContextCard, LeaderTimelineSection } from '@/components/leader-blocks'
 import { TimelineController } from '@/components/timeline-controller'
-
-function leaderTerms(leader: LeaderRecord) {
-  return leader.terms?.length
-    ? leader.terms
-    : [{ endYear: leader.endYear, startYear: leader.startYear }]
-}
-
-function leadersForTimeSlice(leaders: LeaderRecord[], activeYear: number, activePeriod: PeriodRecord | null) {
-  if (activePeriod?.periodType === 'formation' || activeYear < 1930) {
-    return []
-  }
-
-  if (activePeriod) {
-    const leaderBySlug = new Map(leaders.map((leader) => [leader.slug, leader]))
-    const periodLeaderSlugs = [
-      ...(activePeriod.featuredLeaderSlug ? [activePeriod.featuredLeaderSlug] : []),
-      ...activePeriod.officialLeaderSlugs,
-    ]
-
-    const periodLeaders = periodLeaderSlugs
-      .map((slug) => leaderBySlug.get(slug))
-      .filter((leader): leader is LeaderRecord => Boolean(leader))
-      .filter((leader, index, items) => items.findIndex((item) => item.slug === leader.slug) === index)
-      .sort((left, right) => left.startYear - right.startYear)
-
-    if (periodLeaders.length > 0) {
-      return periodLeaders
-    }
-  }
-
-  return leaders
-    .filter((leader) =>
-      leaderTerms(leader).some((term) => activeYear >= term.startYear && activeYear <= term.endYear),
-    )
-    .sort((left, right) => left.startYear - right.startYear)
-}
 
 export function HomeStoryPage({
   filters,
@@ -120,6 +85,7 @@ export function HomeStoryPage({
 
         <TimelineController
           filters={filters}
+          leaders={snapshot.leaders}
           maxYear={maxYear}
           minYear={minYear}
           periods={snapshot.periods}

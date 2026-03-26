@@ -3,19 +3,31 @@
 import { useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
-import type { PeriodRecord } from '@/lib/content-types'
+import type { LeaderRecord, PeriodRecord } from '@/lib/content-types'
 import type { SearchState } from '@/lib/search-state'
 
 import { resolvePeriodForYear } from '@/components/explorer-helpers'
 
+function leaderTerms(leader: LeaderRecord) {
+  return leader.terms?.length
+    ? leader.terms
+    : [{ endYear: leader.endYear, label: leader.tenureLabel ?? leader.officeLabel, startYear: leader.startYear }]
+}
+
+function leaderCoversYear(leader: LeaderRecord, year: number) {
+  return leaderTerms(leader).some((term) => year >= term.startYear && year <= term.endYear)
+}
+
 export function TimelineController({
   filters,
+  leaders,
   maxYear,
   minYear,
   periods,
   variant = 'full',
 }: {
   filters: SearchState
+  leaders: LeaderRecord[]
   maxYear: number
   minYear: number
   periods: PeriodRecord[]
@@ -50,7 +62,21 @@ export function TimelineController({
       : ''
   }
 
-  function pushState(next: { period?: string; year?: number }) {
+  function resolveCompatibleLeaderSlug(nextYear: number) {
+    if (!filters.leader) {
+      return ''
+    }
+
+    const selectedLeader = leaders.find((leader) => leader.slug === filters.leader)
+
+    if (!selectedLeader) {
+      return ''
+    }
+
+    return leaderCoversYear(selectedLeader, nextYear) ? selectedLeader.slug : ''
+  }
+
+  function pushState(next: { leader?: string; period?: string; year?: number }) {
     const params = new URLSearchParams(searchParams.toString())
 
     if (typeof next.year === 'number') {
@@ -71,12 +97,21 @@ export function TimelineController({
       }
     }
 
+    if (typeof next.leader === 'string') {
+      if (next.leader) {
+        params.set('leader', next.leader)
+      } else {
+        params.delete('leader')
+      }
+    }
+
     const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname
     window.location.assign(nextUrl)
   }
 
   function commitYear(nextYear: number) {
     pushState({
+      leader: resolveCompatibleLeaderSlug(nextYear),
       period: resolveCompatiblePeriodSlug(nextYear),
       year: nextYear,
     })
@@ -187,12 +222,17 @@ export function TimelineController({
             <button
               className={active ? 'period-chip active' : 'period-chip'}
               key={period.id}
-              onClick={() =>
+              onClick={() => {
+                const nextYear = active
+                  ? year
+                  : Math.min(Math.max(year, period.startYear), period.endYear)
+
                 pushState({
+                  leader: resolveCompatibleLeaderSlug(nextYear),
                   period: active ? '' : period.slug,
-                  year: active ? year : Math.min(Math.max(year, period.startYear), period.endYear),
+                  year: nextYear,
                 })
-              }
+              }}
               style={{ '--chip-accent': period.accentColor } as React.CSSProperties}
               type="button"
             >
