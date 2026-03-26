@@ -6,6 +6,7 @@ const nav = [
   { href: '/atlas', label: 'Atlas bản đồ' },
   { href: '/lanh-dao', label: 'Trục lãnh đạo' },
   { href: '/game', label: 'Game realtime' },
+  { href: '/member', label: 'Member' },
   { href: '/ai-usage', label: 'AI Usage' },
 ]
 
